@@ -7,7 +7,7 @@
    <parent>
       <groupId>com.googlecode</groupId>
       <artifactId>jcasockets</artifactId>
-      <version>1.0</version>
+      <version>alpha.1.0</version>
    </parent>
    <dependencies>
     <dependency>
