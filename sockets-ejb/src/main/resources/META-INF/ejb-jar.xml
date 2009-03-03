@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ejb-jar version="2.1" xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/ejb-jar_2_1.xsd">
+  <display-name>Socket Message Driven Bean</display-name>
+  <enterprise-beans>
+
+    <!-- a message driven descriptor -->
+    <message-driven>
+      <display-name>SOCKET_MDB</display-name>
+      <ejb-name>SOCKET_MDB</ejb-name>
+      <ejb-class>com.googlecode.jcasockets.SocketMessageDrivenBean</ejb-class>
+
+      <!-- The message listener interface -->
+      <messaging-type>com.googlecode.jcasockets.SocketMessageEndpoint</messaging-type>
+
+      <transaction-type>Container</transaction-type>
+
+      <!-- the values for the Activation Spec JavaBean -->
+      <activation-config>
+        <activation-config-property>
+          <activation-config-property-name>port</activation-config-property-name>
+          <activation-config-property-value>9000</activation-config-property-value>
+        </activation-config-property>
+        <activation-config-property>
+          <activation-config-property-name>encoding</activation-config-property-name>
+          <activation-config-property-value>UTF-8</activation-config-property-value>
+        </activation-config-property>
+       </activation-config>
+    </message-driven>
+
+    <message-driven>
+      <display-name>SOCKET_MDB1</display-name>
+      <ejb-name>SOCKET_MDB1</ejb-name>
+      <ejb-class>com.googlecode.jcasockets.SocketMessageDrivenBean</ejb-class>
+
+      <!-- The message listener interface -->
+      <messaging-type>com.googlecode.jcasockets.SocketMessageEndpoint</messaging-type>
+
+      <transaction-type>Container</transaction-type>
+
+      <!-- the values for the Activation Spec JavaBean -->
+      <activation-config>
+        <activation-config-property>
+          <activation-config-property-name>port</activation-config-property-name>
+          <activation-config-property-value>9001</activation-config-property-value>
+        </activation-config-property>
+       </activation-config>
+ 
+    </message-driven>
+
+  </enterprise-beans>
+
+  <assembly-descriptor>
+    <container-transaction>
+      <method>
+        <ejb-name>SOCKET_MDB</ejb-name>
+        <method-name>*</method-name>
+      </method>
+      <trans-attribute>NotSupported</trans-attribute>
+    </container-transaction>
+    <container-transaction>
+      <method>
+        <ejb-name>SOCKET_MDB1</ejb-name>
+        <method-name>*</method-name>
+      </method>
+      <trans-attribute>NotSupported</trans-attribute>
+    </container-transaction>
+  </assembly-descriptor>
+
+</ejb-jar>
