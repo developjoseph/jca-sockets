@@ -12,6 +12,7 @@ public class ConformanceClientCli {
 	public static final String OPTION_EXECUTION_SECONDS = "t";
 	private Options options;
 	private int executionSeconds;
+	private boolean helpRequested;
 
 	public ConformanceClientCli() {
 		options = createOptions();
@@ -19,19 +20,25 @@ public class ConformanceClientCli {
 
 	public void parseArguments(String... args) throws ParseException {
 		CommandLineParser parser = new GnuParser();
-		executionSeconds = getIntegerOption(parser, args);
-
-	}
-
-	private int getIntegerOption(CommandLineParser parser, String... args)
-			throws ParseException {
 		CommandLine commandLine = parser.parse(options, args, false);
-		String secondsString = commandLine
-				.getOptionValue(OPTION_EXECUTION_SECONDS).trim();
-		int intValue = Integer.parseInt(secondsString);
-		return intValue;
+		executionSeconds = getIntegerOption(commandLine, OPTION_EXECUTION_SECONDS, 0);
+		helpRequested = getBooleanOption(commandLine, OPTION_HELP);
 	}
 
+	private boolean getBooleanOption(CommandLine commandLine, String optionString) {
+		return commandLine.hasOption(optionString);
+	}
+
+
+	private int getIntegerOption(CommandLine commandLine, String optionString, int defaultValue) throws ParseException {
+		String optionValueString = getStringValue(commandLine, optionString);
+		return  optionValueString == null ? defaultValue : Integer.parseInt(optionValueString);
+	}
+
+	private String getStringValue(CommandLine commandLine, String optionString) {
+		String optionValue = commandLine.getOptionValue(optionString);
+		return optionValue == null ? null : optionValue.trim();
+	}
 	public int getExecutionSeconds() {
 		return executionSeconds;
 	}
@@ -55,6 +62,10 @@ public class ConformanceClientCli {
 				optionDescription);
 		option.setArgName(optionArgument);
 		options.addOption(option);
+	}
+
+	public boolean isHelpRequested() {
+		return helpRequested;
 	}
 
 }
