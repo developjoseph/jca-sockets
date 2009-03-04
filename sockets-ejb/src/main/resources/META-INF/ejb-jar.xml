@@ -7,7 +7,7 @@
     <message-driven>
       <display-name>SOCKET_MDB</display-name>
       <ejb-name>SOCKET_MDB</ejb-name>
-      <ejb-class>com.googlecode.jcasockets.SocketMessageDrivenBean</ejb-class>
+      <ejb-class>com.googlecode.jcasockets.sample.SocketMessageDrivenBean</ejb-class>
 
       <!-- The message listener interface -->
       <messaging-type>com.googlecode.jcasockets.SocketMessageEndpoint</messaging-type>
@@ -30,7 +30,7 @@
     <message-driven>
       <display-name>SOCKET_MDB1</display-name>
       <ejb-name>SOCKET_MDB1</ejb-name>
-      <ejb-class>com.googlecode.jcasockets.SocketMessageDrivenBean</ejb-class>
+      <ejb-class>com.googlecode.jcasockets.sample.SocketMessageDrivenBean</ejb-class>
 
       <!-- The message listener interface -->
       <messaging-type>com.googlecode.jcasockets.SocketMessageEndpoint</messaging-type>
