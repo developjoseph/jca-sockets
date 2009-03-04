@@ -1,0 +1,23 @@
+<assembly>
+  <id>bin</id>
+  <formats>
+    <format>zip</format>
+  </formats>
+  <includeBaseDirectory/>
+  <moduleSets>
+    <moduleSet>
+      <includes>
+        <include>com.googlecode.jcasockets:sockets-jar</include>
+        <include>com.googlecode.jcasockets:sockets-ejb</include>
+        <include>com.googlecode.jcasockets:sockets-rar</include>
+      </includes>
+      <binaries>
+        <outputDirectory>${artifactId}</outputDirectory>
+        <unpack>false</unpack>
+      </binaries>
+      <sources>
+        <outputDirectory>${artifactId}-source</outputDirectory>
+      </sources>
+    </moduleSet>
+  </moduleSets>
+</assembly>
