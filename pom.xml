@@ -31,6 +31,7 @@
       <module>sockets-jar</module>
       <module>sockets-rar</module>
       <module>sockets-ejb</module>
+      <module>sockets-client</module>
    </modules>
    <build>
       <pluginManagement>
