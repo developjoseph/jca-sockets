@@ -9,13 +9,6 @@ import org.junit.Test;
 public class ConformanceClientCliTest {
 
 	@Test 
-	public void testCommandLineParsingOfExecutionSeconds() throws Exception{
-		ConformanceClientCli conformanceClient = new ConformanceClientCli( );
-		String argument = getOption(ConformanceClientCli.OPTION_EXECUTION_SECONDS, " 5");
-		conformanceClient.parseArguments( argument); 
-		assertEquals( 5,  conformanceClient.getExecutionSeconds( ) );
-	}
-	@Test 
 	public void testCommandLineParsingDefaults() throws Exception{
 		ConformanceClientCli conformanceClient = new ConformanceClientCli( );
 		conformanceClient.parseArguments( "" ); 
@@ -30,6 +23,21 @@ public class ConformanceClientCliTest {
 		conformanceClient.parseArguments( argument); 
 		assertTrue(  conformanceClient.isHelpRequested( ) );
 	}
+	@Test 
+	public void testCommandLineParsingOfExecutionSeconds() throws Exception{
+		ConformanceClientCli conformanceClient = new ConformanceClientCli( );
+		String argument = getOption(ConformanceClientCli.OPTION_EXECUTION_SECONDS, " 5");
+		conformanceClient.parseArguments( argument); 
+		assertEquals( 5,  conformanceClient.getExecutionSeconds( ) );
+	}
+	@Test 
+	public void testCommandLineParsingOfnumberOfThreads() throws Exception{
+		ConformanceClientCli conformanceClient = new ConformanceClientCli( );
+		String argument = getOption(ConformanceClientCli.OPTION_NUMBER_OF_THREAD, " 3");
+		conformanceClient.parseArguments( argument); 
+		assertEquals( 3,  conformanceClient.getNumberOfThreads() );
+	}
+
 	@Test 
 	public void testCommandLineParsingNoHelp() throws Exception{
 		ConformanceClientCli conformanceClient = new ConformanceClientCli( );
