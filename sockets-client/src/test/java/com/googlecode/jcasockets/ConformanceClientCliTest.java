@@ -33,7 +33,7 @@ public class ConformanceClientCliTest {
 	@Test 
 	public void testCommandLineParsingOfnumberOfThreads() throws Exception{
 		ConformanceClientCli conformanceClient = new ConformanceClientCli( );
-		String argument = getOption(ConformanceClientCli.OPTION_NUMBER_OF_THREAD, " 3");
+		String argument = getOption(ConformanceClientCli.OPTION_NUMBER_OF_THREAD, "3 ");
 		conformanceClient.parseArguments( argument); 
 		assertEquals( 3,  conformanceClient.getNumberOfThreads() );
 	}
