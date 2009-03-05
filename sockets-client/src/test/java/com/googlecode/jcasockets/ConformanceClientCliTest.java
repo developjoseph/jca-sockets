@@ -16,6 +16,14 @@ public class ConformanceClientCliTest {
 		assertEquals( 5,  conformanceClient.getExecutionSeconds( ) );
 	}
 	@Test 
+	public void testCommandLineParsingDefaults() throws Exception{
+		ConformanceClientCli conformanceClient = new ConformanceClientCli( );
+		conformanceClient.parseArguments( "" ); 
+		assertEquals( ConformanceClientCli.DEFAULT_EXECUTION_SECONDS,  conformanceClient.getExecutionSeconds( ) );
+		assertEquals( ConformanceClientCli.DEFAULT_NUMBER_OF_THREAD,  conformanceClient.getNumberOfThreads( ) );
+		assertEquals( false,  conformanceClient.isHelpRequested() );
+	}
+	@Test 
 	public void testCommandLineParsingOfHelp() throws Exception{
 		ConformanceClientCli conformanceClient = new ConformanceClientCli( );
 		String argument = getOption(ConformanceClientCli.OPTION_HELP);

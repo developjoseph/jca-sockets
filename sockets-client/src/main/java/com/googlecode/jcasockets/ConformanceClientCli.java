@@ -9,10 +9,14 @@ import org.apache.commons.cli.ParseException;
 
 public class ConformanceClientCli {
 	public static final String OPTION_HELP = "h";
-	public static final String OPTION_EXECUTION_SECONDS = "t";
+	public static final String OPTION_EXECUTION_SECONDS = "s";
+	public static final String OPTION_NUMBER_OF_THREAD = "T";
+	public static final int DEFAULT_NUMBER_OF_THREAD = 1;
+	public static final int DEFAULT_EXECUTION_SECONDS = 60;
 	private Options options;
 	private int executionSeconds;
 	private boolean helpRequested;
+	private int getNumberOfThreads;
 
 	public ConformanceClientCli() {
 		options = createOptions();
@@ -21,7 +25,8 @@ public class ConformanceClientCli {
 	public void parseArguments(String... args) throws ParseException {
 		CommandLineParser parser = new GnuParser();
 		CommandLine commandLine = parser.parse(options, args, false);
-		executionSeconds = getIntegerOption(commandLine, OPTION_EXECUTION_SECONDS, 0);
+		executionSeconds = getIntegerOption(commandLine, OPTION_EXECUTION_SECONDS, DEFAULT_EXECUTION_SECONDS);
+		getNumberOfThreads = getIntegerOption(commandLine, OPTION_NUMBER_OF_THREAD, DEFAULT_NUMBER_OF_THREAD);
 		helpRequested = getBooleanOption(commandLine, OPTION_HELP);
 	}
 
@@ -49,9 +54,12 @@ public class ConformanceClientCli {
 		options.addOption(OPTION_HELP, "help", false,
 				"Displays the Help information");
 
-		addOptionWithArgument(options, OPTION_EXECUTION_SECONDS, "config",
-				"Configuration file containing command line options",
-				"path to config file");
+		addOptionWithArgument(options, OPTION_EXECUTION_SECONDS, "seconds",
+				"The number of seconds of execution.",
+				"seconds");
+		addOptionWithArgument(options, OPTION_NUMBER_OF_THREAD, "threads",
+				"Number of threads",
+				"threads");
 
 		return options;
 	}
@@ -66,6 +74,10 @@ public class ConformanceClientCli {
 
 	public boolean isHelpRequested() {
 		return helpRequested;
+	}
+
+	public int getNumberOfThreads() {
+		return getNumberOfThreads;
 	}
 
 }
