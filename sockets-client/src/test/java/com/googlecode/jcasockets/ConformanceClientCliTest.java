@@ -4,6 +4,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import java.util.Arrays;
+
 import org.junit.Test;
 
 public class ConformanceClientCliTest {
@@ -22,6 +24,13 @@ public class ConformanceClientCliTest {
 		String argument = getOption(ConformanceClientCli.OPTION_HELP);
 		conformanceClient.parseArguments( argument); 
 		assertTrue(  conformanceClient.isHelpRequested( ) );
+	}
+	@Test 
+	public void testCommandLineParsingOfPorts() throws Exception{
+		ConformanceClientCli conformanceClient = new ConformanceClientCli( );
+		String argument = getOption(ConformanceClientCli.OPTION_PORTS, "100,123,111");
+		conformanceClient.parseArguments( argument); 
+		assertEquals( Arrays.asList(100,123,111),  conformanceClient.getPorts( ) );
 	}
 	@Test 
 	public void testCommandLineParsingOfExecutionSeconds() throws Exception{
