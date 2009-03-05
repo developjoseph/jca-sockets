@@ -16,6 +16,8 @@ public class ConformanceClientCliTest {
 		conformanceClient.parseArguments( "" ); 
 		assertEquals( ConformanceClientCli.DEFAULT_EXECUTION_SECONDS,  conformanceClient.getExecutionSeconds( ) );
 		assertEquals( ConformanceClientCli.DEFAULT_NUMBER_OF_THREAD,  conformanceClient.getNumberOfThreads( ) );
+		assertEquals( ConformanceClientCli.DEFAULT_MIN_MESSAGE_SIZE,  conformanceClient.getMinimumMessageSize() );
+		assertEquals( ConformanceClientCli.DEFAULT_MAX_MESSAGE_SIZE,  conformanceClient.getMaximumMessageSize() );
 		assertEquals( false,  conformanceClient.isHelpRequested() );
 	}
 	@Test 
@@ -38,6 +40,20 @@ public class ConformanceClientCliTest {
 		String argument = getOption(ConformanceClientCli.OPTION_EXECUTION_SECONDS, " 5");
 		conformanceClient.parseArguments( argument); 
 		assertEquals( 5,  conformanceClient.getExecutionSeconds( ) );
+	}
+	@Test 
+	public void testCommandLineParsingOfMinimumMessageSize() throws Exception{
+		ConformanceClientCli conformanceClient = new ConformanceClientCli( );
+		String argument = getOption(ConformanceClientCli.OPTION_MIN_MESSAGE_SIZE, " 5");
+		conformanceClient.parseArguments( argument); 
+		assertEquals( 5,  conformanceClient.getMinimumMessageSize( ) );
+	}
+	@Test 
+	public void testCommandLineParsingOfMaximumMessageSize() throws Exception{
+		ConformanceClientCli conformanceClient = new ConformanceClientCli( );
+		String argument = getOption(ConformanceClientCli.OPTION_MAX_MESSAGE_SIZE, "200");
+		conformanceClient.parseArguments( argument); 
+		assertEquals( 200,  conformanceClient.getMaximumMessageSize( ) );
 	}
 	@Test 
 	public void testCommandLineParsingOfnumberOfThreads() throws Exception{

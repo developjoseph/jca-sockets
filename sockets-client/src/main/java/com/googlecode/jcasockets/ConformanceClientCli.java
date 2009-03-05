@@ -18,11 +18,18 @@ public class ConformanceClientCli {
 
 	public static final int DEFAULT_NUMBER_OF_THREAD = 1;
 	public static final int DEFAULT_EXECUTION_SECONDS = 60;
+	public static final String OPTION_MIN_MESSAGE_SIZE = "m";
+	public static final String OPTION_MAX_MESSAGE_SIZE = "M";
+	public static final int DEFAULT_MIN_MESSAGE_SIZE = 0;
+	public static final int DEFAULT_MAX_MESSAGE_SIZE = 10000;
+	
 	private Options options;
 	private int executionSeconds;
 	private boolean helpRequested;
 	private int getNumberOfThreads;
 	private List<Integer> ports;
+	private int minimumMessageSize;
+	private int maximumMessageSize;
 
 	public ConformanceClientCli() {
 		options = createOptions();
@@ -35,6 +42,10 @@ public class ConformanceClientCli {
 				OPTION_EXECUTION_SECONDS, DEFAULT_EXECUTION_SECONDS);
 		getNumberOfThreads = getIntegerOption(commandLine,
 				OPTION_NUMBER_OF_THREAD, DEFAULT_NUMBER_OF_THREAD);
+		minimumMessageSize = getIntegerOption(commandLine,
+				OPTION_MIN_MESSAGE_SIZE, DEFAULT_MIN_MESSAGE_SIZE);
+		maximumMessageSize = getIntegerOption(commandLine,
+				OPTION_MAX_MESSAGE_SIZE, DEFAULT_MAX_MESSAGE_SIZE);
 		ports = getListOption(commandLine, OPTION_PORTS);
 		helpRequested = getBooleanOption(commandLine, OPTION_HELP);
 	}
@@ -84,6 +95,11 @@ public class ConformanceClientCli {
 		addOptionWithArgument(options, OPTION_NUMBER_OF_THREAD, "threads",
 				"Number of threads", "threads");
 
+		addOptionWithArgument(options, OPTION_MIN_MESSAGE_SIZE, "minSize",
+				"Minimum size of messages", "minMessage");
+		addOptionWithArgument(options, OPTION_MAX_MESSAGE_SIZE, "maxSize",
+				"Maximum size of messages", "maxMessage");
+
 		addOptionWithArgument(options, OPTION_PORTS, "ports",
 				"Ports to connect to", "ports");
 
@@ -108,5 +124,12 @@ public class ConformanceClientCli {
 
 	public List<Integer> getPorts() {
 		return ports;
+	}
+
+	public int getMinimumMessageSize() {
+		return minimumMessageSize;
+	}
+	public int getMaximumMessageSize() {
+		return maximumMessageSize;
 	}
 }
