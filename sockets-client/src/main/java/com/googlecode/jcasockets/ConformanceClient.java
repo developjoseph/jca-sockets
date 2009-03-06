@@ -36,7 +36,7 @@ public class ConformanceClient {
 	}
 
 	private String generateMessage() {
-		int range = clientCli.getMaximumMessageSize() - clientCli.getMinimumMessageSize();
+		int range = clientCli.getMaximumMessageSize() - clientCli.getMinimumMessageSize() + 1;
 		int size = random.nextInt(range) + clientCli.getMinimumMessageSize();
 		return filledString.substring(0, size);
 	}

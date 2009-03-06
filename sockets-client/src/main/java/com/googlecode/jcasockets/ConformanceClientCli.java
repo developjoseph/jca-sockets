@@ -13,7 +13,7 @@ import org.apache.commons.cli.ParseException;
 public class ConformanceClientCli {
 	public static final String OPTION_HELP = "h";
 	public static final String OPTION_EXECUTION_SECONDS = "s";
-	public static final String OPTION_NUMBER_OF_THREAD = "T";
+	public static final String OPTION_NUMBER_OF_THREAD = "t";
 	public static final String OPTION_PORTS = "p";
 
 	public static final int DEFAULT_NUMBER_OF_THREAD = 1;
