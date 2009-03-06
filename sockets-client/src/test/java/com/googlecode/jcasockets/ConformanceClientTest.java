@@ -17,6 +17,7 @@ public class ConformanceClientTest {
 		assertTrue(messageCount > 0 );
 
 		// TODO in fact this is a bit flakey it is possible (but unlikely) for this to fail
+		// maybe the first 2 executions should not use random but max/min
 		assertEquals( 3, socketSender.getMinimumMessageSize() );
 		assertEquals( 15, socketSender.getMaximumMessageSize() );
 		assertEquals( 1, socketSender.getNumThreads() );
