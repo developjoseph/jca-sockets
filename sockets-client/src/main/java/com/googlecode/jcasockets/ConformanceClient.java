@@ -10,6 +10,10 @@ import java.util.concurrent.Future;
 import org.apache.commons.cli.ParseException;
 
 public class ConformanceClient {
+	public static void main(String[] args) throws Exception {
+		ConformanceClient ConformanceClient = new ConformanceClient(null);
+		
+	}
 
 	private SocketSenderFactory socketSenderFactory;
 	private ConformanceClientCli clientCli;
@@ -27,13 +31,14 @@ public class ConformanceClient {
 
 	public void execute() throws InterruptedException, ExecutionException {
 		int numberOfThreads = clientCli.getNumberOfThreads();
+		String ipAddress = clientCli.getIpAddress();
 		List<Integer> ports = clientCli.getPorts();
 
 		ExecutorService executorService = Executors.newFixedThreadPool(numberOfThreads);
 		List<SenderTestRunner> senderTestRunners = new ArrayList<SenderTestRunner>(numberOfThreads);
 		for (Integer port : ports) {
 			for (int i = 0; i < numberOfThreads; i++) {
-				SocketSender socketSender = socketSenderFactory.createSocketSender(port);
+				SocketSender socketSender = socketSenderFactory.createSocketSender(ipAddress, port);
 				senderTestRunners.add(new SenderTestRunner(clientCli, socketSender));
 			}
 		}
