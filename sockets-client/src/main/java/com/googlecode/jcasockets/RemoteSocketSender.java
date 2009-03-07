@@ -11,9 +11,16 @@ import java.net.SocketAddress;
 
 public class RemoteSocketSender implements SocketSender, SocketSenderFactory {
 
+	public RemoteSocketSender() {
+	}
+
 	private Socket socket;
+	private Integer port;
+	private String ipAddress;
 
 	public RemoteSocketSender(String ipAddress, Integer port) {
+		this.ipAddress = ipAddress;
+		this.port = port;
 		final SocketAddress socketAddress = new InetSocketAddress(ipAddress, port);
 		socket = new Socket();
 
@@ -21,7 +28,7 @@ public class RemoteSocketSender implements SocketSender, SocketSenderFactory {
 		try {
 			socket.connect(socketAddress, timeoutMs);
 		} catch (IOException e) {
-			throw new RuntimeException(e);
+			throw new RuntimeException("Exception while connecting: " + ipAddress + ":" + port, e);
 		}
 
 	}
@@ -44,7 +51,7 @@ public class RemoteSocketSender implements SocketSender, SocketSenderFactory {
 			}
 			rd.close();
 		} catch (IOException e) {
-			throw new RuntimeException(e);
+			throw new RuntimeException("Exception while sending: " + ipAddress + ":" + port, e);
 		}
 		return sb.toString();
 	}

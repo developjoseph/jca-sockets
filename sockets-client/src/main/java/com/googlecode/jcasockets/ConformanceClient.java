@@ -15,7 +15,7 @@ public class ConformanceClient {
 		conformanceClient.execute();
 	}
 
-	private SocketSenderFactory socketSenderFactory;
+	private SocketSenderFactory socketSenderFactory = new RemoteSocketSender();
 	private ConformanceClientCli clientCli;
 	private ExecutionStatistics executionStatistics;
 
