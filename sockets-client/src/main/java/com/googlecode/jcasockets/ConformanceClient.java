@@ -1,44 +1,47 @@
 package com.googlecode.jcasockets;
 
-import java.util.Arrays;
-import java.util.Random;
-import java.util.concurrent.TimeUnit;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 import org.apache.commons.cli.ParseException;
 
 public class ConformanceClient {
 
-	private SocketSender socketSender;
+	private SocketSenderFactory socketSenderFactory;
 	private ConformanceClientCli clientCli;
-	Random random = new Random();
-	private String filledString;
+	private ExecutionStatistics executionStatistics;
 
 	public ConformanceClient(String string) throws ParseException {
 		clientCli = new ConformanceClientCli();
 		String[] args = string.split(" ");
 		clientCli.parseArguments(args);
-		char[] chars = new char[ clientCli.getMaximumMessageSize() ]; 
-		Arrays.fill(chars, 'X');
-		filledString = new String(chars);
 	}
 
-	void setSender(SocketSender socketSender) {
-		this.socketSender = socketSender;
+	void setSender(SocketSenderFactory socketSenderFactory) {
+		this.socketSenderFactory = socketSenderFactory;
 	}
 
-	public void execute() {
-		long incrementNanos = TimeUnit.SECONDS.toNanos( clientCli.getExecutionSeconds() );
-		long endNanos = System.nanoTime() + incrementNanos;
-		while ( endNanos > System.nanoTime()){
-			String message = generateMessage();
-			socketSender.send(message);
+	public void execute() throws InterruptedException, ExecutionException {
+		int numberOfThreads = clientCli.getNumberOfThreads();
+		ExecutorService executorService = Executors.newFixedThreadPool(numberOfThreads);
+		List<SenderTestRunner> senderTestRunners = new ArrayList<SenderTestRunner>(numberOfThreads);
+		for (int i = 0; i < numberOfThreads; i++) {
+			SocketSender socketSender = socketSenderFactory.createSocketSender();
+			senderTestRunners.add( new SenderTestRunner(clientCli, socketSender));
+		}
+		List<Future<ExecutionStatistics>> executionStatisticsFutures = executorService.invokeAll(senderTestRunners);
+		executionStatistics = new ExecutionStatistics();
+		for (Future<ExecutionStatistics> future : executionStatisticsFutures) {
+			 executionStatistics.combine(future.get()); 
 		}
 	}
 
-	private String generateMessage() {
-		int range = clientCli.getMaximumMessageSize() - clientCli.getMinimumMessageSize() + 1;
-		int size = random.nextInt(range) + clientCli.getMinimumMessageSize();
-		return filledString.substring(0, size);
+	public ExecutionStatistics getExecutionStatistics() {
+		return executionStatistics;
 	}
 
 }
