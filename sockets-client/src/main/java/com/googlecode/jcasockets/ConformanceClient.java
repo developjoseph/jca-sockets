@@ -11,17 +11,16 @@ import org.apache.commons.cli.ParseException;
 
 public class ConformanceClient {
 	public static void main(String[] args) throws Exception {
-		ConformanceClient ConformanceClient = new ConformanceClient(null);
-		
+		ConformanceClient conformanceClient = new ConformanceClient(args);
+		conformanceClient.execute();
 	}
 
 	private SocketSenderFactory socketSenderFactory;
 	private ConformanceClientCli clientCli;
 	private ExecutionStatistics executionStatistics;
 
-	public ConformanceClient(String string) throws ParseException {
+	public ConformanceClient(String[] args) throws ParseException {
 		clientCli = new ConformanceClientCli();
-		String[] args = string.split(" ");
 		clientCli.parseArguments(args);
 	}
 
