@@ -8,7 +8,7 @@ import org.junit.Test;
 public class SenderTestRunnerTest {
 	@Test
 	public void testSmallMessageSize() throws Exception{
-		ConformanceClientCli conformanceClient = getCommandLineOptions("-s1 -m3 -M15");
+		ConformanceClientCli conformanceClient = getCommandLineOptions("-s1 -m3 -M15 -p8000");
 		SocketSender socketSender = new MockSocketSender();
 		SenderTestRunner senderTestRunner = new SenderTestRunner(conformanceClient, socketSender);
 		ExecutionStatistics executionStatistics = senderTestRunner.call();

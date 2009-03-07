@@ -9,7 +9,7 @@ public class MockSocketSender implements SocketSenderFactory, SocketSender {
 	}
 
 	@Override
-	public SocketSender createSocketSender() {
+	public SocketSender createSocketSender(Integer port) {
 		return new MockSocketSender();
 	}
 }

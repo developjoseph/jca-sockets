@@ -1,5 +1,5 @@
 package com.googlecode.jcasockets;
 
 public interface SocketSenderFactory {
-	SocketSender createSocketSender();
+	SocketSender createSocketSender(Integer port);
 }

@@ -48,6 +48,9 @@ public class ConformanceClientCli {
 				OPTION_MAX_MESSAGE_SIZE, DEFAULT_MAX_MESSAGE_SIZE);
 		ports = getListOption(commandLine, OPTION_PORTS);
 		helpRequested = getBooleanOption(commandLine, OPTION_HELP);
+		if ( !helpRequested && ports.isEmpty()){
+			throw new IllegalArgumentException("At least one port must be specified.");
+		}
 	}
 
 	private List<Integer> getListOption(CommandLine commandLine, String optionString) {

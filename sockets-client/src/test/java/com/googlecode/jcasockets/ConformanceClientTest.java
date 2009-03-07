@@ -8,7 +8,7 @@ import org.junit.Test;
 public class ConformanceClientTest {
 	@Test
 	public void testMultipleThread() throws Exception{
-		ConformanceClient conformanceClient = new ConformanceClient( "-s 1 -t2 -m10 -M10");
+		ConformanceClient conformanceClient = new ConformanceClient( "-s 1 -t2 -m10 -M10 -p 9000");
 		MockSocketSender socketSender = new MockSocketSender();
 		
 		conformanceClient.setSender( socketSender );
@@ -24,7 +24,7 @@ public class ConformanceClientTest {
 
 	@Test
 	public void testSmallMessageSize() throws Exception{
-		ConformanceClient conformanceClient = new ConformanceClient( "-s 1 -m 3 -M15");
+		ConformanceClient conformanceClient = new ConformanceClient( "-s 1 -m 3 -M15 -p 8888");
 		MockSocketSender socketSender = new MockSocketSender();
 		
 		conformanceClient.setSender( socketSender );
