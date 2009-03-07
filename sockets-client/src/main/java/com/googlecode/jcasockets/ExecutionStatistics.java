@@ -5,8 +5,8 @@ public class ExecutionStatistics {
 	
 	private int minimumMessageSize = Integer.MAX_VALUE;
 	private int maximumMessageSize = Integer.MIN_VALUE;;  
-	private int bytesReceived;
-	private int bytesSent;
+	private long bytesReceived;
+	private long bytesSent;
 	private int messagesSent;
 	private int messagesReceived;
 
@@ -31,10 +31,10 @@ public class ExecutionStatistics {
 	public int getMaximumMessageSize() {
 		return maximumMessageSize;
 	}
-	public int getBytesReceived() {
+	public long getBytesReceived() {
 		return bytesReceived;
 	}
-	public int getBytesSent() {
+	public long getBytesSent() {
 		return bytesSent;
 	}
 	public int getMessagesSent() {

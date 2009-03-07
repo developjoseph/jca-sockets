@@ -27,16 +27,22 @@ public class ConformanceClient {
 
 	public void execute() throws InterruptedException, ExecutionException {
 		int numberOfThreads = clientCli.getNumberOfThreads();
-		ExecutorService executorService = Executors.newFixedThreadPool(numberOfThreads);
-		List<SenderTestRunner> senderTestRunners = new ArrayList<SenderTestRunner>(numberOfThreads);
+		ExecutorService executorService = Executors
+				.newFixedThreadPool(numberOfThreads);
+		List<SenderTestRunner> senderTestRunners = new ArrayList<SenderTestRunner>(
+				numberOfThreads);
 		for (int i = 0; i < numberOfThreads; i++) {
-			SocketSender socketSender = socketSenderFactory.createSocketSender();
-			senderTestRunners.add( new SenderTestRunner(clientCli, socketSender));
+			SocketSender socketSender = socketSenderFactory
+					.createSocketSender();
+			senderTestRunners
+					.add(new SenderTestRunner(clientCli, socketSender));
 		}
-		List<Future<ExecutionStatistics>> executionStatisticsFutures = executorService.invokeAll(senderTestRunners);
+		List<Future<ExecutionStatistics>> executionStatisticsFutures = executorService
+				.invokeAll(senderTestRunners);
 		executionStatistics = new ExecutionStatistics();
 		for (Future<ExecutionStatistics> future : executionStatisticsFutures) {
-			 executionStatistics.combine(future.get()); 
+			ExecutionStatistics that = future.get();
+			executionStatistics.combine(that);
 		}
 	}
 
