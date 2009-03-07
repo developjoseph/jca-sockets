@@ -3,6 +3,12 @@ package com.googlecode.jcasockets;
 
 public class ExecutionStatistics {
 	
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append( "Total messages=" + messagesReceived );
+		return sb.toString();
+	}
 	private int minimumMessageSize = Integer.MAX_VALUE;
 	private int maximumMessageSize = Integer.MIN_VALUE;;  
 	private long bytesReceived;

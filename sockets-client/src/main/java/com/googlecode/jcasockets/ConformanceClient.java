@@ -13,6 +13,8 @@ public class ConformanceClient {
 	public static void main(String[] args) throws Exception {
 		ConformanceClient conformanceClient = new ConformanceClient(args);
 		conformanceClient.execute();
+		ExecutionStatistics executionStatistics = conformanceClient.getExecutionStatistics();
+		System.out.println(executionStatistics.toString());
 	}
 
 	private SocketSenderFactory socketSenderFactory = new RemoteSocketSender();
@@ -47,6 +49,7 @@ public class ConformanceClient {
 			ExecutionStatistics that = future.get();
 			executionStatistics.combine(that);
 		}
+		executorService.shutdown();
 	}
 
 	public ExecutionStatistics getExecutionStatistics() {

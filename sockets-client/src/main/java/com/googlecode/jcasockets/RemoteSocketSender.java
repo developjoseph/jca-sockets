@@ -17,29 +17,26 @@ public class RemoteSocketSender implements SocketSender, SocketSenderFactory {
 	private Socket socket;
 	private Integer port;
 	private String ipAddress;
+	private SocketAddress socketAddress;
 
 	public RemoteSocketSender(String ipAddress, Integer port) {
 		this.ipAddress = ipAddress;
 		this.port = port;
-		final SocketAddress socketAddress = new InetSocketAddress(ipAddress, port);
-		socket = new Socket();
-
-		final int timeoutMs = 0;
-		try {
-			socket.connect(socketAddress, timeoutMs);
-		} catch (IOException e) {
-			throw new RuntimeException("Exception while connecting: " + ipAddress + ":" + port, e);
-		}
 
 	}
 
 	@Override
 	public String send(String sendMessage) {
+		socket = new Socket();
+		socketAddress = new InetSocketAddress(ipAddress, port);
 		StringBuilder sb = new StringBuilder(sendMessage.length());
 		OutputStream outputStream;
+		int timeoutMs = 0;
 		try {
+			socket.connect(socketAddress, timeoutMs);
 			outputStream = socket.getOutputStream();
 			outputStream.write(sendMessage.getBytes());
+			outputStream.flush();
 			socket.shutdownOutput();
 
 			final InputStream inputStream = socket.getInputStream();
@@ -52,7 +49,14 @@ public class RemoteSocketSender implements SocketSender, SocketSenderFactory {
 			rd.close();
 		} catch (IOException e) {
 			throw new RuntimeException("Exception while sending: " + ipAddress + ":" + port, e);
+		}finally{
+			try {
+				socket.close();
+			} catch (IOException e) {
+				throw new RuntimeException("Exception while closing: " + ipAddress + ":" + port, e);
+			}
 		}
+		
 		return sb.toString();
 	}
 
