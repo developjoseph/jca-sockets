@@ -3,9 +3,8 @@ package com.googlecode.jcasockets;
 import java.util.concurrent.TimeUnit;
 
 public class StopWatch {
-	private static enum State{
-		RUNNING,
-		STOPPED;
+	private static enum State {
+		RUNNING, STOPPED;
 	}
 
 	private final TimeProvider timeProvider;
@@ -18,7 +17,7 @@ public class StopWatch {
 	}
 
 	public void start() {
-		if ( state != State.STOPPED){
+		if (state != State.STOPPED) {
 			throw new IllegalStateException("Cannot stop a Stopwatch that is already running");
 		}
 		lastStartTime = timeProvider.nanoTime();
@@ -26,7 +25,7 @@ public class StopWatch {
 	}
 
 	public void stop() {
-		if ( state != State.RUNNING){
+		if (state != State.RUNNING) {
 			throw new IllegalStateException("Cannot stop a Stopwatch that is already running");
 		}
 		long stopTime = timeProvider.nanoTime();
@@ -35,6 +34,9 @@ public class StopWatch {
 	}
 
 	public long getElapsed(TimeUnit timeUnit) {
+		if (state != State.STOPPED) {
+			throw new IllegalStateException("Stopwatch must be stopped to get elapsed time");
+		}
 		return TimeUnit.NANOSECONDS.convert(accumulatedTime, timeUnit);
 	}
 

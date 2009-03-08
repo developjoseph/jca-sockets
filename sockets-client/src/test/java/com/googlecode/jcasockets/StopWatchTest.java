@@ -30,6 +30,17 @@ public class StopWatchTest {
 		assertEquals( 4, elapsed);
 	}
 	@Test
+	public void testGetElapsedWhenStarted() {
+		StopWatch stopWatch = createStopWatch(1);
+		stopWatch.start();  
+		try {
+			stopWatch.getElapsed(TimeUnit.NANOSECONDS);  
+			fail("Should not be able get elapsed time unless stopped."); 
+		} catch (IllegalStateException e) {
+			// expected this
+		}
+	}
+	@Test
 	public void testStopWhenStopped() {
 		StopWatch stopWatch = createStopWatch();
 		try {
