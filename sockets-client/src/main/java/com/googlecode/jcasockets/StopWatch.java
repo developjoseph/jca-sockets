@@ -55,4 +55,8 @@ public class StopWatch {
 		return  timeUnit.convert(accumulatedTime,  TimeUnit.NANOSECONDS);
 	}
 
+	public void combine(StopWatch that) {
+		this.accumulatedTime += that.accumulatedTime;
+	}
+
 }

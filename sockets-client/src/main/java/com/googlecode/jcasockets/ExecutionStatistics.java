@@ -15,6 +15,8 @@
  */
 package com.googlecode.jcasockets;
 
+import java.util.concurrent.TimeUnit;
+
 
 public class ExecutionStatistics {
 	
@@ -80,5 +82,11 @@ public class ExecutionStatistics {
 		this.bytesSent += that.bytesSent;
 		this.messagesSent += that.messagesSent;
 		this.messagesReceived += that.messagesReceived;
+		this.sendingTimeStopWatch.combine( that.sendingTimeStopWatch);
 	}
+
+	public long getElapsed(TimeUnit timeUnit) {
+		return sendingTimeStopWatch.getElapsed(timeUnit);
+	}
+
 }

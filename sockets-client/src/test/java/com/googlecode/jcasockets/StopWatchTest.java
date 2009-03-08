@@ -25,64 +25,82 @@ import org.junit.After;
 import org.junit.Test;
 
 public class StopWatchTest {
-	
+
 	private TimeProvider timeProvider;
 
 	@After
-	public void tearDown(){
-		verify(timeProvider);
+	public void tearDown() {
+		if (timeProvider != null) {
+			verify(timeProvider);
+		}
 	}
-	
+
 	@Test
 	public void testStartStop() {
-		StopWatch stopWatch = createStopWatch(1,5);
+		StopWatch stopWatch = createStopWatch(1, 5);
 		stopWatch.start();
 		stopWatch.stop();
-		long elapsed = stopWatch.getElapsed( TimeUnit.NANOSECONDS );
-		assertEquals( 4, elapsed);
+		long elapsed = stopWatch.getElapsed(TimeUnit.NANOSECONDS);
+		assertEquals(4, elapsed);
 	}
+
 	@Test
 	public void testStartStopMilliseconds() {
 		StopWatch stopWatch = createStopWatch(0, 123456789);
 		stopWatch.start();
 		stopWatch.stop();
-		long elapsed = stopWatch.getElapsed( TimeUnit.MILLISECONDS );
-		assertEquals( 123, elapsed);
+		long elapsed = stopWatch.getElapsed(TimeUnit.MILLISECONDS);
+		assertEquals(123, elapsed);
 	}
+
 	@Test
 	public void testGetElapsedWhenStarted() {
 		StopWatch stopWatch = createStopWatch(1);
-		stopWatch.start();  
+		stopWatch.start();
 		try {
-			stopWatch.getElapsed(TimeUnit.NANOSECONDS);  
-			fail("Should not be able get elapsed time unless stopped."); 
+			stopWatch.getElapsed(TimeUnit.NANOSECONDS);
+			fail("Should not be able get elapsed time unless stopped.");
 		} catch (IllegalStateException e) {
 			// expected this
 		}
 	}
+
 	@Test
 	public void testStopWhenStopped() {
 		StopWatch stopWatch = createStopWatch();
 		try {
-			stopWatch.stop(); 
-			fail("Should not be able to stop a stopped watch, (initial state is stopped)"); 
+			stopWatch.stop();
+			fail("Should not be able to stop a stopped watch, (initial state is stopped)");
 		} catch (IllegalStateException e) {
 			// expected this
 		}
 	}
-	
+
 	@Test
 	public void testStartWhenStarted() {
 		StopWatch stopWatch = createStopWatch(1);
-		stopWatch.start();  
+		stopWatch.start();
 		try {
-			stopWatch.start();  
-			fail("Should not be able to start a started watch"); 
+			stopWatch.start();
+			fail("Should not be able to start a started watch");
 		} catch (IllegalStateException e) {
 			// expected this
 		}
 	}
-	
+
+	@Test
+	public void testCombineStopWatches() {
+		StopWatch stopWatch1 = new StopWatch(TimeProviderFixture.createIncrementalTimeProvider());
+		StopWatch stopWatch2 = new StopWatch(TimeProviderFixture.createIncrementalTimeProvider());
+
+		stopWatch1.start();
+		stopWatch1.stop();
+		stopWatch2.combine(stopWatch1);
+
+		assertEquals(1, stopWatch1.getElapsed(TimeUnit.NANOSECONDS));
+		assertEquals(1, stopWatch2.getElapsed(TimeUnit.NANOSECONDS));
+	}
+
 	private StopWatch createStopWatch(long... nanoTimes) {
 		timeProvider = TimeProviderFixture.createTimeProvider(nanoTimes);
 		return new StopWatch(timeProvider);
