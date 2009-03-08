@@ -52,7 +52,7 @@ public class StopWatch {
 		if (state != State.STOPPED) {
 			throw new IllegalStateException("Stopwatch must be stopped to get elapsed time");
 		}
-		return TimeUnit.NANOSECONDS.convert(accumulatedTime, timeUnit);
+		return  timeUnit.convert(accumulatedTime,  TimeUnit.NANOSECONDS);
 	}
 
 }

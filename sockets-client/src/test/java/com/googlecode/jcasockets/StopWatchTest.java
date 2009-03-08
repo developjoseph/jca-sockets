@@ -45,6 +45,14 @@ public class StopWatchTest {
 		assertEquals( 4, elapsed);
 	}
 	@Test
+	public void testStartStopMilliseconds() {
+		StopWatch stopWatch = createStopWatch(0, 123456789);
+		stopWatch.start();
+		stopWatch.stop();
+		long elapsed = stopWatch.getElapsed( TimeUnit.MILLISECONDS );
+		assertEquals( 123, elapsed);
+	}
+	@Test
 	public void testGetElapsedWhenStarted() {
 		StopWatch stopWatch = createStopWatch(1);
 		stopWatch.start();  
