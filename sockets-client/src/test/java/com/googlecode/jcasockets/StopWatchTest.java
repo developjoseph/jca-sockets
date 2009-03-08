@@ -23,14 +23,40 @@ public class StopWatchTest {
 	
 	@Test
 	public void testStartStop() {
-		expect( timeProvider.nanoTime() ).andReturn(1L);
-		expect( timeProvider.nanoTime() ).andReturn(5L);
-		replay(timeProvider);
-		StopWatch stopWatch = new StopWatch(timeProvider);
+		StopWatch stopWatch = createStopWatch(1,5);
 		stopWatch.start();
 		stopWatch.stop();
 		long elapsed = stopWatch.getElapsed( TimeUnit.NANOSECONDS );
 		assertEquals( 4, elapsed);
-
+	}
+	@Test
+	public void testStopWhenStopped() {
+		StopWatch stopWatch = createStopWatch();
+		try {
+			stopWatch.stop(); 
+			fail("Should not be able to stop a stopped watch, (initial state is stopped)"); 
+		} catch (IllegalStateException e) {
+			// expected this
+		}
+	}
+	
+	@Test
+	public void testStartWhenStarted() {
+		StopWatch stopWatch = createStopWatch(1);
+		stopWatch.start();  
+		try {
+			stopWatch.start();  
+			fail("Should not be able to start a started watch"); 
+		} catch (IllegalStateException e) {
+			// expected this
+		}
+	}
+	
+	private StopWatch createStopWatch(long... nanoTimes) {
+		for (long nanoTime : nanoTimes) {
+			expect( timeProvider.nanoTime() ).andReturn(nanoTime);
+		}
+		replay(timeProvider);
+		return new StopWatch(timeProvider);
 	}
 }
