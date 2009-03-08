@@ -43,13 +43,12 @@ public class SenderTestRunner implements Callable<ExecutionStatistics> {
 	@Override
 	public ExecutionStatistics call() throws Exception {
 
-		executionStatistics = new ExecutionStatistics();
-		while ( endNanos > System.nanoTime()){
+		executionStatistics = new ExecutionStatistics(timeProvider);
+		while ( endNanos > timeProvider.nanoTime()){
 			String sendMessage = generateMessage();
 			executionStatistics.recordSend(sendMessage);
 			String receivedMessage = socketSender.send(sendMessage);
 			executionStatistics.recordReceive(receivedMessage);
-			
 		}
 		return executionStatistics;
 	}

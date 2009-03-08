@@ -15,22 +15,19 @@
  */
 package com.googlecode.jcasockets;
 
+import static org.easymock.EasyMock.verify;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
+
 import java.util.concurrent.TimeUnit;
 
 import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
-import static org.junit.Assert.*;
-import static org.easymock.EasyMock.*;
 
 public class StopWatchTest {
 	
 	private TimeProvider timeProvider;
 
-	@Before
-	public void setUp(){
-		timeProvider = createStrictMock( TimeProvider.class );
-	}
 	@After
 	public void tearDown(){
 		verify(timeProvider);
@@ -87,10 +84,7 @@ public class StopWatchTest {
 	}
 	
 	private StopWatch createStopWatch(long... nanoTimes) {
-		for (long nanoTime : nanoTimes) {
-			expect( timeProvider.nanoTime() ).andReturn(nanoTime);
-		}
-		replay(timeProvider);
+		timeProvider = TimeProviderFixture.createTimeProvider(nanoTimes);
 		return new StopWatch(timeProvider);
 	}
 }

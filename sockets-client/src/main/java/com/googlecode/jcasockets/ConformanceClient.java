@@ -59,7 +59,7 @@ public class ConformanceClient {
 			}
 		}
 		List<Future<ExecutionStatistics>> executionStatisticsFutures = executorService.invokeAll(senderTestRunners);
-		executionStatistics = new ExecutionStatistics();
+		executionStatistics = new ExecutionStatistics(null);
 		for (Future<ExecutionStatistics> future : executionStatisticsFutures) {
 			ExecutionStatistics that = future.get();
 			executionStatistics.combine(that);
