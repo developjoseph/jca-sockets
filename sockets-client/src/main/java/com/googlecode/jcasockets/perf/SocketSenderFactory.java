@@ -13,18 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.jcasockets;
+package com.googlecode.jcasockets.perf;
 
-
-public class MockSocketSender implements SocketSenderFactory, SocketSender {
-
-	@Override
-	public String send(String send) {
-		return send;
-	}
-
-	@Override
-	public SocketSender createSocketSender(String ipAddress, Integer port) {
-		return new MockSocketSender();
-	}
+public interface SocketSenderFactory {
+	SocketSender createSocketSender(String ipAddress, Integer port);
 }

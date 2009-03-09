@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.jcasockets;
+package com.googlecode.jcasockets.perf;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +25,7 @@ import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 
-public class ConformanceClientCli {
+public class ClientOptions {
 	public static final String OPTION_HELP = "h";
 	public static final String OPTION_EXECUTION_SECONDS = "s";
 	public static final String OPTION_NUMBER_OF_THREAD = "t";
@@ -50,7 +50,7 @@ public class ConformanceClientCli {
 	private int minimumMessageSize;
 	private int maximumMessageSize;
 
-	public ConformanceClientCli() {
+	public ClientOptions() {
 		options = createOptions();
 	}
 

@@ -13,8 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.jcasockets;
+package com.googlecode.jcasockets.perf;
 
-public interface SocketSender {
-	String send(String send);
+public interface TimeProvider {
+	static TimeProvider DEFAULT = new TimeProvider(){
+		@Override
+		public long nanoTime() {
+			return System.nanoTime();
+		}};
+	long nanoTime();
 }

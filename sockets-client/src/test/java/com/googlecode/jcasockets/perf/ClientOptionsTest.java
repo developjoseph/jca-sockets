@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.jcasockets;
+package com.googlecode.jcasockets.perf;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -23,79 +23,81 @@ import java.util.Arrays;
 
 import org.junit.Test;
 
-public class ConformanceClientCliTest {
+import com.googlecode.jcasockets.perf.ClientOptions;
+
+public class ClientOptionsTest {
 
 	@Test 
 	public void testCommandLineParsingDefaults() throws Exception{
-		ConformanceClientCli conformanceClient = new ConformanceClientCli( );
+		ClientOptions conformanceClient = new ClientOptions( );
 		conformanceClient.parseArguments( ); 
-		assertEquals( ConformanceClientCli.DEFAULT_EXECUTION_SECONDS,  conformanceClient.getExecutionSeconds( ) );
-		assertEquals( ConformanceClientCli.DEFAULT_NUMBER_OF_THREAD,  conformanceClient.getNumberOfThreads( ) );
-		assertEquals( ConformanceClientCli.DEFAULT_MIN_MESSAGE_SIZE,  conformanceClient.getMinimumMessageSize() );
-		assertEquals( ConformanceClientCli.DEFAULT_MAX_MESSAGE_SIZE,  conformanceClient.getMaximumMessageSize() );
+		assertEquals( ClientOptions.DEFAULT_EXECUTION_SECONDS,  conformanceClient.getExecutionSeconds( ) );
+		assertEquals( ClientOptions.DEFAULT_NUMBER_OF_THREAD,  conformanceClient.getNumberOfThreads( ) );
+		assertEquals( ClientOptions.DEFAULT_MIN_MESSAGE_SIZE,  conformanceClient.getMinimumMessageSize() );
+		assertEquals( ClientOptions.DEFAULT_MAX_MESSAGE_SIZE,  conformanceClient.getMaximumMessageSize() );
 		assertEquals( false,  conformanceClient.isHelpRequested() );
 	}
 	@Test 
 	public void testCommandLineParsingOfHelp() throws Exception{
-		ConformanceClientCli conformanceClient = new ConformanceClientCli( );
-		String argument = getOption(ConformanceClientCli.OPTION_HELP);
+		ClientOptions conformanceClient = new ClientOptions( );
+		String argument = getOption(ClientOptions.OPTION_HELP);
 		conformanceClient.parseArguments( argument); 
 		assertTrue(  conformanceClient.isHelpRequested( ) );
 	}
 	@Test 
 	public void testCommandLineParsingOfSinglePort() throws Exception{
-		ConformanceClientCli conformanceClient = new ConformanceClientCli( );
-		String argument = getOption(ConformanceClientCli.OPTION_PORTS, " 9000");
+		ClientOptions conformanceClient = new ClientOptions( );
+		String argument = getOption(ClientOptions.OPTION_PORTS, " 9000");
 		conformanceClient.parseArguments( argument); 
 		assertEquals( Arrays.asList(9000),  conformanceClient.getPorts( ) );
 	}
 	@Test 
 	public void testCommandLineParsingOfPorts() throws Exception{
-		ConformanceClientCli conformanceClient = new ConformanceClientCli( );
-		String argument = getOption(ConformanceClientCli.OPTION_PORTS, "100,123,111");
+		ClientOptions conformanceClient = new ClientOptions( );
+		String argument = getOption(ClientOptions.OPTION_PORTS, "100,123,111");
 		conformanceClient.parseArguments( argument); 
 		assertEquals( Arrays.asList(100,123,111),  conformanceClient.getPorts( ) );
 	}
 	@Test 
 	public void testCommandLineParsingOfExecutionSeconds() throws Exception{
-		ConformanceClientCli conformanceClient = new ConformanceClientCli( );
-		String argument = getOption(ConformanceClientCli.OPTION_EXECUTION_SECONDS, " 5");
+		ClientOptions conformanceClient = new ClientOptions( );
+		String argument = getOption(ClientOptions.OPTION_EXECUTION_SECONDS, " 5");
 		conformanceClient.parseArguments( argument); 
 		assertEquals( 5,  conformanceClient.getExecutionSeconds( ) );
 	}
 	@Test 
 	public void testCommandLineParsingOfMinimumMessageSize() throws Exception{
-		ConformanceClientCli conformanceClient = new ConformanceClientCli( );
-		String argument = getOption(ConformanceClientCli.OPTION_MIN_MESSAGE_SIZE, " 5");
+		ClientOptions conformanceClient = new ClientOptions( );
+		String argument = getOption(ClientOptions.OPTION_MIN_MESSAGE_SIZE, " 5");
 		conformanceClient.parseArguments( argument); 
 		assertEquals( 5,  conformanceClient.getMinimumMessageSize( ) );
 	}
 	@Test 
 	public void testCommandLineParsingOfMaximumMessageSize() throws Exception{
-		ConformanceClientCli conformanceClient = new ConformanceClientCli( );
-		String argument = getOption(ConformanceClientCli.OPTION_MAX_MESSAGE_SIZE, "200");
+		ClientOptions conformanceClient = new ClientOptions( );
+		String argument = getOption(ClientOptions.OPTION_MAX_MESSAGE_SIZE, "200");
 		conformanceClient.parseArguments( argument); 
 		assertEquals( 200,  conformanceClient.getMaximumMessageSize( ) );
 	}
 	@Test 
 	public void testCommandLineParsingOfNumberOfThreads() throws Exception{
-		ConformanceClientCli conformanceClient = new ConformanceClientCli( );
-		String argument = getOption(ConformanceClientCli.OPTION_NUMBER_OF_THREAD, "3 ");
+		ClientOptions conformanceClient = new ClientOptions( );
+		String argument = getOption(ClientOptions.OPTION_NUMBER_OF_THREAD, "3 ");
 		conformanceClient.parseArguments( argument); 
 		assertEquals( 3,  conformanceClient.getNumberOfThreads() );
 	}
 	@Test 
 	public void testCommandLineParsingOfIpAddress() throws Exception{
-		ConformanceClientCli conformanceClient = new ConformanceClientCli( );
-		String argument = getOption(ConformanceClientCli.OPTION_IP_ADDRESS, " myhost ");
+		ClientOptions conformanceClient = new ClientOptions( );
+		String argument = getOption(ClientOptions.OPTION_IP_ADDRESS, " myhost ");
 		conformanceClient.parseArguments( argument); 
 		assertEquals( "myhost",  conformanceClient.getIpAddress() );
 	}
 
 	@Test 
 	public void testCommandLineParsingNoHelp() throws Exception{
-		ConformanceClientCli conformanceClient = new ConformanceClientCli( );
-		String argument = getOption(ConformanceClientCli.OPTION_EXECUTION_SECONDS, "3");
+		ClientOptions conformanceClient = new ClientOptions( );
+		String argument = getOption(ClientOptions.OPTION_EXECUTION_SECONDS, "3");
 		conformanceClient.parseArguments( argument); 
 		assertFalse(  conformanceClient.isHelpRequested( ) );
 	}

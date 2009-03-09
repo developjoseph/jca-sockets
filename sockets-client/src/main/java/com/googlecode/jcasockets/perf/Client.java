@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.jcasockets;
+package com.googlecode.jcasockets.perf;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,9 +25,9 @@ import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.cli.ParseException;
 
-public class ConformanceClient {
+public class Client {
 	public static void main(String[] args) throws Exception {
-		ConformanceClient conformanceClient = new ConformanceClient(args);
+		Client conformanceClient = new Client(args);
 		conformanceClient.execute();
 		ExecutionStatistics executionStatistics = conformanceClient.getExecutionStatistics();
 		printStatisticsAsCSV(executionStatistics );
@@ -47,11 +47,11 @@ public class ConformanceClient {
 	}
 
 	private SocketSenderFactory socketSenderFactory = new RemoteSocketSender();
-	private ConformanceClientCli clientCli;
+	private ClientOptions clientCli;
 	private ExecutionStatistics executionStatistics;
 
-	public ConformanceClient(String[] args) throws ParseException {
-		clientCli = new ConformanceClientCli();
+	public Client(String[] args) throws ParseException {
+		clientCli = new ClientOptions();
 		clientCli.parseArguments(args);
 	}
 

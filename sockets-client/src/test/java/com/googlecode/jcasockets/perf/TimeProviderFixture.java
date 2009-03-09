@@ -1,8 +1,10 @@
-package com.googlecode.jcasockets;
+package com.googlecode.jcasockets.perf;
 
 import static org.easymock.EasyMock.createStrictMock;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
+
+import com.googlecode.jcasockets.perf.TimeProvider;
 
 public class TimeProviderFixture {
 

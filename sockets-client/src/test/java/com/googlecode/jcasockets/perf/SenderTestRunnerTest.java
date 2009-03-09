@@ -13,17 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.jcasockets;
+package com.googlecode.jcasockets.perf;
 
 import static org.junit.Assert.*;
 
 import org.apache.commons.cli.ParseException;
 import org.junit.Test;
 
+import com.googlecode.jcasockets.perf.ClientOptions;
+import com.googlecode.jcasockets.perf.ExecutionStatistics;
+import com.googlecode.jcasockets.perf.SenderTestRunner;
+import com.googlecode.jcasockets.perf.SocketSender;
+
 public class SenderTestRunnerTest {
 	@Test
 	public void testSmallMessageSize() throws Exception{
-		ConformanceClientCli conformanceClient = getCommandLineOptions("-s1 -m3 -M15 -p8000");
+		ClientOptions conformanceClient = getCommandLineOptions("-s1 -m3 -M15 -p8000");
 		SocketSender socketSender = new MockSocketSender();
 		SenderTestRunner senderTestRunner = new SenderTestRunner(conformanceClient, socketSender);
 		ExecutionStatistics executionStatistics = senderTestRunner.call();
@@ -38,9 +43,9 @@ public class SenderTestRunnerTest {
 		
 	}
 
-	private ConformanceClientCli getCommandLineOptions(String string)
+	private ClientOptions getCommandLineOptions(String string)
 			throws ParseException {
-		ConformanceClientCli conformanceClient = new ConformanceClientCli();
+		ClientOptions conformanceClient = new ClientOptions();
 		String[] args = string.split(" ");
 		conformanceClient.parseArguments( args );
 		return conformanceClient;

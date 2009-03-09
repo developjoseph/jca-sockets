@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.jcasockets;
+package com.googlecode.jcasockets.perf;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -21,11 +21,14 @@ import static org.junit.Assert.assertTrue;
 import org.apache.commons.cli.ParseException;
 import org.junit.Test;
 
-public class ConformanceClientTest {
+import com.googlecode.jcasockets.perf.Client;
+import com.googlecode.jcasockets.perf.ExecutionStatistics;
+
+public class ClientTest {
 	@Test
 	public void testMultipleThread() throws Exception{
 
-		ConformanceClient conformanceClient = getConformanceClient( "-s 1 -t2 -m10 -M10 -p 9000");
+		Client conformanceClient = getConformanceClient( "-s 1 -t2 -m10 -M10 -p 9000");
 		MockSocketSender socketSender = new MockSocketSender();
 		
 		conformanceClient.setSender( socketSender );
@@ -39,15 +42,15 @@ public class ConformanceClientTest {
 		assertEquals( 20, executionStatistics.getMaximumMessageSize() );
 	}
 
-	private ConformanceClient getConformanceClient(String string) throws ParseException {
+	private Client getConformanceClient(String string) throws ParseException {
 		String[] args = string.split(" ");
-		ConformanceClient conformanceClient = new ConformanceClient(args);
+		Client conformanceClient = new Client(args);
 		return conformanceClient;
 	}
 
 	@Test
 	public void testSmallMessageSize() throws Exception{
-		ConformanceClient conformanceClient = getConformanceClient( "-s 1 -m 3 -M15 -p 8888");
+		Client conformanceClient = getConformanceClient( "-s 1 -m 3 -M15 -p 8888");
 		MockSocketSender socketSender = new MockSocketSender();
 		
 		conformanceClient.setSender( socketSender );

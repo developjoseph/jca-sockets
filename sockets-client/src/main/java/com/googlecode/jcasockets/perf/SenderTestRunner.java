@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.jcasockets;
+package com.googlecode.jcasockets.perf;
 
 import java.util.Arrays;
 import java.util.Random;
@@ -22,14 +22,14 @@ import java.util.concurrent.TimeUnit;
 
 public class SenderTestRunner implements Callable<ExecutionStatistics> {
 	private ExecutionStatistics executionStatistics;;
-	private ConformanceClientCli conformanceClientCli;
+	private ClientOptions conformanceClientCli;
 	private SocketSender socketSender;
 	private TimeProvider timeProvider = TimeProvider.DEFAULT;
 	private long endNanos;
 	Random random = new Random();
 	private String filledString;
 
-	public SenderTestRunner(ConformanceClientCli conformanceClientCli,
+	public SenderTestRunner(ClientOptions conformanceClientCli,
 			SocketSender socketSender) {
 		this.conformanceClientCli = conformanceClientCli;
 		this.socketSender = socketSender;
