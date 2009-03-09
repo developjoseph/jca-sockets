@@ -74,14 +74,17 @@ public class ClientTest {
 
 	@Test
 	public void testExectuionStatistics() throws Exception {
+		String[] values = getHeaderStrings();
+		assertEquals(10, values.length);
+	}
 
+	private String[] getHeaderStrings() {
 		ByteArrayOutputStream os = new ByteArrayOutputStream(); 
 		PrintStream printStream = new PrintStream( os ); 
 		Client.printStatisticsHeaderAsCSV(printStream);
 		String csv = os.toString().trim();
 		String[] values = csv.split(",");
-		assertEquals(7, values.length);
-		
+		return values;
 	}
 	@Test
 	public void testExecutionStatistics() throws Exception {
@@ -94,20 +97,13 @@ public class ClientTest {
 		executionStatistics.recordSend("1234567890");
 		executionStatistics.recordReceive("R123456789");
 		
-		assertEquals(32, executionStatistics.getBytesSent());
-		assertEquals(36, executionStatistics.getBytesReceived());
-		assertEquals(3, executionStatistics.getElapsed(TimeUnit.SECONDS));
-		assertEquals(3, executionStatistics.getMessagesSent());
-		assertEquals(3, executionStatistics.getMessagesReceived());
-		assertEquals(2, executionStatistics.getMinimumMessageSize());
-		assertEquals(20, executionStatistics.getMaximumMessageSize());
-
 		ByteArrayOutputStream os = new ByteArrayOutputStream(); 
 		PrintStream printStream = new PrintStream( os ); 
 		Client.printStatisticsAsCSV(printStream, executionStatistics);
 		String csv = os.toString().trim();
 		String[] values = csv.split(",");
-		assertEquals(7, values.length);
+		assertEquals(10, values.length);
+		assertEquals(getHeaderStrings().length, values.length);
 		
 		assertEquals(executionStatistics.getBytesSent(), Integer.parseInt(values[0]));
 		assertEquals(executionStatistics.getBytesReceived(), Integer.parseInt(values[1]));
@@ -116,9 +112,8 @@ public class ClientTest {
 		assertEquals(executionStatistics.getMessagesReceived(), Integer.parseInt(values[4]));
 		assertEquals(executionStatistics.getMinimumMessageSize(), Integer.parseInt(values[5]));
 		assertEquals(executionStatistics.getMaximumMessageSize(), Integer.parseInt(values[6]));
-		
-//		assertEquals( 11, Integer.parseInt(values[7])); // sent bytes/second (rounded up)
-//		assertEquals( 12, Integer.parseInt(values[8])); // received bytes/second (rounded down)
-		
+		assertEquals(executionStatistics.getBytesSentPerSecond(), Integer.parseInt(values[7]));
+		assertEquals(executionStatistics.getBytesReceivedPerSecond(), Integer.parseInt(values[8]));
+		assertEquals(executionStatistics.getBytesPerSecond(), Integer.parseInt(values[9]));
 	}
 }

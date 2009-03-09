@@ -36,17 +36,20 @@ public class Client {
 	}
 
 	static void printStatisticsHeaderAsCSV(PrintStream printStream) {
-		printStream.printf("bytesSent,bytesReceived,milliseconds,messagesSent,messagesReceived,minimumMessageSize,maximumMessageSize\n"); 
+		printStream.printf("bytesSent,bytesReceived,milliseconds,messagesSent,messagesReceived,minimumMessageSize,maximumMessageSize,bytesSentPerSecond,bytesReceivedPerSecond,bytesPerSecond\n"); 
 	}
 	static void printStatisticsAsCSV(PrintStream printStream, ExecutionStatistics executionStatistics) {
-		printStream.printf("%d,%d,%d,%d,%d,%d,%d\n", 
+		printStream.printf("%d,%d,%d,%d,%d,%d,%d,%d,%d,%d\n", 
 				executionStatistics.getBytesSent(), 
 				executionStatistics.getBytesReceived(),
 				executionStatistics.getElapsed(TimeUnit.MILLISECONDS),
 				executionStatistics.getMessagesSent(),
 				executionStatistics.getMessagesReceived(),
 				executionStatistics.getMinimumMessageSize(),
-				executionStatistics.getMaximumMessageSize()
+				executionStatistics.getMaximumMessageSize(),
+				executionStatistics.getBytesSentPerSecond(),
+				executionStatistics.getBytesReceivedPerSecond(),
+				executionStatistics.getBytesPerSecond()
 				);
 	}
 
