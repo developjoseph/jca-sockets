@@ -15,8 +15,7 @@
  */
 package com.googlecode.jcasockets;
 
-import static org.easymock.EasyMock.verify;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import java.util.concurrent.TimeUnit;
 
