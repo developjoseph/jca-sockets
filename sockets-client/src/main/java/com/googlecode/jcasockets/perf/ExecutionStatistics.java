@@ -69,19 +69,6 @@ public class ExecutionStatistics {
 	public long getBytesSent() {
 		return bytesSent;
 	}
-	public int getBytesSentPerSecond() {
-		return calculateBytesPerSecond( bytesSent );
-	}
-	public int getBytesReceivedPerSecond() {
-		return calculateBytesPerSecond( bytesReceived );
-	}
-	public int getBytesPerSecond() {
-		return calculateBytesPerSecond( bytesReceived + bytesSent );
-	}
-	private int calculateBytesPerSecond( long bytes ){
-		double millis = getElapsed(TimeUnit.MILLISECONDS);
-		return (int) Math.round((1000f * (bytes)/ millis)); 
-	}
 	
 	
 	public int getMessagesSent() {
@@ -102,6 +89,20 @@ public class ExecutionStatistics {
 
 	public long getElapsed(TimeUnit timeUnit) {
 		return sendingTimeStopWatch.getElapsed(timeUnit);
+	}
+
+	public int getBytesSentPerSecond() {
+		return calculateCountPerSecond( bytesSent );
+	}
+	public int getBytesReceivedPerSecond() {
+		return calculateCountPerSecond( bytesReceived );
+	}
+	public int getMessagesPerSecond() {
+		return calculateCountPerSecond( messagesReceived );
+	}
+	private int calculateCountPerSecond( long count ){
+		double millis = getElapsed(TimeUnit.MILLISECONDS);
+		return (int) Math.round((1000f * (count)/ millis)); 
 	}
 
 }

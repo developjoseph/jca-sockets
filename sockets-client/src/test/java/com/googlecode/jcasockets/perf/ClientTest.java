@@ -114,6 +114,6 @@ public class ClientTest {
 		assertEquals(executionStatistics.getMaximumMessageSize(), Integer.parseInt(values[6]));
 		assertEquals(executionStatistics.getBytesSentPerSecond(), Integer.parseInt(values[7]));
 		assertEquals(executionStatistics.getBytesReceivedPerSecond(), Integer.parseInt(values[8]));
-		assertEquals(executionStatistics.getBytesPerSecond(), Integer.parseInt(values[9]));
+		assertEquals(executionStatistics.getMessagesPerSecond(), Integer.parseInt(values[9]));
 	}
 }

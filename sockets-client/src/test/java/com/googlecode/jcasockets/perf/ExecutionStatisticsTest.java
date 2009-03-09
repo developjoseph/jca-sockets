@@ -19,18 +19,13 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.concurrent.TimeUnit;
 
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
-
-import com.googlecode.jcasockets.perf.ExecutionStatistics;
-import com.googlecode.jcasockets.perf.TimeProvider;
 
 public class ExecutionStatisticsTest {
 
 	@Test
 	public void testSendReceiveMesages() {
-		TimeProvider timeProvider = TimeProviderFixture.createTimeProvider(TimeUnit.SECONDS, 1,4, 5,8  );
+		TimeProvider timeProvider = TimeProviderFixture.createTimeProvider(TimeUnit.MILLISECONDS, 1,4, 5,8  );
 		ExecutionStatistics executionStatistics = new ExecutionStatistics(timeProvider);
 		executionStatistics.recordSend("xx");
 		executionStatistics.recordReceive("xx");
@@ -40,11 +35,11 @@ public class ExecutionStatisticsTest {
 		assertEquals(1, executionStatistics.getMessagesReceived());
 		assertEquals(4, executionStatistics.getMinimumMessageSize());
 		assertEquals(4, executionStatistics.getMaximumMessageSize());
-		assertEquals(3, executionStatistics.getElapsed(TimeUnit.SECONDS));
+		assertEquals(3, executionStatistics.getElapsed(TimeUnit.MILLISECONDS));
 		
-		assertEquals(1, executionStatistics.getBytesSentPerSecond());
-		assertEquals(1, executionStatistics.getBytesReceivedPerSecond());
-		assertEquals(3, executionStatistics.getBytesPerSecond());
+		assertEquals(1333, executionStatistics.getBytesSentPerSecond());
+		assertEquals(1333, executionStatistics.getBytesReceivedPerSecond());
+		assertEquals(333, executionStatistics.getMessagesPerSecond());
 
 		executionStatistics.recordSend("yyy");
 		executionStatistics.recordReceive("Ryyy");
@@ -54,11 +49,11 @@ public class ExecutionStatisticsTest {
 		assertEquals(2, executionStatistics.getMessagesReceived());
 		assertEquals(4, executionStatistics.getMinimumMessageSize());
 		assertEquals(6, executionStatistics.getMaximumMessageSize());
-		assertEquals(6, executionStatistics.getElapsed(TimeUnit.SECONDS));
+		assertEquals(6, executionStatistics.getElapsed(TimeUnit.MILLISECONDS));
 
-		assertEquals(2, executionStatistics.getBytesSentPerSecond());
-		assertEquals(2, executionStatistics.getBytesReceivedPerSecond());
-		assertEquals(4, executionStatistics.getBytesPerSecond());
+		assertEquals(1667, executionStatistics.getBytesSentPerSecond());
+		assertEquals(2000, executionStatistics.getBytesReceivedPerSecond());
+		assertEquals(333, executionStatistics.getMessagesPerSecond());
 	}
 
 	@Test
