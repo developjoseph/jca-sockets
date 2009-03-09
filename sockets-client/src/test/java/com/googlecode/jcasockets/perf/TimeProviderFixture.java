@@ -4,14 +4,20 @@ import static org.easymock.EasyMock.createStrictMock;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
 
+import java.util.concurrent.TimeUnit;
+
 import com.googlecode.jcasockets.perf.TimeProvider;
 
 public class TimeProviderFixture {
 
 	public static TimeProvider createTimeProvider(long... nanoTimes) {
+		return createTimeProvider(TimeUnit.NANOSECONDS, nanoTimes);
+	}
+	public static TimeProvider createTimeProvider(TimeUnit timeUnit, long... times) {
 		TimeProvider timeProvider = createStrictMock( TimeProvider.class );
 		
-		for (long nanoTime : nanoTimes) {
+		for (long time : times) {
+			long nanoTime = TimeUnit.NANOSECONDS.convert(time, timeUnit);
 			expect( timeProvider.nanoTime() ).andReturn(nanoTime);
 		}
 		replay(timeProvider);

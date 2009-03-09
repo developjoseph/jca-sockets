@@ -15,6 +15,7 @@
  */
 package com.googlecode.jcasockets.perf;
 
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -30,12 +31,15 @@ public class Client {
 		Client conformanceClient = new Client(args);
 		conformanceClient.execute();
 		ExecutionStatistics executionStatistics = conformanceClient.getExecutionStatistics();
-		printStatisticsAsCSV(executionStatistics );
+		printStatisticsHeaderAsCSV(System.out );
+		printStatisticsAsCSV(System.out, executionStatistics );
 	}
 
-	private static void printStatisticsAsCSV(ExecutionStatistics executionStatistics) {
-		System.out.printf("bytesSent,bytesReceived,milliseconds,messagesSent,messagesReceived,minimumMessageSize,maximumMessageSize\n"); 
-		System.out.printf("%d,%d,%d,%d,%d,%d,%d\n", 
+	static void printStatisticsHeaderAsCSV(PrintStream printStream) {
+		printStream.printf("bytesSent,bytesReceived,milliseconds,messagesSent,messagesReceived,minimumMessageSize,maximumMessageSize\n"); 
+	}
+	static void printStatisticsAsCSV(PrintStream printStream, ExecutionStatistics executionStatistics) {
+		printStream.printf("%d,%d,%d,%d,%d,%d,%d\n", 
 				executionStatistics.getBytesSent(), 
 				executionStatistics.getBytesReceived(),
 				executionStatistics.getElapsed(TimeUnit.MILLISECONDS),

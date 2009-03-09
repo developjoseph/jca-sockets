@@ -69,6 +69,21 @@ public class ExecutionStatistics {
 	public long getBytesSent() {
 		return bytesSent;
 	}
+	public int getBytesSentPerSecond() {
+		return calculateBytesPerSecond( bytesSent );
+	}
+	public int getBytesReceivedPerSecond() {
+		return calculateBytesPerSecond( bytesReceived );
+	}
+	public int getBytesPerSecond() {
+		return calculateBytesPerSecond( bytesReceived + bytesSent );
+	}
+	private int calculateBytesPerSecond( long bytes ){
+		double millis = getElapsed(TimeUnit.MILLISECONDS);
+		return (int) Math.round((1000f * (bytes)/ millis)); 
+	}
+	
+	
 	public int getMessagesSent() {
 		return messagesSent;
 	}

@@ -18,6 +18,10 @@ package com.googlecode.jcasockets.perf;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
+import java.util.concurrent.TimeUnit;
+
 import org.apache.commons.cli.ParseException;
 import org.junit.Test;
 
@@ -26,20 +30,21 @@ import com.googlecode.jcasockets.perf.ExecutionStatistics;
 
 public class ClientTest {
 	@Test
-	public void testMultipleThread() throws Exception{
+	public void testMultipleThread() throws Exception {
 
-		Client conformanceClient = getConformanceClient( "-s 1 -t2 -m10 -M10 -p 9000");
+		Client conformanceClient = getConformanceClient("-s 1 -t2 -m10 -M10 -p 9000");
 		MockSocketSender socketSender = new MockSocketSender();
-		
-		conformanceClient.setSender( socketSender );
+
+		conformanceClient.setSender(socketSender);
 		conformanceClient.execute();
 		ExecutionStatistics executionStatistics = conformanceClient.getExecutionStatistics();
 
-		assertTrue(executionStatistics.getMessagesSent() > 0 );
-		// TODO in fact this is a bit flakey it is possible (but unlikely) for this to fail
+		assertTrue(executionStatistics.getMessagesSent() > 0);
+		// TODO in fact this is a bit flakey it is possible (but unlikely) for
+		// this to fail
 		// maybe the first 2 executions should not use random but max/min
-		assertEquals( 20, executionStatistics.getMinimumMessageSize() );
-		assertEquals( 20, executionStatistics.getMaximumMessageSize() );
+		assertEquals(20, executionStatistics.getMinimumMessageSize());
+		assertEquals(20, executionStatistics.getMaximumMessageSize());
 	}
 
 	private Client getConformanceClient(String string) throws ParseException {
@@ -49,22 +54,71 @@ public class ClientTest {
 	}
 
 	@Test
-	public void testSmallMessageSize() throws Exception{
-		Client conformanceClient = getConformanceClient( "-s 1 -m 3 -M15 -p 8888");
+	public void testSmallMessageSize() throws Exception {
+		Client conformanceClient = getConformanceClient("-s 1 -m 3 -M15 -p 8888");
 		MockSocketSender socketSender = new MockSocketSender();
-		
-		conformanceClient.setSender( socketSender );
+
+		conformanceClient.setSender(socketSender);
 		conformanceClient.execute();
 		ExecutionStatistics executionStatistics = conformanceClient.getExecutionStatistics();
-		
-		assertTrue(executionStatistics.getMessagesSent() > 0 );
 
-		// TODO in fact this is a bit flakey it is possible (but unlikely) for this to fail
+		assertTrue(executionStatistics.getMessagesSent() > 0);
+
+		// TODO in fact this is a bit flakey it is possible (but unlikely) for
+		// this to fail
 		// maybe the first 2 executions should not use random but max/min
-		assertEquals( 6, executionStatistics.getMinimumMessageSize() );
-		assertEquals( 30, executionStatistics.getMaximumMessageSize() );
-		
+		assertEquals(6, executionStatistics.getMinimumMessageSize());
+		assertEquals(30, executionStatistics.getMaximumMessageSize());
+
 	}
 
-	
+	@Test
+	public void testExectuionStatistics() throws Exception {
+
+		ByteArrayOutputStream os = new ByteArrayOutputStream(); 
+		PrintStream printStream = new PrintStream( os ); 
+		Client.printStatisticsHeaderAsCSV(printStream);
+		String csv = os.toString().trim();
+		String[] values = csv.split(",");
+		assertEquals(7, values.length);
+		
+	}
+	@Test
+	public void testExecutionStatistics() throws Exception {
+		TimeProvider timeProvider = TimeProviderFixture.createTimeProvider(TimeUnit.SECONDS, 1,2,3,4,5,6);
+		ExecutionStatistics executionStatistics = new ExecutionStatistics(timeProvider);
+		executionStatistics.recordSend("12345");
+		executionStatistics.recordReceive("R12345");
+		executionStatistics.recordSend("1");
+		executionStatistics.recordReceive("R1");
+		executionStatistics.recordSend("1234567890");
+		executionStatistics.recordReceive("R123456789");
+		
+		assertEquals(32, executionStatistics.getBytesSent());
+		assertEquals(36, executionStatistics.getBytesReceived());
+		assertEquals(3, executionStatistics.getElapsed(TimeUnit.SECONDS));
+		assertEquals(3, executionStatistics.getMessagesSent());
+		assertEquals(3, executionStatistics.getMessagesReceived());
+		assertEquals(2, executionStatistics.getMinimumMessageSize());
+		assertEquals(20, executionStatistics.getMaximumMessageSize());
+
+		ByteArrayOutputStream os = new ByteArrayOutputStream(); 
+		PrintStream printStream = new PrintStream( os ); 
+		Client.printStatisticsAsCSV(printStream, executionStatistics);
+		String csv = os.toString().trim();
+		String[] values = csv.split(",");
+		assertEquals(7, values.length);
+		
+		assertEquals(executionStatistics.getBytesSent(), Integer.parseInt(values[0]));
+		assertEquals(executionStatistics.getBytesReceived(), Integer.parseInt(values[1]));
+		assertEquals(executionStatistics.getElapsed(TimeUnit.MILLISECONDS), Integer.parseInt(values[2]));
+		assertEquals(executionStatistics.getMessagesSent(), Integer.parseInt(values[3]));
+		assertEquals(executionStatistics.getMessagesReceived(), Integer.parseInt(values[4]));
+		assertEquals(executionStatistics.getMinimumMessageSize(), Integer.parseInt(values[5]));
+		assertEquals(executionStatistics.getMaximumMessageSize(), Integer.parseInt(values[6]));
+		
+//		assertEquals( 11, Integer.parseInt(values[7])); // sent bytes/second (rounded up)
+//		assertEquals( 12, Integer.parseInt(values[8])); // received bytes/second (rounded down)
+		
+	}
 }

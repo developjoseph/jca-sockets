@@ -27,19 +27,10 @@ import com.googlecode.jcasockets.perf.ExecutionStatistics;
 import com.googlecode.jcasockets.perf.TimeProvider;
 
 public class ExecutionStatisticsTest {
-	private TimeProvider timeProvider;
-
-	@Before
-	public void setUp() {
-		timeProvider = TimeProviderFixture.createIncrementalTimeProvider();
-	}
-
-	@After
-	public void tearDown() {
-	}
 
 	@Test
 	public void testSendReceiveMesages() {
+		TimeProvider timeProvider = TimeProviderFixture.createTimeProvider(TimeUnit.SECONDS, 1,4, 5,8  );
 		ExecutionStatistics executionStatistics = new ExecutionStatistics(timeProvider);
 		executionStatistics.recordSend("xx");
 		executionStatistics.recordReceive("xx");
@@ -47,23 +38,32 @@ public class ExecutionStatisticsTest {
 		assertEquals(4, executionStatistics.getBytesReceived());
 		assertEquals(1, executionStatistics.getMessagesSent());
 		assertEquals(1, executionStatistics.getMessagesReceived());
-		assertEquals(4, executionStatistics.getMaximumMessageSize());
 		assertEquals(4, executionStatistics.getMinimumMessageSize());
-		assertEquals(1, executionStatistics.getElapsed(TimeUnit.NANOSECONDS));
+		assertEquals(4, executionStatistics.getMaximumMessageSize());
+		assertEquals(3, executionStatistics.getElapsed(TimeUnit.SECONDS));
+		
+		assertEquals(1, executionStatistics.getBytesSentPerSecond());
+		assertEquals(1, executionStatistics.getBytesReceivedPerSecond());
+		assertEquals(3, executionStatistics.getBytesPerSecond());
 
 		executionStatistics.recordSend("yyy");
-		executionStatistics.recordReceive("yyy");
+		executionStatistics.recordReceive("Ryyy");
 		assertEquals(10, executionStatistics.getBytesSent());
-		assertEquals(10, executionStatistics.getBytesReceived());
+		assertEquals(12, executionStatistics.getBytesReceived());
 		assertEquals(2, executionStatistics.getMessagesSent());
 		assertEquals(2, executionStatistics.getMessagesReceived());
-		assertEquals(6, executionStatistics.getMaximumMessageSize());
 		assertEquals(4, executionStatistics.getMinimumMessageSize());
-		assertEquals(2, executionStatistics.getElapsed(TimeUnit.NANOSECONDS));
+		assertEquals(6, executionStatistics.getMaximumMessageSize());
+		assertEquals(6, executionStatistics.getElapsed(TimeUnit.SECONDS));
+
+		assertEquals(2, executionStatistics.getBytesSentPerSecond());
+		assertEquals(2, executionStatistics.getBytesReceivedPerSecond());
+		assertEquals(4, executionStatistics.getBytesPerSecond());
 	}
 
 	@Test
 	public void testCombineMesages() {
+		TimeProvider timeProvider = TimeProviderFixture.createIncrementalTimeProvider();
 		ExecutionStatistics executionStatistics1 = new ExecutionStatistics(timeProvider);
 		executionStatistics1.recordSend("xxx");
 		executionStatistics1.recordReceive("xxx");
