@@ -21,6 +21,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.cli.ParseException;
 
@@ -29,7 +30,20 @@ public class ConformanceClient {
 		ConformanceClient conformanceClient = new ConformanceClient(args);
 		conformanceClient.execute();
 		ExecutionStatistics executionStatistics = conformanceClient.getExecutionStatistics();
-		System.out.println(executionStatistics.toString());
+		printStatisticsAsCSV(executionStatistics );
+	}
+
+	private static void printStatisticsAsCSV(ExecutionStatistics executionStatistics) {
+		System.out.printf("bytesSent,bytesReceived,milliseconds,messagesSent,messagesReceived,minimumMessageSize,maximumMessageSize\n"); 
+		System.out.printf("%d,%d,%d,%d,%d,%d,%d\n", 
+				executionStatistics.getBytesSent(), 
+				executionStatistics.getBytesReceived(),
+				executionStatistics.getElapsed(TimeUnit.MILLISECONDS),
+				executionStatistics.getMessagesSent(),
+				executionStatistics.getMessagesReceived(),
+				executionStatistics.getMinimumMessageSize(),
+				executionStatistics.getMaximumMessageSize()
+				);
 	}
 
 	private SocketSenderFactory socketSenderFactory = new RemoteSocketSender();
