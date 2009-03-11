@@ -22,36 +22,43 @@ import javax.ejb.EJBException;
 import javax.ejb.MessageDrivenBean;
 import javax.ejb.MessageDrivenContext;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import com.googlecode.jcasockets.SocketMessage;
 import com.googlecode.jcasockets.SocketMessageEndpoint;
 
 public class SocketMessageDrivenBean implements MessageDrivenBean, SocketMessageEndpoint {
 	private static final long serialVersionUID = 1L;
+	private final Log log = LogFactory.getLog(SocketMessageDrivenBean.class);
 
 	public SocketMessageDrivenBean() {
 	}
 
-
 	@Override
 	public void ejbRemove() throws EJBException {
-		
-	}
-	public void ejbCreate() throws EJBException {
-		
+
 	}
 
+	public void ejbCreate() throws EJBException {
+
+	}
 
 	@Override
-	public void setMessageDrivenContext(MessageDrivenContext ctx)
-			throws EJBException {
+	public void setMessageDrivenContext(MessageDrivenContext ctx) throws EJBException {
 	}
 
-	public void onMessage(SocketMessage socketMessage) throws Exception{
+	public void onMessage(SocketMessage socketMessage) throws Exception {
 		LineNumberReader in = new LineNumberReader(socketMessage.getReader());
 		final PrintStream out = new PrintStream(socketMessage.getOutputStream());
 		String line;
+		int size = 0;
 		while ((line = in.readLine()) != null) {
-			out.println("In MDB I got:" + line);
+			out.println(line);
+			size += line.length();
+		}
+		if (log.isInfoEnabled()){
+			log.info("Processed message size: " + size );
 		}
 	}
 }

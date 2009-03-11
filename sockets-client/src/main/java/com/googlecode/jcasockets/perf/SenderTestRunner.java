@@ -22,20 +22,20 @@ import java.util.concurrent.TimeUnit;
 
 public class SenderTestRunner implements Callable<ExecutionStatistics> {
 	private ExecutionStatistics executionStatistics;;
-	private ClientOptions conformanceClientCli;
+	private ClientOptions clientOptions;
 	private SocketSender socketSender;
 	private TimeProvider timeProvider = TimeProvider.DEFAULT;
 	private long endNanos;
 	Random random = new Random();
 	private String filledString;
 
-	public SenderTestRunner(ClientOptions conformanceClientCli,
+	public SenderTestRunner(ClientOptions clientOptions,
 			SocketSender socketSender) {
-		this.conformanceClientCli = conformanceClientCli;
+		this.clientOptions = clientOptions;
 		this.socketSender = socketSender;
-		long nanosToExecute = TimeUnit.SECONDS.toNanos( conformanceClientCli.getExecutionSeconds() );
+		long nanosToExecute = TimeUnit.SECONDS.toNanos( clientOptions.getExecutionSeconds() );
 		endNanos = timeProvider.nanoTime() + nanosToExecute;
-		char[] chars = new char[ conformanceClientCli.getMaximumMessageSize() ]; 
+		char[] chars = new char[ clientOptions.getMaximumMessageSize() ]; 
 		Arrays.fill(chars, 'X');
 		filledString = new String(chars);
 	}
@@ -49,13 +49,23 @@ public class SenderTestRunner implements Callable<ExecutionStatistics> {
 			executionStatistics.recordSend(sendMessage);
 			String receivedMessage = socketSender.send(sendMessage);
 			executionStatistics.recordReceive(receivedMessage);
+			String expectedResponse = generateExpectedResponse( sendMessage );
+			// TODO parameterize the expectation 
+			if (!expectedResponse.equals(receivedMessage)){
+				throw new RuntimeException("Messages are different expected\n" 
+						+ expectedResponse + "\nactual\n" + receivedMessage);
+			}
+			
 		}
 		return executionStatistics;
 	}
 	private String generateMessage() {
-		int range = conformanceClientCli.getMaximumMessageSize() - conformanceClientCli.getMinimumMessageSize() + 1;
-		int size = random.nextInt(range) + conformanceClientCli.getMinimumMessageSize();
+		int range = clientOptions.getMaximumMessageSize() - clientOptions.getMinimumMessageSize() + 1;
+		int size = random.nextInt(range) + clientOptions.getMinimumMessageSize();
 		return filledString.substring(0, size);
 	}
 
+	private String generateExpectedResponse(String request) {
+		return request;
+	}
 }

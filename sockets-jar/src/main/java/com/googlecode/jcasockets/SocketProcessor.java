@@ -41,7 +41,7 @@ public class SocketProcessor implements Work {
 
 	public void run() {
 		try {
-			log.info("Executing the onMessage( socketMessage) method");
+			log.debug("Executing the onMessage(socketMessage) method");
 			messageEndpoint.onMessage(socketMessage);
 		} catch (Exception e) {
 			log.error("Exception on execution of MDB, processing has probably failed", e);
