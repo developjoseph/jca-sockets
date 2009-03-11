@@ -28,9 +28,14 @@ import org.apache.commons.cli.ParseException;
 
 public class Client {
 	public static void main(String[] args) throws Exception {
-		Client conformanceClient = new Client(args);
-		conformanceClient.execute();
-		ExecutionStatistics executionStatistics = conformanceClient.getExecutionStatistics();
+		Client client = new Client(args);
+		if ( client.clientOptions.isHelpRequested() ){
+			client.clientOptions.printHelp(System.err);
+			return;
+		}
+		
+		client.execute();
+		ExecutionStatistics executionStatistics = client.getExecutionStatistics();
 		printStatisticsHeaderAsCSV(System.out );
 		printStatisticsAsCSV(System.out, executionStatistics );
 	}
@@ -54,12 +59,12 @@ public class Client {
 	}
 
 	private SocketSenderFactory socketSenderFactory = new RemoteSocketSender();
-	private ClientOptions clientCli;
+	private ClientOptions clientOptions;
 	private ExecutionStatistics executionStatistics;
 
 	public Client(String[] args) throws ParseException {
-		clientCli = new ClientOptions();
-		clientCli.parseArguments(args);
+		clientOptions = new ClientOptions();
+		clientOptions.parseArguments(args);
 	}
 
 	void setSender(SocketSenderFactory socketSenderFactory) {
@@ -67,16 +72,16 @@ public class Client {
 	}
 
 	public void execute() throws InterruptedException, ExecutionException {
-		int numberOfThreads = clientCli.getNumberOfThreads();
-		String ipAddress = clientCli.getIpAddress();
-		List<Integer> ports = clientCli.getPorts();
+		int numberOfThreads = clientOptions.getNumberOfThreads();
+		String ipAddress = clientOptions.getIpAddress();
+		List<Integer> ports = clientOptions.getPorts();
 
 		ExecutorService executorService = Executors.newFixedThreadPool(numberOfThreads);
 		List<SenderTestRunner> senderTestRunners = new ArrayList<SenderTestRunner>(numberOfThreads);
 		for (Integer port : ports) {
 			for (int i = 0; i < numberOfThreads; i++) {
 				SocketSender socketSender = socketSenderFactory.createSocketSender(ipAddress, port);
-				senderTestRunners.add(new SenderTestRunner(clientCli, socketSender));
+				senderTestRunners.add(new SenderTestRunner(clientOptions, socketSender));
 			}
 		}
 		List<Future<ExecutionStatistics>> executionStatisticsFutures = executorService.invokeAll(senderTestRunners);

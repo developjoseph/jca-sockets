@@ -19,6 +19,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 import java.util.Arrays;
 
 import org.junit.Test;
@@ -29,77 +31,87 @@ public class ClientOptionsTest {
 
 	@Test 
 	public void testCommandLineParsingDefaults() throws Exception{
-		ClientOptions conformanceClient = new ClientOptions( );
-		conformanceClient.parseArguments( ); 
-		assertEquals( ClientOptions.DEFAULT_EXECUTION_SECONDS,  conformanceClient.getExecutionSeconds( ) );
-		assertEquals( ClientOptions.DEFAULT_NUMBER_OF_THREAD,  conformanceClient.getNumberOfThreads( ) );
-		assertEquals( ClientOptions.DEFAULT_MIN_MESSAGE_SIZE,  conformanceClient.getMinimumMessageSize() );
-		assertEquals( ClientOptions.DEFAULT_MAX_MESSAGE_SIZE,  conformanceClient.getMaximumMessageSize() );
-		assertEquals( false,  conformanceClient.isHelpRequested() );
+		ClientOptions clientOptions = new ClientOptions( );
+		clientOptions.parseArguments( ); 
+		assertEquals( ClientOptions.DEFAULT_EXECUTION_SECONDS,  clientOptions.getExecutionSeconds( ) );
+		assertEquals( ClientOptions.DEFAULT_NUMBER_OF_THREAD,  clientOptions.getNumberOfThreads( ) );
+		assertEquals( ClientOptions.DEFAULT_MIN_MESSAGE_SIZE,  clientOptions.getMinimumMessageSize() );
+		assertEquals( ClientOptions.DEFAULT_MAX_MESSAGE_SIZE,  clientOptions.getMaximumMessageSize() );
+		assertEquals( false,  clientOptions.isHelpRequested() );
 	}
 	@Test 
 	public void testCommandLineParsingOfHelp() throws Exception{
-		ClientOptions conformanceClient = new ClientOptions( );
+		ClientOptions clientOptions = new ClientOptions( );
 		String argument = getOption(ClientOptions.OPTION_HELP);
-		conformanceClient.parseArguments( argument); 
-		assertTrue(  conformanceClient.isHelpRequested( ) );
+		clientOptions.parseArguments( argument); 
+		assertTrue(  clientOptions.isHelpRequested( ) );
 	}
 	@Test 
 	public void testCommandLineParsingOfSinglePort() throws Exception{
-		ClientOptions conformanceClient = new ClientOptions( );
+		ClientOptions clientOptions = new ClientOptions( );
 		String argument = getOption(ClientOptions.OPTION_PORTS, " 9000");
-		conformanceClient.parseArguments( argument); 
-		assertEquals( Arrays.asList(9000),  conformanceClient.getPorts( ) );
+		clientOptions.parseArguments( argument); 
+		assertEquals( Arrays.asList(9000),  clientOptions.getPorts( ) );
 	}
 	@Test 
 	public void testCommandLineParsingOfPorts() throws Exception{
-		ClientOptions conformanceClient = new ClientOptions( );
+		ClientOptions clientOptions = new ClientOptions( );
 		String argument = getOption(ClientOptions.OPTION_PORTS, "100,123,111");
-		conformanceClient.parseArguments( argument); 
-		assertEquals( Arrays.asList(100,123,111),  conformanceClient.getPorts( ) );
+		clientOptions.parseArguments( argument); 
+		assertEquals( Arrays.asList(100,123,111),  clientOptions.getPorts( ) );
 	}
 	@Test 
 	public void testCommandLineParsingOfExecutionSeconds() throws Exception{
-		ClientOptions conformanceClient = new ClientOptions( );
+		ClientOptions clientOptions = new ClientOptions( );
 		String argument = getOption(ClientOptions.OPTION_EXECUTION_SECONDS, " 5");
-		conformanceClient.parseArguments( argument); 
-		assertEquals( 5,  conformanceClient.getExecutionSeconds( ) );
+		clientOptions.parseArguments( argument); 
+		assertEquals( 5,  clientOptions.getExecutionSeconds( ) );
 	}
 	@Test 
 	public void testCommandLineParsingOfMinimumMessageSize() throws Exception{
-		ClientOptions conformanceClient = new ClientOptions( );
+		ClientOptions clientOptions = new ClientOptions( );
 		String argument = getOption(ClientOptions.OPTION_MIN_MESSAGE_SIZE, " 5");
-		conformanceClient.parseArguments( argument); 
-		assertEquals( 5,  conformanceClient.getMinimumMessageSize( ) );
+		clientOptions.parseArguments( argument); 
+		assertEquals( 5,  clientOptions.getMinimumMessageSize( ) );
 	}
 	@Test 
 	public void testCommandLineParsingOfMaximumMessageSize() throws Exception{
-		ClientOptions conformanceClient = new ClientOptions( );
+		ClientOptions clientOptions = new ClientOptions( );
 		String argument = getOption(ClientOptions.OPTION_MAX_MESSAGE_SIZE, "200");
-		conformanceClient.parseArguments( argument); 
-		assertEquals( 200,  conformanceClient.getMaximumMessageSize( ) );
+		clientOptions.parseArguments( argument); 
+		assertEquals( 200,  clientOptions.getMaximumMessageSize( ) );
 	}
 	@Test 
 	public void testCommandLineParsingOfNumberOfThreads() throws Exception{
-		ClientOptions conformanceClient = new ClientOptions( );
+		ClientOptions clientOptions = new ClientOptions( );
 		String argument = getOption(ClientOptions.OPTION_NUMBER_OF_THREAD, "3 ");
-		conformanceClient.parseArguments( argument); 
-		assertEquals( 3,  conformanceClient.getNumberOfThreads() );
+		clientOptions.parseArguments( argument); 
+		assertEquals( 3,  clientOptions.getNumberOfThreads() );
 	}
 	@Test 
 	public void testCommandLineParsingOfIpAddress() throws Exception{
-		ClientOptions conformanceClient = new ClientOptions( );
+		ClientOptions clientOptions = new ClientOptions( );
 		String argument = getOption(ClientOptions.OPTION_IP_ADDRESS, " myhost ");
-		conformanceClient.parseArguments( argument); 
-		assertEquals( "myhost",  conformanceClient.getIpAddress() );
+		clientOptions.parseArguments( argument); 
+		assertEquals( "myhost",  clientOptions.getIpAddress() );
 	}
 
 	@Test 
 	public void testCommandLineParsingNoHelp() throws Exception{
-		ClientOptions conformanceClient = new ClientOptions( );
+		ClientOptions clientOptions = new ClientOptions( );
 		String argument = getOption(ClientOptions.OPTION_EXECUTION_SECONDS, "3");
-		conformanceClient.parseArguments( argument); 
-		assertFalse(  conformanceClient.isHelpRequested( ) );
+		clientOptions.parseArguments( argument); 
+		assertFalse(  clientOptions.isHelpRequested( ) );
+	}
+	@Test 
+	public void testPrintHelp() throws Exception{
+		ClientOptions clientOptions = new ClientOptions( );
+		ByteArrayOutputStream os = new ByteArrayOutputStream();
+		PrintStream printStream = new PrintStream(os);
+		clientOptions.printHelp(printStream);
+		printStream.flush();
+		assertTrue( os.toString().contains( "-h,--help" ));
+		
 	}
 	private String getOption(String option) {
 		return "-" + option;
