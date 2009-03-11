@@ -28,9 +28,9 @@ import com.googlecode.jcasockets.perf.SocketSender;
 public class SenderTestRunnerTest {
 	@Test
 	public void testSmallMessageSize() throws Exception{
-		ClientOptions conformanceClient = getCommandLineOptions("-s1 -m3 -M15 -p8000");
+		ClientOptions client = getCommandLineOptions("-s1 -m3 -M15 -p8000");
 		SocketSender socketSender = new MockSocketSender();
-		SenderTestRunner senderTestRunner = new SenderTestRunner(conformanceClient, socketSender);
+		SenderTestRunner senderTestRunner = new SenderTestRunner(client, socketSender);
 		ExecutionStatistics executionStatistics = senderTestRunner.call();
 		
 		int messageCount = executionStatistics.getMessagesSent();
@@ -45,9 +45,9 @@ public class SenderTestRunnerTest {
 
 	private ClientOptions getCommandLineOptions(String string)
 			throws ParseException {
-		ClientOptions conformanceClient = new ClientOptions();
+		ClientOptions client = new ClientOptions();
 		String[] args = string.split(" ");
-		conformanceClient.parseArguments( args );
-		return conformanceClient;
+		client.parseArguments( args );
+		return client;
 	}
 }

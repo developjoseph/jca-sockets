@@ -32,12 +32,12 @@ public class ClientTest {
 	@Test
 	public void testMultipleThread() throws Exception {
 
-		Client conformanceClient = getConformanceClient("-s 1 -t2 -m10 -M10 -p 9000");
+		Client client = getClient("-s 1 -t2 -m10 -M10 -p 9000");
 		MockSocketSender socketSender = new MockSocketSender();
 
-		conformanceClient.setSender(socketSender);
-		conformanceClient.execute();
-		ExecutionStatistics executionStatistics = conformanceClient.getExecutionStatistics();
+		client.setSender(socketSender);
+		client.execute();
+		ExecutionStatistics executionStatistics = client.getExecutionStatistics();
 
 		assertTrue(executionStatistics.getMessagesSent() > 0);
 		// TODO in fact this is a bit flakey it is possible (but unlikely) for
@@ -47,20 +47,20 @@ public class ClientTest {
 		assertEquals(20, executionStatistics.getMaximumMessageSize());
 	}
 
-	private Client getConformanceClient(String string) throws ParseException {
+	private Client getClient(String string) throws ParseException {
 		String[] args = string.split(" ");
-		Client conformanceClient = new Client(args);
-		return conformanceClient;
+		Client client = new Client(args);
+		return client;
 	}
 
 	@Test
 	public void testSmallMessageSize() throws Exception {
-		Client conformanceClient = getConformanceClient("-s 1 -m 3 -M15 -p 8888");
+		Client client = getClient("-s 1 -m 3 -M15 -p 8888");
 		MockSocketSender socketSender = new MockSocketSender();
 
-		conformanceClient.setSender(socketSender);
-		conformanceClient.execute();
-		ExecutionStatistics executionStatistics = conformanceClient.getExecutionStatistics();
+		client.setSender(socketSender);
+		client.execute();
+		ExecutionStatistics executionStatistics = client.getExecutionStatistics();
 
 		assertTrue(executionStatistics.getMessagesSent() > 0);
 
