@@ -4,12 +4,11 @@
   <parent>
         <artifactId>jcasockets</artifactId>
         <groupId>com.googlecode</groupId>
-        <version>alpha.1.0</version>
+        <version>alpha.0.1</version>
     </parent>
   <groupId>com.googlecode</groupId>
   <artifactId>sockets-ejb</artifactId>
   <packaging>ejb</packaging>
-  <version>alpha.1.0</version>
   <name>sockets-ejb Maven J2EE 1.4 EJB</name>
   <url>http://maven.apache.org</url>
   <dependencies>
@@ -17,7 +16,7 @@
     <dependency>
       <groupId>com.googlecode.jcasockets</groupId>
       <artifactId>sockets-jar</artifactId>
-      <version>alpha.1.0</version>
+      <version>alpha.0.1</version>
     </dependency>
     <dependency>
       <groupId>org.apache.geronimo.specs</groupId>
@@ -46,9 +45,6 @@
           <ejbVersion>2.1</ejbVersion>
         </configuration>
       </plugin>
-
     </plugins>
-    <!--TODO keep or remove-->
-    <finalName>sockets-ejb</finalName>
   </build>
 </project>

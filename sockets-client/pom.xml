@@ -2,13 +2,12 @@
   <parent>
     <artifactId>jcasockets</artifactId>
     <groupId>com.googlecode</groupId>
-    <version>alpha.1.0</version>
+    <version>alpha.0.1</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.googlecode</groupId>
   <artifactId>sockets-client</artifactId>
   <name>sockets-client</name>
-  <version>alpha.1.0</version>
   <description>Socket client to connect to JCA adapter.</description>
   <dependencies>
   	<dependency>

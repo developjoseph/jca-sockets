@@ -1,1 +1,1 @@
-mvn package assembly:assembly -Did=bin
+mvn -Dmaven.test.skip=true clean package assembly:assembly
