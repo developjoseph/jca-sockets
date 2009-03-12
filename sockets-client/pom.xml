@@ -2,7 +2,7 @@
   <parent>
     <artifactId>jcasockets</artifactId>
     <groupId>com.googlecode</groupId>
-    <version>alpha.0.1</version>
+    <version>alpha.0.2</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.googlecode</groupId>
