@@ -40,7 +40,6 @@ public class RemoteSocketSender implements SocketSender, SocketSenderFactory {
 
 	}
 
-	@Override
 	public String send(String sendMessage) {
 		socket = new Socket();
 		socketAddress = new InetSocketAddress(ipAddress, port);
@@ -75,7 +74,6 @@ public class RemoteSocketSender implements SocketSender, SocketSenderFactory {
 		return sb.toString();
 	}
 
-	@Override
 	public SocketSender createSocketSender(String ipAddress, Integer port) {
 		return new RemoteSocketSender(ipAddress, port);
 	}

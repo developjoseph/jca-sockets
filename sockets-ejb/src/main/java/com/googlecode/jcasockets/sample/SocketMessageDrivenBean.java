@@ -35,7 +35,6 @@ public class SocketMessageDrivenBean implements MessageDrivenBean, SocketMessage
 	public SocketMessageDrivenBean() {
 	}
 
-	@Override
 	public void ejbRemove() throws EJBException {
 
 	}
@@ -44,7 +43,6 @@ public class SocketMessageDrivenBean implements MessageDrivenBean, SocketMessage
 
 	}
 
-	@Override
 	public void setMessageDrivenContext(MessageDrivenContext ctx) throws EJBException {
 	}
 

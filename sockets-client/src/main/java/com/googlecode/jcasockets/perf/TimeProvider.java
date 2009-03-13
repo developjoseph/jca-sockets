@@ -17,7 +17,6 @@ package com.googlecode.jcasockets.perf;
 
 public interface TimeProvider {
 	static TimeProvider DEFAULT = new TimeProvider(){
-		@Override
 		public long nanoTime() {
 			return System.nanoTime();
 		}};

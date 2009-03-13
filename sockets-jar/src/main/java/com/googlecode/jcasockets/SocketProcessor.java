@@ -34,7 +34,6 @@ public class SocketProcessor implements Work {
 		this.messageEndpoint = messageEndpoint;
 	}
 
-	@Override
 	public void release() {
 		closeSocket();
 	}

@@ -64,7 +64,6 @@ public class SocketListener implements Runnable, Work {
 		}
 	}
 
-	@Override
 	public void release() {
 		log.info("Stop listening on port " + activationSpec.getPort());
 		setRunning(false);
@@ -75,7 +74,6 @@ public class SocketListener implements Runnable, Work {
 		}
 	}
 
-	@Override
 	public void run() {
 		setRunning(true);
 		try {

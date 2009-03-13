@@ -40,7 +40,6 @@ public class SenderTestRunner implements Callable<ExecutionStatistics> {
 		filledString = new String(chars);
 	}
 
-	@Override
 	public ExecutionStatistics call() throws Exception {
 
 		executionStatistics = new ExecutionStatistics(timeProvider);

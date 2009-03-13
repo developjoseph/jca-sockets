@@ -43,7 +43,6 @@ public class SocketResourceAdapter implements ResourceAdapter{
 	public SocketResourceAdapter() {
 	}
 
-	@Override
 	public void start(BootstrapContext ctx) throws ResourceAdapterInternalException {
 		log.info("start");
     	workManager = ctx.getWorkManager();
@@ -52,7 +51,6 @@ public class SocketResourceAdapter implements ResourceAdapter{
 		}
 	}
 
-	@Override
 	public void stop() {
 		log.info("stop");
 		for (SocketListener socketListener: socketListeners.values()) {
@@ -60,7 +58,6 @@ public class SocketResourceAdapter implements ResourceAdapter{
 		}
 	}
 
-	@Override
 	public void endpointActivation(MessageEndpointFactory endpointFactory, ActivationSpec activationSpec)
 			throws  ResourceException {
 		log.info("endpointActivation");
@@ -89,7 +86,6 @@ public class SocketResourceAdapter implements ResourceAdapter{
 		// nothing to do.
 	}
 
-	@Override
 	public XAResource[] getXAResources(ActivationSpec[] arg0) throws ResourceException {
 		return new XAResource[0]; // XA is unsupported
 	}

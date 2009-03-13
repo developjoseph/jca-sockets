@@ -28,7 +28,6 @@ public class TimeProviderFixture {
 		return new TimeProvider(){
 			long time;
 
-			@Override
 			public long nanoTime() {
 				return time++;
 			}
