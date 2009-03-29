@@ -8,14 +8,14 @@ Application Server 9.0 EJB 3.0//EN'
 	<!--  this is untested  -->
 			<ejb-name>SOCKET_MDB</ejb-name>
 			<mdb-resource-adapter>
-				<resource-adapter-mid>sockets-rar.rar</resource-adapter-mid>
+				<resource-adapter-mid>sockets-rar</resource-adapter-mid>
 			</mdb-resource-adapter>
 		</ejb>
 		<ejb>
 	<!--  this is untested  -->
 			<ejb-name>SOCKET_MDB1</ejb-name>
 			<mdb-resource-adapter>
-				<resource-adapter-mid>sockets-rar.rar</resource-adapter-mid>
+				<resource-adapter-mid>sockets-rar</resource-adapter-mid>
 			</mdb-resource-adapter>
 		</ejb>
 	</enterprise-beans>
