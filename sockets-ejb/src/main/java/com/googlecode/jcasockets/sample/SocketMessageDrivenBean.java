@@ -33,14 +33,16 @@ public class SocketMessageDrivenBean implements MessageDrivenBean, SocketMessage
 	private final Log log = LogFactory.getLog(SocketMessageDrivenBean.class);
 
 	public SocketMessageDrivenBean() {
+		log.info("Construct MDB");
 	}
 
 	public void ejbRemove() throws EJBException {
+		log.info("ejbRemove");
 
 	}
 
 	public void ejbCreate() throws EJBException {
-
+		log.info("EJBCreate" );
 	}
 
 	public void setMessageDrivenContext(MessageDrivenContext ctx) throws EJBException {
@@ -58,5 +60,6 @@ public class SocketMessageDrivenBean implements MessageDrivenBean, SocketMessage
 		if (log.isInfoEnabled()){
 			log.info("Processed message size: " + size );
 		}
+		out.flush();
 	}
 }
