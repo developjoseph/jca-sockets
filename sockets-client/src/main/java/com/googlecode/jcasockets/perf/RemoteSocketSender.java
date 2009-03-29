@@ -25,19 +25,21 @@ import java.net.Socket;
 import java.net.SocketAddress;
 
 public class RemoteSocketSender implements SocketSender, SocketSenderFactory {
+	
 
-	public RemoteSocketSender() {
-	}
-
+	private long startTimeMillis;
 	private Socket socket;
 	private Integer port;
 	private String ipAddress;
 	private SocketAddress socketAddress;
 
+	public RemoteSocketSender() {
+	}
+
 	public RemoteSocketSender(String ipAddress, Integer port) {
 		this.ipAddress = ipAddress;
 		this.port = port;
-
+		startTimeMillis = System.currentTimeMillis();
 	}
 
 	public String send(String sendMessage) {
@@ -45,7 +47,7 @@ public class RemoteSocketSender implements SocketSender, SocketSenderFactory {
 		socketAddress = new InetSocketAddress(ipAddress, port);
 		StringBuilder sb = new StringBuilder(sendMessage.length());
 		OutputStream outputStream;
-		int timeoutMs = 0;
+		int timeoutMs = 5000;
 		try {
 			socket.connect(socketAddress, timeoutMs);
 			outputStream = socket.getOutputStream();
@@ -62,12 +64,15 @@ public class RemoteSocketSender implements SocketSender, SocketSenderFactory {
 			}
 			rd.close();
 		} catch (IOException e) {
-			throw new RuntimeException("Exception while sending: " + ipAddress + ":" + port, e);
+			String out = "Thread " + Thread.currentThread().getName() +  " exception while sending: " + ipAddress + ":" + port + " after " + (System.currentTimeMillis() - startTimeMillis) + "ms";
+			System.out.println(out);
+			throw new RuntimeException( out, e );
 		}finally{
 			try {
 				socket.close();
 			} catch (IOException e) {
-				throw new RuntimeException("Exception while closing: " + ipAddress + ":" + port, e);
+				throw new RuntimeException(
+						"Thread " + Thread.currentThread().getName() +  " exception while closing: " + ipAddress + ":" + port + " after " + (System.currentTimeMillis() - startTimeMillis) + "ms", e );
 			}
 		}
 		

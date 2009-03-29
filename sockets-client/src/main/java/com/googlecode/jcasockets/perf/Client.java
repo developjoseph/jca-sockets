@@ -29,33 +29,29 @@ import org.apache.commons.cli.ParseException;
 public class Client {
 	public static void main(String[] args) throws Exception {
 		Client client = new Client(args);
-		if ( client.clientOptions.isHelpRequested() ){
+		if (client.clientOptions.isHelpRequested()) {
 			client.clientOptions.printHelp(System.err);
 			return;
 		}
-		
+
 		client.execute();
 		ExecutionStatistics executionStatistics = client.getExecutionStatistics();
-		printStatisticsHeaderAsCSV(System.out );
-		printStatisticsAsCSV(System.out, executionStatistics );
+		printStatisticsHeaderAsCSV(System.out);
+		printStatisticsAsCSV(System.out, executionStatistics);
 	}
 
 	static void printStatisticsHeaderAsCSV(PrintStream printStream) {
-		printStream.printf("bytesSent,bytesReceived,milliseconds,messagesSent,messagesReceived,minimumMessageSize,maximumMessageSize,bytesSentPerSecond,bytesReceivedPerSecond,messagesPerSecond\n"); 
+		printStream
+				.printf("bytesSent,bytesReceived,milliseconds,messagesSent,messagesReceived,minimumMessageSize,maximumMessageSize,bytesSentPerSecond,bytesReceivedPerSecond,messagesPerSecond\n");
 	}
+
 	static void printStatisticsAsCSV(PrintStream printStream, ExecutionStatistics executionStatistics) {
-		printStream.printf("%d,%d,%d,%d,%d,%d,%d,%d,%d,%d\n", 
-				executionStatistics.getBytesSent(), 
-				executionStatistics.getBytesReceived(),
-				executionStatistics.getElapsed(TimeUnit.MILLISECONDS),
-				executionStatistics.getMessagesSent(),
-				executionStatistics.getMessagesReceived(),
-				executionStatistics.getMinimumMessageSize(),
-				executionStatistics.getMaximumMessageSize(),
-				executionStatistics.getBytesSentPerSecond(),
-				executionStatistics.getBytesReceivedPerSecond(),
-				executionStatistics.getMessagesPerSecond()
-				);
+		printStream.printf("%d,%d,%d,%d,%d,%d,%d,%d,%d,%d\n", executionStatistics.getBytesSent(), executionStatistics
+				.getBytesReceived(), executionStatistics.getElapsed(TimeUnit.MILLISECONDS), executionStatistics
+				.getMessagesSent(), executionStatistics.getMessagesReceived(), executionStatistics
+				.getMinimumMessageSize(), executionStatistics.getMaximumMessageSize(), executionStatistics
+				.getBytesSentPerSecond(), executionStatistics.getBytesReceivedPerSecond(), executionStatistics
+				.getMessagesPerSecond());
 	}
 
 	private SocketSenderFactory socketSenderFactory = new RemoteSocketSender();
@@ -75,22 +71,24 @@ public class Client {
 		int numberOfThreads = clientOptions.getNumberOfThreads();
 		String ipAddress = clientOptions.getIpAddress();
 		List<Integer> ports = clientOptions.getPorts();
-
 		ExecutorService executorService = Executors.newFixedThreadPool(numberOfThreads);
-		List<SenderTestRunner> senderTestRunners = new ArrayList<SenderTestRunner>(numberOfThreads);
-		for (Integer port : ports) {
-			for (int i = 0; i < numberOfThreads; i++) {
-				SocketSender socketSender = socketSenderFactory.createSocketSender(ipAddress, port);
-				senderTestRunners.add(new SenderTestRunner(clientOptions, socketSender));
+		try {
+			List<SenderTestRunner> senderTestRunners = new ArrayList<SenderTestRunner>(numberOfThreads);
+			for (Integer port : ports) {
+				for (int i = 0; i < numberOfThreads; i++) {
+					SocketSender socketSender = socketSenderFactory.createSocketSender(ipAddress, port);
+					senderTestRunners.add(new SenderTestRunner(clientOptions, socketSender));
+				}
 			}
+			List<Future<ExecutionStatistics>> executionStatisticsFutures = executorService.invokeAll(senderTestRunners);
+			executionStatistics = new ExecutionStatistics(null);
+			for (Future<ExecutionStatistics> future : executionStatisticsFutures) {
+				ExecutionStatistics that = future.get();
+				executionStatistics.combine(that);
+			}
+		} finally {
+			executorService.shutdown();
 		}
-		List<Future<ExecutionStatistics>> executionStatisticsFutures = executorService.invokeAll(senderTestRunners);
-		executionStatistics = new ExecutionStatistics(null);
-		for (Future<ExecutionStatistics> future : executionStatisticsFutures) {
-			ExecutionStatistics that = future.get();
-			executionStatistics.combine(that);
-		}
-		executorService.shutdown();
 	}
 
 	public ExecutionStatistics getExecutionStatistics() {
