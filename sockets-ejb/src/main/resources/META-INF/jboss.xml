@@ -3,12 +3,10 @@
 	<enterprise-beans>
 		<message-driven>
 			<ejb-name>SOCKET_MDB</ejb-name>
-			<destination-jndi-name>dummy</destination-jndi-name>
 			<resource-adapter-name>sockets-rar.rar</resource-adapter-name>
 		</message-driven>
         <message-driven>
             <ejb-name>SOCKET_MDB1</ejb-name>
-            <destination-jndi-name>dummy1</destination-jndi-name>
             <resource-adapter-name>sockets-rar.rar</resource-adapter-name>
         </message-driven>
 	</enterprise-beans>
