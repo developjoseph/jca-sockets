@@ -18,6 +18,7 @@ package com.googlecode.jcasockets;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.resource.spi.ResourceAdapterInternalException;
@@ -33,10 +34,10 @@ public class SocketListener implements Runnable, Work {
 	private ServerSocket serverSocket;
 	private final WorkManager workManager;
 	private final SocketActivationSpec activationSpec;
-	private final MessageEndpointFactory messageEndpointFactory;
 	private final Log log = LogFactory.getLog(SocketListener.class);
 
 	private AtomicBoolean isRunning = new AtomicBoolean(false);
+	private EndpointPool endpointPool;
 
 	final boolean isRunning() {
 		return isRunning.get();
@@ -50,7 +51,7 @@ public class SocketListener implements Runnable, Work {
 			MessageEndpointFactory messageEndpointFactory) {
 		this.workManager = workManager;
 		this.activationSpec = activationSpec;
-		this.messageEndpointFactory = messageEndpointFactory;
+		endpointPool = new EndpointPool(messageEndpointFactory, 15, 10, TimeUnit.SECONDS);
 	}
 
 	public void start() throws ResourceAdapterInternalException {
@@ -79,9 +80,12 @@ public class SocketListener implements Runnable, Work {
 		try {
 			while (isRunning()) {
 				final Socket socket = serverSocket.accept();
-				SocketMessageEndpoint messageEndpoint = (SocketMessageEndpoint) messageEndpointFactory.createEndpoint(null);
 				SocketMessage socketMessage = new SocketMessage(socket, activationSpec.getEncoding());
-				workManager.scheduleWork(new SocketProcessor(socketMessage, messageEndpoint));
+
+				SocketMessageEndpoint messageEndpoint = endpointPool.getEndpoint();
+
+				SocketProcessor socketProcessor = new SocketProcessor(socketMessage, messageEndpoint);
+				workManager.scheduleWork(socketProcessor, WorkManager.IMMEDIATE, null, endpointPool);
 			}
 		} catch (Exception e) {
 			if (isRunning()) {

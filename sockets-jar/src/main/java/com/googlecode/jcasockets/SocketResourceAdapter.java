@@ -80,7 +80,7 @@ public class SocketResourceAdapter implements ResourceAdapter{
 	}
 
 
-	public void endpointDeactivation(MessageEndpointFactory factory, ActivationSpec spec) {
+	public void endpointDeactivation(MessageEndpointFactory endpointFactory, ActivationSpec spec) {
 		stop();
 		log.info("endpointDeactivation");
 		// nothing to do.

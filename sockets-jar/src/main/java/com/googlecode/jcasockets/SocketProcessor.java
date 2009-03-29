@@ -25,13 +25,17 @@ import org.apache.commons.logging.LogFactory;
 
 public class SocketProcessor implements Work {
 	private final Log log = LogFactory.getLog(SocketProcessor.class);
-	private SocketMessage socketMessage;
 
+	private SocketMessage socketMessage;
 	private final SocketMessageEndpoint messageEndpoint;
 
 	public SocketProcessor(SocketMessage socketMessage, SocketMessageEndpoint messageEndpoint) {
 		this.socketMessage = socketMessage;
 		this.messageEndpoint = messageEndpoint;
+	}
+
+	public SocketMessageEndpoint getMessageEndpoint() {
+		return messageEndpoint;
 	}
 
 	public void release() {
