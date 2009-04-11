@@ -13,8 +13,12 @@ import javax.resource.spi.work.Work;
 import javax.resource.spi.work.WorkEvent;
 import javax.resource.spi.work.WorkListener;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 public class EndpointPool implements WorkListener {
 
+	private final Log log = LogFactory.getLog(EndpointPool.class);
 	private MessageEndpointFactory endpointFactory;
 	private int poolSize;
 	private final int maxEndpoints;
@@ -45,6 +49,7 @@ public class EndpointPool implements WorkListener {
 			if (poolSize < maxEndpoints ){
 				messageEndpoint =(SocketMessageEndpoint) endpointFactory.createEndpoint(null);
 				poolSize++;
+				log.info("Allocated endpoint, poolsize " + poolSize + " of " + maxEndpoints);
 			}
         } finally {
             mainLock.unlock();
