@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+
+<project name="Example Application Build" default="zip" basedir=".">
+  <target name="clean" >
+    <delete file="jca-sockets-1.0.zip"/>
+  </target>
+ <target name="zip" >
+      <zip destfile="jca-sockets-1.0.zip">
+         <fileset dir=".">
+            <exclude name="**/target/**"/>
+            <exclude name="*.zip"/>
+            <exclude name="**/.fbprefs"/>
+            <exclude name="**/.settings/**"/>
+         </fileset>
+         <zipfileset dir="sockets-ejb/target"    includes="*.jar" prefix="dist"/>
+         <zipfileset dir="sockets-jar/target"    includes="*.jar" prefix="dist"/>
+         <zipfileset dir="sockets-rar/target"    includes="*.rar" prefix="dist"/>
+         <zipfileset dir="sockets-client/target" includes="*.jar" prefix="dist"/>
+
+      </zip>
+  </target>
+</project>
+
+
+ 
+ 
+ 
+ 
