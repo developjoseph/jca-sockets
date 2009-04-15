@@ -8,13 +8,13 @@
   <parent>
      <groupId>com.googlecode</groupId>
      <artifactId>jcasockets</artifactId>
-     <version>alpha.0.2</version>
+     <version>1.0</version>
   </parent>
   <dependencies>
     <dependency>
       <groupId>com.googlecode.jcasockets</groupId>
       <artifactId>sockets-jar</artifactId>
-      <version>alpha.0.2</version>
+      <version>1.0</version>
     </dependency>
   	<dependency>
   		<groupId>junit</groupId>
@@ -32,6 +32,6 @@
          </configuration>
       </plugin>
     </plugins>
-    <finalName>sockets-rar</finalName>
+    <finalName>sockets-rar-${version}</finalName>
   </build>
 </project>

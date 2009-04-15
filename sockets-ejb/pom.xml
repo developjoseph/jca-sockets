@@ -4,7 +4,7 @@
   <parent>
         <artifactId>jcasockets</artifactId>
         <groupId>com.googlecode</groupId>
-        <version>alpha.0.2</version>
+        <version>1.0</version>
     </parent>
   <groupId>com.googlecode</groupId>
   <artifactId>sockets-ejb</artifactId>
@@ -16,7 +16,7 @@
     <dependency>
       <groupId>com.googlecode.jcasockets</groupId>
       <artifactId>sockets-jar</artifactId>
-      <version>alpha.0.2</version>
+      <version>1.0</version>
     </dependency>
     <dependency>
       <groupId>org.apache.geronimo.specs</groupId>
