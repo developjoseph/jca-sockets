@@ -80,7 +80,7 @@ public class SocketListener implements Runnable, Work {
 		try {
 			while (isRunning()) {
 				final Socket socket = serverSocket.accept();
-				SocketMessage socketMessage = new SocketMessage(socket, activationSpec.getEncoding());
+				SocketMessage socketMessage = new SocketMessageImpl(socket, activationSpec.getEncoding());
 
 				SocketMessageEndpoint messageEndpoint = endpointPool.getEndpoint();
 

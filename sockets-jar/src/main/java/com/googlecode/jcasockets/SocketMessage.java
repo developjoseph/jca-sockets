@@ -17,45 +17,23 @@ package com.googlecode.jcasockets;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.io.Writer;
 import java.net.Socket;
 
-public class SocketMessage {
-	private final Socket rawSocket;
-	private final String encoding;
-	SocketMessage(Socket rawSocket, String encoding) {
-		this.rawSocket = rawSocket;
-		this.encoding = encoding;
-	}
+public interface SocketMessage {
 
-	public Socket getRawSocket() {
-		return rawSocket;
-	}
-	public String getEncoding() {
-		return encoding;
-	}
-	public InputStream getInputStream() throws IOException {
-		return rawSocket.getInputStream();
-	}
-	public OutputStream getOutputStream() throws IOException {
-		return rawSocket.getOutputStream();
-	}
-	public Reader getReader(){
-		try {
-			return new InputStreamReader( rawSocket.getInputStream(), encoding );
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
-	}
-	public Writer getWriter(){
-		try {
-			return new OutputStreamWriter( rawSocket.getOutputStream(), encoding );
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
-	}
+    Socket getRawSocket();
+
+    String getEncoding();
+
+    InputStream getInputStream() throws IOException;
+
+    OutputStream getOutputStream() throws IOException;
+
+    Reader getReader();
+
+    Writer getWriter();
+
 }
