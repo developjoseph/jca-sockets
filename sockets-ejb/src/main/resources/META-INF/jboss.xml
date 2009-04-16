@@ -3,11 +3,11 @@
 	<enterprise-beans>
 		<message-driven>
 			<ejb-name>SOCKET_MDB</ejb-name>
-			<resource-adapter-name>sockets-rar.rar</resource-adapter-name>
+			<resource-adapter-name>sockets-rar-${project.version}.rar</resource-adapter-name>
 		</message-driven>
         <message-driven>
             <ejb-name>SOCKET_MDB1</ejb-name>
-            <resource-adapter-name>sockets-rar.rar</resource-adapter-name>
+            <resource-adapter-name>sockets-rar-${project.version}.rar</resource-adapter-name>
         </message-driven>
 	</enterprise-beans>
 </jboss>

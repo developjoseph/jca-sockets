@@ -14,14 +14,17 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.googlecode</groupId>
-	<version>1.0</version>
+	<version>1.1</version>
 	<artifactId>jcasockets</artifactId>
 	<packaging>pom</packaging>
 	<name>jcasockets</name>
 	<url>http://code.google.com/p/jca-sockets/</url>
 	<inceptionYear>2009</inceptionYear>
+	<properties>
+	  <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties> 	
 	<modules>
-		<module>sockets-jar</module>
+		<module>sockets-api</module>
 		<module>sockets-rar</module>
 		<module>sockets-ejb</module>
 		<module>sockets-client</module>
@@ -29,6 +32,14 @@
 	<build>
 		<pluginManagement>
 			<plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-resources-plugin</artifactId>
+					<configuration>
+						<encoding>UTF-8</encoding>
+					</configuration>
+				</plugin>
+			
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-compiler-plugin</artifactId>
@@ -78,21 +89,39 @@
             
          </plugins>
       </pluginManagement>
+    <resources>
+      <resource>
+        <directory>src/main/resources</directory>
+        <filtering>true</filtering>
+        <includes>
+          <include>**/*.xml</include>
+        </includes>
+      </resource>
+      <resource>
+        <directory>src/main/resources</directory>
+        <filtering>false</filtering>
+        <excludes>
+          <exclude>**/*.xml</exclude>
+        </excludes>
+      </resource>
+    </resources>
+      
    </build>
    <dependencyManagement>
       <dependencies>
          <dependency>
             <groupId>com.googlecode.jcasockets</groupId>
             <artifactId>sockets-jar</artifactId>
-            <version>1.0</version>
+            <version>${project.version}</version>
             <type>jar</type>
          </dependency>
          <dependency>
             <groupId>com.googlecode.jcasockets</groupId>
             <artifactId>sockets-rar</artifactId>
-            <version>1.0</version>
+            <version>${project.version}</version>
             <type>rar</type>
          </dependency>
       </dependencies>
    </dependencyManagement>
+   
 </project>

@@ -2,10 +2,10 @@
 
 <project name="Example Application Build" default="zip" basedir=".">
   <target name="clean" >
-    <delete file="jca-sockets-1.0.zip"/>
+    <delete file="jca-sockets-1.1.zip"/>
   </target>
  <target name="zip" >
-      <zip destfile="jca-sockets-1.0.zip">
+      <zip destfile="jca-sockets-1.1.zip">
          <fileset dir=".">
             <exclude name="**/target/**"/>
             <exclude name="*.zip"/>
@@ -13,7 +13,7 @@
             <exclude name="**/.settings/**"/>
          </fileset>
          <zipfileset dir="sockets-ejb/target"    includes="*.jar" prefix="dist"/>
-         <zipfileset dir="sockets-jar/target"    includes="*.jar" prefix="dist"/>
+         <zipfileset dir="sockets-api/target"    includes="*.jar" prefix="dist"/>
          <zipfileset dir="sockets-rar/target"    includes="*.rar" prefix="dist"/>
          <zipfileset dir="sockets-client/target" includes="*.jar" prefix="dist"/>
 

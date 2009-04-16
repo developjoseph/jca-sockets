@@ -4,7 +4,7 @@
   <parent>
         <artifactId>jcasockets</artifactId>
         <groupId>com.googlecode</groupId>
-        <version>1.0</version>
+        <version>1.1</version>
     </parent>
   <groupId>com.googlecode</groupId>
   <artifactId>sockets-ejb</artifactId>
@@ -15,9 +15,15 @@
 
     <dependency>
       <groupId>com.googlecode.jcasockets</groupId>
-      <artifactId>sockets-jar</artifactId>
-      <version>1.0</version>
+      <artifactId>sockets-api</artifactId>
+      <version>${project.version}</version>
     </dependency>
+		<dependency>
+			<groupId>commons-logging</groupId>
+			<artifactId>commons-logging</artifactId>
+			<version>1.1.1</version>
+			<scope>provided</scope>
+		</dependency>
     <dependency>
       <groupId>org.apache.geronimo.specs</groupId>
       <artifactId>geronimo-j2ee_1.4_spec</artifactId>
@@ -36,6 +42,7 @@
 
 
   <build>
+  
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
