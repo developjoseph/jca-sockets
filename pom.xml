@@ -111,7 +111,7 @@
       <dependencies>
          <dependency>
             <groupId>com.googlecode.jcasockets</groupId>
-            <artifactId>sockets-jar</artifactId>
+            <artifactId>sockets-api</artifactId>
             <version>${project.version}</version>
             <type>jar</type>
          </dependency>
