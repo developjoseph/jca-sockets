@@ -47,7 +47,11 @@
 				<artifactId>maven-rar-plugin</artifactId>
 				<version>2.2</version>
 				<configuration>
+					<archive>
+						<addMavenDescriptor>false</addMavenDescriptor>
+					</archive> 
                     <rarSourceDirectory>target/classes</rarSourceDirectory>
+		            <includeJar>false</includeJar>
 				</configuration>
 			</plugin>
 		</plugins>
