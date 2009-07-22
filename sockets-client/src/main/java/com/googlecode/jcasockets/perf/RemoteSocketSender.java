@@ -79,8 +79,8 @@ public class RemoteSocketSender implements SocketSender, SocketSenderFactory {
 		return sb.toString();
 	}
 
-	public SocketSender createSocketSender(String ipAddress, Integer port) {
-		return new RemoteSocketSender(ipAddress, port);
+	public SocketSender createSocketSender(String remoteIpAddress, Integer remotePort) {
+		return new RemoteSocketSender(remoteIpAddress, remotePort);
 	}
 
 }

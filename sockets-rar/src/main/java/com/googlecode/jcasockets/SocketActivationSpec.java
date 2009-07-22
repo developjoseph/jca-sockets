@@ -58,7 +58,8 @@ public class SocketActivationSpec implements ActivationSpec, Serializable {
 	    }
 	}
 
-	boolean accepts(String recipientAddress) throws InvalidPropertyException {
+	@SuppressWarnings("unused")
+    boolean accepts(String recipientAddress) throws InvalidPropertyException {
 		return true; // sluttily accept anything
 	}
 

@@ -21,7 +21,7 @@ import java.util.concurrent.TimeUnit;
 public class ExecutionStatistics {
 	
 	private int minimumMessageSize = Integer.MAX_VALUE;
-	private int maximumMessageSize = Integer.MIN_VALUE;;  
+	private int maximumMessageSize = Integer.MIN_VALUE;  
 	private long bytesReceived;
 	private long bytesSent;
 	private int messagesSent;

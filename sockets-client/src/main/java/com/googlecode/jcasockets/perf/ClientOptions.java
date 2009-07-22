@@ -15,11 +15,6 @@
  */
 package com.googlecode.jcasockets.perf;
 
-import java.io.PrintStream;
-import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.List;
-
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.GnuParser;
@@ -27,6 +22,11 @@ import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
+
+import java.io.PrintStream;
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ClientOptions {
 	public static final String OPTION_HELP = "h";
@@ -54,7 +54,19 @@ public class ClientOptions {
 	private int maximumMessageSize;
 
 	public ClientOptions() {
-		options = createOptions();
+		options   = new Options();
+        
+        options.addOption(OPTION_HELP, "help", false, "Displays the Help information");
+        
+        addOptionWithArgument(OPTION_EXECUTION_SECONDS, "seconds", "The number of seconds of execution.", "seconds");
+        addOptionWithArgument(OPTION_NUMBER_OF_THREAD, "threads", "Number of threads", "threads");
+        
+        addOptionWithArgument(OPTION_MIN_MESSAGE_SIZE, "minSize", "Minimum size of messages", "minMessage");
+        addOptionWithArgument(OPTION_MAX_MESSAGE_SIZE, "maxSize", "Maximum size of messages", "maxMessage");
+        
+        addOptionWithArgument(OPTION_PORTS, "ports", "Ports to connect to, default [9000]", "ports");
+        addOptionWithArgument(OPTION_IP_ADDRESS, "internet address", "Host to connect to, default[localhost] ",
+        		"ipAddrsss");
 	}
 
 	public void parseArguments(String... args) throws ParseException {
@@ -72,10 +84,6 @@ public class ClientOptions {
 	}
 
 
-	/**
-	 * @param args
-	 * @throws ParseException
-	 */
 	public void printHelp(PrintStream outputStream) {
 		PrintWriter printWriter = new PrintWriter(outputStream);
 		HelpFormatter helpFormatter = new HelpFormatter();
@@ -132,7 +140,8 @@ public class ClientOptions {
 		return commandLine.hasOption(optionString);
 	}
 
-	private int getIntegerOption(CommandLine commandLine, String optionString, int defaultValue) throws ParseException {
+	@SuppressWarnings("unused")
+    private int getIntegerOption(CommandLine commandLine, String optionString, int defaultValue) throws ParseException {
 		String optionValueString = getStringValue(commandLine, optionString);
 		return optionValueString == null ? defaultValue : Integer.parseInt(optionValueString);
 	}
@@ -148,26 +157,8 @@ public class ClientOptions {
 	}
 
 
-	private Options createOptions() {
-		Options options = new Options();
-
-		options.addOption(OPTION_HELP, "help", false, "Displays the Help information");
-
-		addOptionWithArgument(options, OPTION_EXECUTION_SECONDS, "seconds", "The number of seconds of execution.",
-				"seconds");
-		addOptionWithArgument(options, OPTION_NUMBER_OF_THREAD, "threads", "Number of threads", "threads");
-
-		addOptionWithArgument(options, OPTION_MIN_MESSAGE_SIZE, "minSize", "Minimum size of messages", "minMessage");
-		addOptionWithArgument(options, OPTION_MAX_MESSAGE_SIZE, "maxSize", "Maximum size of messages", "maxMessage");
-
-		addOptionWithArgument(options, OPTION_PORTS, "ports", "Ports to connect to, default [9000]", "ports");
-		addOptionWithArgument(options, OPTION_IP_ADDRESS, "internet address",
-				"Host to connect to, default[localhost] ", "ipAddrsss");
-		return options;
-	}
-
-	private void addOptionWithArgument(Options options, String shortOptionName, String optionName,
-			String optionDescription, String optionArgument) {
+	private void addOptionWithArgument(String shortOptionName, String optionName, String optionDescription,
+			String optionArgument) {
 		Option option = new Option(shortOptionName, optionName, true, optionDescription);
 		option.setArgName(optionArgument);
 		options.addOption(option);
