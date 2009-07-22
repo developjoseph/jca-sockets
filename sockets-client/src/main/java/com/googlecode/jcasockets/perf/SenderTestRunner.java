@@ -21,7 +21,7 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
 
 public class SenderTestRunner implements Callable<ExecutionStatistics> {
-	private ExecutionStatistics executionStatistics;;
+	private ExecutionStatistics executionStatistics;
 	private ClientOptions clientOptions;
 	private SocketSender socketSender;
 	private TimeProvider timeProvider = TimeProvider.DEFAULT;
