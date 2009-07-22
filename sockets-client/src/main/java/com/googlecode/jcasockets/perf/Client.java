@@ -15,16 +15,18 @@
  */
 package com.googlecode.jcasockets.perf;
 
+import org.apache.commons.cli.ParseException;
+
 import java.io.PrintStream;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
-
-import org.apache.commons.cli.ParseException;
 
 public class Client {
 	public static void main(String[] args) throws Exception {
@@ -73,7 +75,7 @@ public class Client {
 		List<Integer> ports = clientOptions.getPorts();
 		ExecutorService executorService = Executors.newFixedThreadPool(numberOfThreads);
 		try {
-			List<SenderTestRunner> senderTestRunners = new ArrayList<SenderTestRunner>(numberOfThreads);
+			Collection<Callable<ExecutionStatistics>> senderTestRunners = new ArrayList<Callable<ExecutionStatistics>>(numberOfThreads);
 			for (Integer port : ports) {
 				for (int i = 0; i < numberOfThreads; i++) {
 					SocketSender socketSender = socketSenderFactory.createSocketSender(ipAddress, port);
