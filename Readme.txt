@@ -9,13 +9,15 @@ The MDB just replies with what was sent.
 Also a simple client (is provided which will send a request from the command line and get and echo a response from the server).
 You can run the client with:
 
-java -cp bin/sockets-client-alpha.0.2.jar com.googlecode.jcasockets.sample.SimpleClient "Hello World"
+java -cp sockets-client\sockets-client-1.2.jar com.googlecode.jcasockets.sample.SimpleClient "Hello World"
 
 The reply for server should be:
 "Hello World"
 
 A more sophisticated client is also provided, for this you need some external jars (commons-logging, commons-cli)
-which are not yet packaged in this distribution.
+which are not packaged in this distribution.
 
-java -cp bin/sockets-client-alpha.0.2.jar com.googlecode.jcasockets.perf.Client -h
+This is the command line required:
+java -cp sockets-client\sockets-client-1.2.jar com.googlecode.jcasockets.perf.Client -h
+
 
