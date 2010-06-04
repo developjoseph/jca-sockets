@@ -20,9 +20,19 @@
           <activation-config-property-name>port</activation-config-property-name>
           <activation-config-property-value>9000</activation-config-property-value>
         </activation-config-property>
+<!-- 
         <activation-config-property>
           <activation-config-property-name>encoding</activation-config-property-name>
           <activation-config-property-value>UTF-8</activation-config-property-value>
+        </activation-config-property>
+ -->        
+        <activation-config-property>
+          <activation-config-property-name>maximumConnections</activation-config-property-name>
+          <activation-config-property-value>5</activation-config-property-value>
+        </activation-config-property>
+        <activation-config-property>
+          <activation-config-property-name>connectionTimeoutMilliseconds</activation-config-property-name>
+          <activation-config-property-value>9999</activation-config-property-value>
         </activation-config-property>
        </activation-config>
     </message-driven>
@@ -31,22 +41,15 @@
       <display-name>SOCKET_MDB1</display-name>
       <ejb-name>SOCKET_MDB1</ejb-name>
       <ejb-class>com.googlecode.jcasockets.sample.SocketMessageDrivenBean</ejb-class>
-
-      <!-- The message listener interface -->
       <messaging-type>com.googlecode.jcasockets.SocketMessageEndpoint</messaging-type>
-
       <transaction-type>Container</transaction-type>
-
-      <!-- the values for the Activation Spec JavaBean -->
       <activation-config>
         <activation-config-property>
           <activation-config-property-name>port</activation-config-property-name>
           <activation-config-property-value>9001</activation-config-property-value>
         </activation-config-property>
        </activation-config>
- 
     </message-driven>
-
   </enterprise-beans>
 
   <assembly-descriptor>
@@ -65,5 +68,4 @@
       <trans-attribute>NotSupported</trans-attribute>
     </container-transaction>
   </assembly-descriptor>
-
 </ejb-jar>
