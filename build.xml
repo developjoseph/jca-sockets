@@ -2,10 +2,10 @@
 
 <project name="Example Application Build" default="zip" basedir=".">
   <target name="clean" >
-    <delete file="jca-sockets-1.1.zip"/>
+    <delete file="jca-sockets-1.2.zip"/>
   </target>
  <target name="zip" >
-      <zip destfile="jca-sockets-1.1.zip">
+      <zip destfile="jca-sockets-1.2.zip">
          <fileset dir=".">
             <exclude name="**/target/**"/>
             <exclude name="*.zip"/>

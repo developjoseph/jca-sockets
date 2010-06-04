@@ -1,1 +1,1 @@
-mvn -Dmaven.test.skip=true clean package assembly:assembly
+mvn -Dmaven.test.skip=true clean package source:jar assembly:assembly
