@@ -37,8 +37,9 @@ public class SocketResourceAdapter implements ResourceAdapter{
 	private WorkManager workManager;
 	private final Log log = LogFactory.getLog(SocketResourceAdapter.class);
 	private String defaultEncoding;
-
-
+	private Integer defaultMaximumConnections;
+	private Integer defaultConnectionTimeoutMilliseconds;
+	
 
 	public SocketResourceAdapter() {
 	}
@@ -69,6 +70,12 @@ public class SocketResourceAdapter implements ResourceAdapter{
 		if ( socketActivationSpec.getEncoding() == null){
 			socketActivationSpec.setEncoding(defaultEncoding);
 		}
+		if ( socketActivationSpec.getMaximumConnections() <= 0){
+			socketActivationSpec.setMaximumConnections(defaultMaximumConnections);
+		}
+		if ( socketActivationSpec.getConnectionTimeoutMilliseconds() <= 0){
+			socketActivationSpec.setConnectionTimeoutMilliseconds(defaultConnectionTimeoutMilliseconds);
+		}
 		SocketListener socketListener = new SocketListener(workManager, socketActivationSpec, endpointFactory);
 		socketListeners.put(activationSpec, socketListener);
 		try {
@@ -90,13 +97,31 @@ public class SocketResourceAdapter implements ResourceAdapter{
 		return new XAResource[0]; // XA is unsupported
 	}
 
-	public String getDefaultEncoding() {
+	public String getEncoding() {
 		return defaultEncoding;
 	}
 
-	public void setDefaultEncoding(String defaultEncoding) {
+	public void setEncoding(String defaultEncoding) {
+		log.info("Setting default encoding: " + defaultEncoding);
 		this.defaultEncoding = defaultEncoding;
 	}
 
+	public int getMaximumConnections() {
+		return defaultMaximumConnections;
+	}
+
+	public void setMaximumConnections(Integer defaultMaximumConnections) {
+		log.info("Setting default maximumConnections: " + defaultMaximumConnections);
+		this.defaultMaximumConnections = defaultMaximumConnections;
+	}
+
+	public int getConnectionTimeoutMilliseconds() {
+		return defaultConnectionTimeoutMilliseconds;
+	}
+
+	public void setConnectionTimeoutMilliseconds(Integer defaultConnectionTimeoutMilliseconds) {
+		log.info("Setting default connectionTimeoutMilliseconds: " + defaultConnectionTimeoutMilliseconds);
+		this.defaultConnectionTimeoutMilliseconds = defaultConnectionTimeoutMilliseconds;
+	}
 
 }

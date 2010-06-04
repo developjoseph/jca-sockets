@@ -61,6 +61,7 @@ public class EndpointPoolTest {
 		testObject.assertEndpointNum(endpointPool.getEndpoint(), 0);
 		testObject.assertEndpointNum(endpointPool.getEndpoint(), 1);
 	}
+
 	@Test
 	public void testBlockWithTimeout() throws UnavailableException {
 		TestObject testObject = new TestObject( 2 );

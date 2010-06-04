@@ -7,17 +7,29 @@
   <display-name>Socket Resource Adapter</display-name>
   <vendor-name>Systems Architects SPRL</vendor-name>
   <eis-type>General Socket Server</eis-type>
-  <resourceadapter-version>1.0</resourceadapter-version>
+  <resourceadapter-version>1.2</resourceadapter-version>
   
 
   <resourceadapter>
     <resourceadapter-class>com.googlecode.jcasockets.SocketResourceAdapter</resourceadapter-class>
     
     <config-property>
-      <description>The encoding for the input and output readers of the socket</description>
-      <config-property-name>defaultEncoding</config-property-name>
+      <description>The default encoding for the input and output readers of the socket, may be overridden in ejb-jar.xml</description>
+      <config-property-name>encoding</config-property-name>
       <config-property-type>java.lang.String</config-property-type>
       <config-property-value>ISO-8859-1</config-property-value>
+    </config-property>
+    <config-property>
+      <description>The default maximum number of simultaneous connections, may be overridden in ejb-jar.xml</description>
+      <config-property-name>maximumConnections</config-property-name>
+      <config-property-type>java.lang.Integer</config-property-type>
+      <config-property-value>30</config-property-value>
+    </config-property>
+    <config-property>
+      <description>The default timeout in milliseconds to get a connection from the pool, may be overridden in ejb-jar.xml</description>
+      <config-property-name>connectionTimeoutMilliseconds</config-property-name>
+      <config-property-type>java.lang.Integer</config-property-type>
+      <config-property-value>1000</config-property-value>
     </config-property>
 
     <!-- ResourceAdapter default configuration properties -->

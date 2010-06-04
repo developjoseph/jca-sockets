@@ -30,13 +30,16 @@ import org.apache.commons.logging.LogFactory;
 public class SocketActivationSpec implements ActivationSpec, Serializable {
 	private static final long serialVersionUID = 1L;
 	private final Log log = LogFactory.getLog(SocketActivationSpec.class);
+	
+	private int maximumConnections;
 	private int port;
 	private String encoding;
+	private int connectionTimeoutMilliseconds;
 
 	private SocketResourceAdapter ra = null;
 
 	public SocketActivationSpec() {
-		log.debug("Creating Activation spec: " + this);
+		log.info("Creating Activation spec: " + this);
 	}
 
 	public ResourceAdapter getResourceAdapter() {
@@ -58,8 +61,7 @@ public class SocketActivationSpec implements ActivationSpec, Serializable {
 	    }
 	}
 
-	@SuppressWarnings("unused")
-    boolean accepts(String recipientAddress) throws InvalidPropertyException {
+	boolean accepts(String recipientAddress) throws InvalidPropertyException {
 		return true; // sluttily accept anything
 	}
 
@@ -68,6 +70,7 @@ public class SocketActivationSpec implements ActivationSpec, Serializable {
 	}
 
 	public void setEncoding(String encoding) {
+		log.info("Setting encoding: " + encoding);
 		this.encoding = encoding;
 	}
 
@@ -76,8 +79,27 @@ public class SocketActivationSpec implements ActivationSpec, Serializable {
 	}
 
 	public void setPort(int port) {
+		log.info("Setting port: " + port);
 		this.port = port;
 	}
+	public int getMaximumConnections() {
+		return maximumConnections;
+	}
+
+	public void setMaximumConnections(int maximumConnections) {
+		log.info("Setting maximum connections: " + maximumConnections);
+		this.maximumConnections = maximumConnections;
+	}
+
+	public int getConnectionTimeoutMilliseconds() {
+		return connectionTimeoutMilliseconds;
+	}
+
+	public void setConnectionTimeoutMilliseconds(int connectionTimeoutMilliseconds) {
+		log.info("Setting connection timeout milliseconds: " + connectionTimeoutMilliseconds);
+		this.connectionTimeoutMilliseconds = connectionTimeoutMilliseconds;
+	}
+
 
 	@Override
 	public int hashCode() {

@@ -57,7 +57,7 @@ public class SocketProcessor implements Work {
 		try {
 			Socket socket = socketMessage.getRawSocket();
 			if ( !socket.isClosed()){
-			   socket.close();
+				socket.close();
 			}
 		} catch (final IOException e) {
 			log.error("Exception on close of socketMessage, processing may have failed", e);
