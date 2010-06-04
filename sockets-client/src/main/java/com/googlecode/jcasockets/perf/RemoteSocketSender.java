@@ -47,7 +47,7 @@ public class RemoteSocketSender implements SocketSender, SocketSenderFactory {
 		socketAddress = new InetSocketAddress(ipAddress, port);
 		StringBuilder sb = new StringBuilder(sendMessage.length());
 		OutputStream outputStream;
-		int timeoutMs = 5000;
+		int timeoutMs = 000;
 		try {
 			socket.connect(socketAddress, timeoutMs);
 			outputStream = socket.getOutputStream();
@@ -56,13 +56,12 @@ public class RemoteSocketSender implements SocketSender, SocketSenderFactory {
 			socket.shutdownOutput();
 
 			final InputStream inputStream = socket.getInputStream();
-			final BufferedReader rd = new BufferedReader(new InputStreamReader(inputStream));
-
+			final BufferedReader socketReader = new BufferedReader(new InputStreamReader(inputStream));
 			String str;
-			while ((str = rd.readLine()) != null) {
+			while ((str = readFromSocket(socketReader)) != null) {
 				sb.append(str);
 			}
-			rd.close();
+			socketReader.close();
 		} catch (IOException e) {
 			String out = "Thread " + Thread.currentThread().getName() +  " exception while sending: " + ipAddress + ":" + port + " after " + (System.currentTimeMillis() - startTimeMillis) + "ms";
 			System.out.println(out);
@@ -79,8 +78,23 @@ public class RemoteSocketSender implements SocketSender, SocketSenderFactory {
 		return sb.toString();
 	}
 
+	private String readFromSocket(final BufferedReader rd)  {
+		String readLine;
+		try {
+			readLine = rd.readLine();
+		} catch (IOException e) {
+			e.printStackTrace();
+			return null;
+		}
+		return readLine;
+	}
+
 	public SocketSender createSocketSender(String remoteIpAddress, Integer remotePort) {
 		return new RemoteSocketSender(remoteIpAddress, remotePort);
+	}
+
+	public void close() throws IOException {
+		socket.close();
 	}
 
 }

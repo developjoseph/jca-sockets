@@ -15,6 +15,8 @@
  */
 package com.googlecode.jcasockets.perf;
 
-public interface SocketSender {
+import java.io.Closeable;
+
+public interface SocketSender extends Closeable {
 	String send(String send);
 }

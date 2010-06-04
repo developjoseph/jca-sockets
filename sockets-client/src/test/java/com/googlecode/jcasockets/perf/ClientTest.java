@@ -29,10 +29,29 @@ import com.googlecode.jcasockets.perf.Client;
 import com.googlecode.jcasockets.perf.ExecutionStatistics;
 
 public class ClientTest {
-	@Test
-	public void testMultipleThread() throws Exception {
 
-		Client client = getClient("-s 1 -t2 -m10 -M10 -p 9000");
+	@Test
+	public void whenSingleThreadSendsMessages_MessagesAreSentCorrectly() throws Exception {
+		Client client = getClient("-s 1 -m 3 -M 3 -p 8888");
+		int expectedBytesIsTwiceSentMessage = 6;
+
+		MockSocketSender socketSender = new MockSocketSender();
+		client.setSender(socketSender);
+		client.execute();
+		ExecutionStatistics executionStatistics = client.getExecutionStatistics();
+
+		assertTrue(executionStatistics.getMessagesSent() > 0);
+		assertEquals(expectedBytesIsTwiceSentMessage, executionStatistics.getMinimumMessageSize());  // 2 * number of characters sent   
+		assertEquals(expectedBytesIsTwiceSentMessage, executionStatistics.getMaximumMessageSize());   // 2 * number of characters sent
+
+	}
+
+
+	@Test
+	public void whenMultipleThreadsSendMessages_MessagesAreSentCorrectly() throws Exception {
+
+		Client client = getClient("-s 1 -t3 -m10 -M10 -p 8888");
+		int expectedBytesIsTwiceSentMessage = 20;
 		MockSocketSender socketSender = new MockSocketSender();
 
 		client.setSender(socketSender);
@@ -40,11 +59,8 @@ public class ClientTest {
 		ExecutionStatistics executionStatistics = client.getExecutionStatistics();
 
 		assertTrue(executionStatistics.getMessagesSent() > 0);
-		// TODO in fact this is a bit flakey it is possible (but unlikely) for
-		// this to fail
-		// maybe the first 2 executions should not use random but max/min
-		assertEquals(20, executionStatistics.getMinimumMessageSize());
-		assertEquals(20, executionStatistics.getMaximumMessageSize());
+		assertEquals(expectedBytesIsTwiceSentMessage, executionStatistics.getMinimumMessageSize());  
+		assertEquals(expectedBytesIsTwiceSentMessage, executionStatistics.getMaximumMessageSize());
 	}
 
 	private Client getClient(String string) throws ParseException {
@@ -54,40 +70,7 @@ public class ClientTest {
 	}
 
 	@Test
-	public void testSmallMessageSize() throws Exception {
-		Client client = getClient("-s 1 -m 3 -M15 -p 8888");
-		MockSocketSender socketSender = new MockSocketSender();
-
-		client.setSender(socketSender);
-		client.execute();
-		ExecutionStatistics executionStatistics = client.getExecutionStatistics();
-
-		assertTrue(executionStatistics.getMessagesSent() > 0);
-
-		// TODO in fact this is a bit flakey it is possible (but unlikely) for
-		// this to fail
-		// maybe the first 2 executions should not use random but max/min
-		assertEquals(6, executionStatistics.getMinimumMessageSize());
-		assertEquals(30, executionStatistics.getMaximumMessageSize());
-
-	}
-
-	@Test
-	public void testExectuionStatistics() throws Exception {
-		String[] values = getHeaderStrings();
-		assertEquals(10, values.length);
-	}
-
-	private String[] getHeaderStrings() {
-		ByteArrayOutputStream os = new ByteArrayOutputStream(); 
-		PrintStream printStream = new PrintStream( os ); 
-		Client.printStatisticsHeaderAsCSV(printStream);
-		String csv = os.toString().trim();
-		String[] values = csv.split(",");
-		return values;
-	}
-	@Test
-	public void testExecutionStatistics() throws Exception {
+	public void testExecutionStatisticsFormattedAsCSV() throws Exception {
 		TimeProvider timeProvider = TimeProviderFixture.createTimeProvider(TimeUnit.SECONDS, 1,2,3,4,5,6);
 		ExecutionStatistics executionStatistics = new ExecutionStatistics(timeProvider);
 		executionStatistics.recordSend("12345");
@@ -97,13 +80,9 @@ public class ClientTest {
 		executionStatistics.recordSend("1234567890");
 		executionStatistics.recordReceive("R123456789");
 		
-		ByteArrayOutputStream os = new ByteArrayOutputStream(); 
-		PrintStream printStream = new PrintStream( os ); 
-		Client.printStatisticsAsCSV(printStream, executionStatistics);
-		String csv = os.toString().trim();
-		String[] values = csv.split(",");
+		String[] values = getExectuionStatsAsCSV(executionStatistics);
 		assertEquals(10, values.length);
-		assertEquals(getHeaderStrings().length, values.length);
+		assertCsvHeaderAndBodyHaveTheSameNumberOfValues(values);
 		
 		assertEquals(executionStatistics.getBytesSent(), Integer.parseInt(values[0]));
 		assertEquals(executionStatistics.getBytesReceived(), Integer.parseInt(values[1]));
@@ -115,5 +94,30 @@ public class ClientTest {
 		assertEquals(executionStatistics.getBytesSentPerSecond(), Integer.parseInt(values[7]));
 		assertEquals(executionStatistics.getBytesReceivedPerSecond(), Integer.parseInt(values[8]));
 		assertEquals(executionStatistics.getMessagesPerSecond(), Integer.parseInt(values[9]));
+	}
+
+
+	private void assertCsvHeaderAndBodyHaveTheSameNumberOfValues(String[] values) {
+		assertEquals(getCSVHeaderStrings().length, values.length);
+	}
+
+
+	private String[] getExectuionStatsAsCSV(ExecutionStatistics executionStatistics) {
+		ByteArrayOutputStream os = new ByteArrayOutputStream(); 
+		PrintStream printStream = new PrintStream( os ); 
+		Client.printStatisticsAsCSV(printStream, executionStatistics);
+		String csv = os.toString().trim();
+		String[] values = csv.split(",");
+		return values;
+	}
+
+
+	private String[] getCSVHeaderStrings() {
+		ByteArrayOutputStream os = new ByteArrayOutputStream(); 
+		PrintStream printStream = new PrintStream( os ); 
+		Client.printStatisticsHeaderAsCSV(printStream);
+		String csv = os.toString().trim();
+		String[] values = csv.split(",");
+		return values;
 	}
 }

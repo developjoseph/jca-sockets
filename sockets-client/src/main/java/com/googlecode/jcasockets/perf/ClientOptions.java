@@ -34,7 +34,9 @@ public class ClientOptions {
 	public static final String OPTION_NUMBER_OF_THREAD = "t";
 	public static final String OPTION_PORTS = "p";
 	public static final String OPTION_IP_ADDRESS = "i";
+	public static final String OPTION_MILLIS_PAUSE_BETWEEN_EXECUTIONS = "P";
 
+	public static final int DEFAULT_MILLIS_PAUSE_BETWEEN_EXECUTIONS = 0;
 	public static final int DEFAULT_NUMBER_OF_THREAD = 1;
 	public static final int DEFAULT_EXECUTION_SECONDS = 60;
 	public static final String OPTION_MIN_MESSAGE_SIZE = "m";
@@ -53,6 +55,9 @@ public class ClientOptions {
 	private int minimumMessageSize;
 	private int maximumMessageSize;
 
+
+	private int millisPause;
+
 	public ClientOptions() {
 		options   = new Options();
         
@@ -66,6 +71,8 @@ public class ClientOptions {
         addOptionWithArgument(options, OPTION_MAX_MESSAGE_SIZE, "maxSize", "Maximum size of messages", "maxMessage");
         
         addOptionWithArgument(options, OPTION_PORTS, "ports", "Ports to connect to, default [9000]", "ports");
+        addOptionWithArgument(options, OPTION_MILLIS_PAUSE_BETWEEN_EXECUTIONS, "pause", "Milliseconds pause between requests, default ["  
+        		+ DEFAULT_MILLIS_PAUSE_BETWEEN_EXECUTIONS + "]", "pause");
         addOptionWithArgument(options, OPTION_IP_ADDRESS, "internet address",
         		"Host to connect to, default[localhost] ", "ipAddrsss");
 	}
@@ -77,6 +84,7 @@ public class ClientOptions {
 		getNumberOfThreads = getIntegerOption(commandLine, OPTION_NUMBER_OF_THREAD, DEFAULT_NUMBER_OF_THREAD);
 		minimumMessageSize = getIntegerOption(commandLine, OPTION_MIN_MESSAGE_SIZE, DEFAULT_MIN_MESSAGE_SIZE);
 		maximumMessageSize = getIntegerOption(commandLine, OPTION_MAX_MESSAGE_SIZE, DEFAULT_MAX_MESSAGE_SIZE);
+		millisPause = getIntegerOption(commandLine, OPTION_MILLIS_PAUSE_BETWEEN_EXECUTIONS, DEFAULT_MILLIS_PAUSE_BETWEEN_EXECUTIONS);
 		ports = getListOption(commandLine, OPTION_PORTS, DEFAULT_PORT);
 
 		ipAddress = getStringValue(commandLine, OPTION_IP_ADDRESS, DEFAULT_IP_ADDRESS);
@@ -141,7 +149,6 @@ public class ClientOptions {
 		return commandLine.hasOption(optionString);
 	}
 
-	@SuppressWarnings("unused")
     private int getIntegerOption(CommandLine commandLine, String optionString, int defaultValue) throws ParseException {
 		String optionValueString = getStringValue(commandLine, optionString);
 		return optionValueString == null ? defaultValue : Integer.parseInt(optionValueString);
@@ -165,4 +172,8 @@ public class ClientOptions {
 		options.addOption(option);
 	}
 
+	public int getMillisPause() {
+		return millisPause;
+	}
+	
 }

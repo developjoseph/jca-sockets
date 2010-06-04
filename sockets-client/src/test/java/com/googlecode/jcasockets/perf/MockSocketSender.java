@@ -15,6 +15,8 @@
  */
 package com.googlecode.jcasockets.perf;
 
+import java.io.IOException;
+
 import com.googlecode.jcasockets.perf.SocketSender;
 import com.googlecode.jcasockets.perf.SocketSenderFactory;
 
@@ -27,5 +29,9 @@ public class MockSocketSender implements SocketSenderFactory, SocketSender {
 
 	public SocketSender createSocketSender(String ipAddress, Integer port) {
 		return new MockSocketSender();
+	}
+
+	public void close() throws IOException {
+		
 	}
 }

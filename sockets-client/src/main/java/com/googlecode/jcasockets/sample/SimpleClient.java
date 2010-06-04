@@ -27,14 +27,15 @@ import java.net.SocketAddress;
 public class SimpleClient {
 
   public static void main(String[] args) throws Exception {
-    // Create a socket without a timeout
+    // Create a mockSocket without a timeout
     final InetAddress address = InetAddress.getByName("localhost");
     final int port = 9000;
 
     final SocketAddress socketAddress = new InetSocketAddress(address, port);
     final Socket socket = new Socket();
+	socket.setSoLinger(false, 0);
 
-    final int timeoutMs = 0; 
+    final int timeoutMs = 1; 
     socket.connect(socketAddress, timeoutMs);
     final OutputStream outputStream = socket.getOutputStream();
     outputStream.write(args[0].getBytes());

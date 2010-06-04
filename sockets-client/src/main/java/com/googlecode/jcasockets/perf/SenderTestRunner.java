@@ -15,34 +15,43 @@
  */
 package com.googlecode.jcasockets.perf;
 
-import java.util.Arrays;
 import java.util.Random;
 import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
 
 public class SenderTestRunner implements Callable<ExecutionStatistics> {
-	private ExecutionStatistics executionStatistics;
 	private ClientOptions clientOptions;
 	private SocketSender socketSender;
 	private TimeProvider timeProvider = TimeProvider.DEFAULT;
+	private ExecutionStatistics executionStatistics = new ExecutionStatistics(timeProvider);
 	private long endNanos;
 	Random random = new Random();
-	private String filledString;
+	private final String filledString;
 
-	public SenderTestRunner(ClientOptions clientOptions,
-			SocketSender socketSender) {
+	public SenderTestRunner(ClientOptions clientOptions, SocketSender socketSender) {
 		this.clientOptions = clientOptions;
 		this.socketSender = socketSender;
 		long nanosToExecute = TimeUnit.SECONDS.toNanos( clientOptions.getExecutionSeconds() );
 		endNanos = timeProvider.nanoTime() + nanosToExecute;
-		char[] chars = new char[ clientOptions.getMaximumMessageSize() ]; 
-		Arrays.fill(chars, 'X');
-		filledString = new String(chars);
+		StringBuilder sb = new StringBuilder(clientOptions.getMaximumMessageSize()); 
+		while ( sb.length() < clientOptions.getMaximumMessageSize()){
+			sb.append("abcdefghijklmnopqrstuvwxyz");
+		}
+		filledString = sb.toString();
 	}
 
-	public ExecutionStatistics call() throws Exception {
+	public ExecutionStatistics call() throws Exception{
+		try {
+			doSend();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally{
+			socketSender.close();
+		}
+		return executionStatistics;
+	}
 
-		executionStatistics = new ExecutionStatistics(timeProvider);
+	private void doSend() throws InterruptedException {
 		while ( endNanos > timeProvider.nanoTime()){
 			String sendMessage = generateMessage();
 			executionStatistics.recordSend(sendMessage);
@@ -53,10 +62,13 @@ public class SenderTestRunner implements Callable<ExecutionStatistics> {
 			if (!expectedResponse.equals(receivedMessage)){
 				throw new RuntimeException("Messages are different expected\n" 
 						+ expectedResponse + "\nactual\n" + receivedMessage);
+			}else{
+				System.out.println("Messages same");
 			}
 			
+			TimeUnit.MILLISECONDS.sleep(clientOptions.getMillisPause());
+			
 		}
-		return executionStatistics;
 	}
 	private String generateMessage() {
 		int range = clientOptions.getMaximumMessageSize() - clientOptions.getMinimumMessageSize() + 1;
