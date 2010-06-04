@@ -50,16 +50,21 @@ public class SocketMessageDrivenBean implements MessageDrivenBean, SocketMessage
 
 	public void onMessage(SocketMessage socketMessage) throws Exception {
 		LineNumberReader in = new LineNumberReader(socketMessage.getReader());
-		final PrintStream out = new PrintStream(socketMessage.getOutputStream());
+		final PrintStream socketOutput = new PrintStream(socketMessage.getOutputStream());
 		String line;
 		int size = 0;
 		while ((line = in.readLine()) != null) {
-			out.println(line);
-			size += line.length();
+			if ( "EXIT".equals( line )){
+				socketMessage.getRawSocket().close();
+				break;	
+			}else{
+				socketOutput.println( "New " + line);
+				size += line.length();
+				socketOutput.flush();
+			}
 		}
 		if (log.isInfoEnabled()){
-			log.info("Processed message size: " + size );
+			log.info("Processed message size was: " + size );
 		}
-		out.flush();
 	}
 }
