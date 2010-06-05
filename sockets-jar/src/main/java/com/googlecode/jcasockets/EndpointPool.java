@@ -1,7 +1,9 @@
 package com.googlecode.jcasockets;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.TimeUnit;
+import java.util.logging.Logger;
 
 import javax.resource.spi.UnavailableException;
 import javax.resource.spi.endpoint.MessageEndpointFactory;
@@ -9,13 +11,10 @@ import javax.resource.spi.work.Work;
 import javax.resource.spi.work.WorkEvent;
 import javax.resource.spi.work.WorkListener;
 
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.TimeUnit;
-
 public class EndpointPool implements WorkListener {
 
-	private final Log log = LogFactory.getLog(EndpointPool.class);
+	private final Logger log = Logger.getLogger(EndpointPool.class.getName());
+
 	private MessageEndpointFactory endpointFactory;
 	private int poolSize;
 	private final int maxEndpoints;

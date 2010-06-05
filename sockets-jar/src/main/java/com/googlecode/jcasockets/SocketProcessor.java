@@ -15,16 +15,17 @@
  */
 package com.googlecode.jcasockets;
 
+import static java.util.logging.Level.FINE;
+import static java.util.logging.Level.SEVERE;
+
 import java.io.IOException;
 import java.net.Socket;
+import java.util.logging.Logger;
 
 import javax.resource.spi.work.Work;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
 public class SocketProcessor implements Work {
-	private final Log log = LogFactory.getLog(SocketProcessor.class);
+	private final Logger logger = Logger.getLogger(SocketProcessor.class.getName());
 
 	private SocketMessage socketMessage;
 	private final SocketMessageEndpoint messageEndpoint;
@@ -44,10 +45,10 @@ public class SocketProcessor implements Work {
 
 	public void run() {
 		try {
-			log.debug("Executing the onMessage(socketMessage) method");
+			logger.fine("Executing the onMessage(socketMessage) method");
 			messageEndpoint.onMessage(socketMessage);
 		} catch (Exception e) {
-			log.error("Exception on execution of MDB, processing has probably failed", e);
+			logger.log( FINE,  "Exception on execution of MDB, processing has probably failed", e);
 		} finally {
 			closeSocket();
 		}
@@ -60,7 +61,7 @@ public class SocketProcessor implements Work {
 				socket.close();
 			}
 		} catch (final IOException e) {
-			log.error("Exception on close of socketMessage, processing may have failed", e);
+			logger.log( SEVERE, "Exception on close of socketMessage, processing may have failed", e);
 		}
 	}
 

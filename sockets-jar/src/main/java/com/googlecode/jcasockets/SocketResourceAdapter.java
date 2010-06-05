@@ -15,8 +15,10 @@
  */
 package com.googlecode.jcasockets;
 
+
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+import java.util.logging.Logger;
 
 import javax.resource.NotSupportedException;
 import javax.resource.ResourceException;
@@ -28,14 +30,11 @@ import javax.resource.spi.endpoint.MessageEndpointFactory;
 import javax.resource.spi.work.WorkManager;
 import javax.transaction.xa.XAResource;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
 public class SocketResourceAdapter implements ResourceAdapter{
 	private static ConcurrentMap<ActivationSpec, SocketListener> socketListeners = new ConcurrentHashMap<ActivationSpec, SocketListener>();
 
 	private WorkManager workManager;
-	private final Log log = LogFactory.getLog(SocketResourceAdapter.class);
+	private final Logger logger = Logger.getLogger(SocketResourceAdapter.class.getName());
 	private String defaultEncoding;
 	private Integer defaultMaximumConnections;
 	private Integer defaultConnectionTimeoutMilliseconds;
@@ -45,7 +44,7 @@ public class SocketResourceAdapter implements ResourceAdapter{
 	}
 
 	public void start(BootstrapContext ctx) throws ResourceAdapterInternalException {
-		log.info("start");
+		logger.info("start");
     	workManager = ctx.getWorkManager();
 		for (SocketListener socketListener: socketListeners.values()) {
 			socketListener.start();
@@ -53,7 +52,7 @@ public class SocketResourceAdapter implements ResourceAdapter{
 	}
 
 	public void stop() {
-		log.info("stop");
+		logger.info("stop");
 		for (SocketListener socketListener: socketListeners.values()) {
 			socketListener.release();
 		}
@@ -61,7 +60,7 @@ public class SocketResourceAdapter implements ResourceAdapter{
 
 	public void endpointActivation(MessageEndpointFactory endpointFactory, ActivationSpec activationSpec)
 			throws  ResourceException {
-		log.info("endpointActivation");
+		logger.info("endpointActivation");
 
 		if (!(activationSpec instanceof SocketActivationSpec)) {
 			throw new NotSupportedException("Invalid spec" + activationSpec);
@@ -89,7 +88,7 @@ public class SocketResourceAdapter implements ResourceAdapter{
 
 	public void endpointDeactivation(MessageEndpointFactory endpointFactory, ActivationSpec spec) {
 		stop();
-		log.info("endpointDeactivation");
+		logger.info("endpointDeactivation");
 		// nothing to do.
 	}
 
@@ -102,7 +101,7 @@ public class SocketResourceAdapter implements ResourceAdapter{
 	}
 
 	public void setEncoding(String defaultEncoding) {
-		log.info("Setting default encoding: " + defaultEncoding);
+		logger.info("Setting default encoding: " + defaultEncoding);
 		this.defaultEncoding = defaultEncoding;
 	}
 
@@ -111,7 +110,7 @@ public class SocketResourceAdapter implements ResourceAdapter{
 	}
 
 	public void setMaximumConnections(Integer defaultMaximumConnections) {
-		log.info("Setting default maximumConnections: " + defaultMaximumConnections);
+		logger.info("Setting default maximumConnections: " + defaultMaximumConnections);
 		this.defaultMaximumConnections = defaultMaximumConnections;
 	}
 
@@ -120,7 +119,7 @@ public class SocketResourceAdapter implements ResourceAdapter{
 	}
 
 	public void setConnectionTimeoutMilliseconds(Integer defaultConnectionTimeoutMilliseconds) {
-		log.info("Setting default connectionTimeoutMilliseconds: " + defaultConnectionTimeoutMilliseconds);
+		logger.info("Setting default connectionTimeoutMilliseconds: " + defaultConnectionTimeoutMilliseconds);
 		this.defaultConnectionTimeoutMilliseconds = defaultConnectionTimeoutMilliseconds;
 	}
 

@@ -18,18 +18,16 @@ package com.googlecode.jcasockets;
 import java.io.Serializable;
 import java.nio.charset.Charset;
 import java.util.Map;
+import java.util.logging.Logger;
 
 import javax.resource.ResourceException;
 import javax.resource.spi.ActivationSpec;
 import javax.resource.spi.InvalidPropertyException;
 import javax.resource.spi.ResourceAdapter;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 public class SocketActivationSpec implements ActivationSpec, Serializable {
-	private static final long serialVersionUID = 1L;
-	private final Log log = LogFactory.getLog(SocketActivationSpec.class);
+	private final Logger logger = Logger.getLogger(SocketActivationSpec.class.getName());
 	
 	private int maximumConnections;
 	private int port;
@@ -39,7 +37,7 @@ public class SocketActivationSpec implements ActivationSpec, Serializable {
 	private SocketResourceAdapter ra = null;
 
 	public SocketActivationSpec() {
-		log.info("Creating Activation spec: " + this);
+		logger.info("Creating Activation spec: " + this);
 	}
 
 	public ResourceAdapter getResourceAdapter() {
@@ -70,7 +68,7 @@ public class SocketActivationSpec implements ActivationSpec, Serializable {
 	}
 
 	public void setEncoding(String encoding) {
-		log.info("Setting encoding: " + encoding);
+		logger.info("Setting encoding: " + encoding);
 		this.encoding = encoding;
 	}
 
@@ -79,7 +77,7 @@ public class SocketActivationSpec implements ActivationSpec, Serializable {
 	}
 
 	public void setPort(int port) {
-		log.info("Setting port: " + port);
+		logger.info("Setting port: " + port);
 		this.port = port;
 	}
 	public int getMaximumConnections() {
@@ -87,7 +85,7 @@ public class SocketActivationSpec implements ActivationSpec, Serializable {
 	}
 
 	public void setMaximumConnections(int maximumConnections) {
-		log.info("Setting maximum connections: " + maximumConnections);
+		logger.info("Setting maximum connections: " + maximumConnections);
 		this.maximumConnections = maximumConnections;
 	}
 
@@ -96,7 +94,7 @@ public class SocketActivationSpec implements ActivationSpec, Serializable {
 	}
 
 	public void setConnectionTimeoutMilliseconds(int connectionTimeoutMilliseconds) {
-		log.info("Setting connection timeout milliseconds: " + connectionTimeoutMilliseconds);
+		logger.info("Setting connection timeout milliseconds: " + connectionTimeoutMilliseconds);
 		this.connectionTimeoutMilliseconds = connectionTimeoutMilliseconds;
 	}
 

@@ -15,6 +15,8 @@
  */
 package com.googlecode.jcasockets;
 
+import static java.util.logging.Level.SEVERE;
+
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
@@ -22,6 +24,7 @@ import java.net.Socket;
 import java.net.SocketException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.logging.Logger;
 
 import javax.resource.spi.ResourceAdapterInternalException;
 import javax.resource.spi.UnavailableException;
@@ -30,15 +33,12 @@ import javax.resource.spi.work.Work;
 import javax.resource.spi.work.WorkException;
 import javax.resource.spi.work.WorkManager;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
 public class SocketListener implements Runnable, Work {
 
 	private ServerSocket serverSocket;
 	private final WorkManager workManager;
 	private final SocketActivationSpec activationSpec;
-	private final Log log = LogFactory.getLog(SocketListener.class);
+	private final Logger logger = Logger.getLogger(SocketListener.class.getName());
 
 	private AtomicBoolean isRunning = new AtomicBoolean(false);
 	private EndpointPool endpointPool;
@@ -61,20 +61,20 @@ public class SocketListener implements Runnable, Work {
 	}
 
 	public void start() throws ResourceAdapterInternalException {
-		log.info("Start listening on port " + activationSpec.getPort());
+		logger.info("Start listening on port " + activationSpec.getPort());
 		try {
 			serverSocket = new ServerSocket();
 			serverSocket.setReuseAddress(true);
 			serverSocket.bind( new InetSocketAddress( activationSpec.getPort() ));
 			workManager.startWork(this);
 		} catch (Throwable e) {
-			log.error("Exception while starting resource adapter, rethrowing with ResourceAdapterInternalException", e);
+			logger.log( SEVERE, "Exception while starting resource adapter, rethrowing with ResourceAdapterInternalException", e);
 			throw new ResourceAdapterInternalException(e);
 		}
 	}
 
 	public void release() {
-		log.info("Stop listening on port " + activationSpec.getPort());
+		logger.info("Stop listening on port " + activationSpec.getPort());
 		setRunning(false);
 		try {
 			if (serverSocket!=null){
@@ -93,7 +93,7 @@ public class SocketListener implements Runnable, Work {
 			}
 		} catch (Exception e) {
 			if (isRunning()) {
-				log.error("Error while accepting a socket request an scheduling work on the request", e);
+				logger.log( SEVERE, "Error while accepting a socket request an scheduling work on the request", e);
 			}
 			setRunning(false);
 		}
@@ -109,22 +109,22 @@ public class SocketListener implements Runnable, Work {
 			SocketProcessor socketProcessor = new SocketProcessor(socketMessage, messageEndpoint);
 			workManager.scheduleWork(socketProcessor, WorkManager.IMMEDIATE, null, endpointPool);
 		}catch ( UnavailableException e){
-			log.error( "No more endpoints avaiable ine the pool", e);
+			logger.log( SEVERE, "No more endpoints avaiable in the pool", e);
 		}
 	}
 
 	private void dumpSocket(Socket socket) {
 		try {
-			log.info("getKeepAlive         " + socket.getKeepAlive());
-			log.info("getLocalPort         " + socket.getLocalPort());
-			log.info("getOOBInline         " + socket.getOOBInline());
-			log.info("getReceiveBufferSize " + socket.getReceiveBufferSize());
-			log.info("getReuseAddress      " + socket.getReuseAddress());
-			log.info("getSendBufferSize    " + socket.getSendBufferSize());
-			log.info("getSoLinger          " + socket.getSoLinger());
-			log.info("getSoTimeout         " + socket.getSoTimeout());
-			log.info("getTcpNoDelay        " + socket.getTcpNoDelay());
-			log.info("getTrafficClass      " + socket.getTrafficClass());
+			logger.info("getKeepAlive         " + socket.getKeepAlive());
+			logger.info("getLocalPort         " + socket.getLocalPort());
+			logger.info("getOOBInline         " + socket.getOOBInline());
+			logger.info("getReceiveBufferSize " + socket.getReceiveBufferSize());
+			logger.info("getReuseAddress      " + socket.getReuseAddress());
+			logger.info("getSendBufferSize    " + socket.getSendBufferSize());
+			logger.info("getSoLinger          " + socket.getSoLinger());
+			logger.info("getSoTimeout         " + socket.getSoTimeout());
+			logger.info("getTcpNoDelay        " + socket.getTcpNoDelay());
+			logger.info("getTrafficClass      " + socket.getTrafficClass());
 		} catch (SocketException e) {
 			e.printStackTrace();
 		}
