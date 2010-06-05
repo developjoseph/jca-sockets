@@ -6,7 +6,7 @@
    <groupId>com.googlecode.jcasockets</groupId>
    <artifactId>sockets-jar</artifactId>
    <packaging>jar</packaging>
-   <name>sockets</name>
+   <name>sockets-jar</name>
    <parent>
       <groupId>com.googlecode</groupId>
       <artifactId>jcasockets</artifactId>

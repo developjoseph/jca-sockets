@@ -6,7 +6,7 @@
   <groupId>com.googlecode.jcasockets</groupId>
   <artifactId>sockets-ejb</artifactId>
   <packaging>ejb</packaging>
-  <name>sockets-ejb Maven J2EE 1.4 EJB</name>
+  <name>sockets-ejb</name>
   <parent>
         <artifactId>jcasockets</artifactId>
         <groupId>com.googlecode</groupId>
