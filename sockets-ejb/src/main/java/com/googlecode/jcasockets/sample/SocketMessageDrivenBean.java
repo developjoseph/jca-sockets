@@ -17,20 +17,18 @@ package com.googlecode.jcasockets.sample;
 
 import java.io.LineNumberReader;
 import java.io.PrintStream;
+import java.util.logging.Logger;
 
 import javax.ejb.EJBException;
 import javax.ejb.MessageDrivenBean;
 import javax.ejb.MessageDrivenContext;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 import com.googlecode.jcasockets.SocketMessage;
 import com.googlecode.jcasockets.SocketMessageEndpoint;
 
 public class SocketMessageDrivenBean implements MessageDrivenBean, SocketMessageEndpoint {
 	private static final long serialVersionUID = 1L;
-	private final Log log = LogFactory.getLog(SocketMessageDrivenBean.class);
+	private final Logger log = Logger.getLogger(SocketMessageDrivenBean.class.getName());
 
 	public SocketMessageDrivenBean() {
 		log.info("Construct MDB");
@@ -63,8 +61,6 @@ public class SocketMessageDrivenBean implements MessageDrivenBean, SocketMessage
 				socketOutput.flush();
 			}
 		}
-		if (log.isInfoEnabled()){
-			log.info("Processed message size was: " + size );
-		}
+		log.info("Processed message size was: " + size );
 	}
 }

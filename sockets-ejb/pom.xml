@@ -19,12 +19,6 @@
       <artifactId>sockets-api</artifactId>
       <version>${project.version}</version>
     </dependency>
-      <dependency>
-         <groupId>commons-logging</groupId>
-         <artifactId>commons-logging</artifactId>
-         <version>1.1.1</version>
-         <scope>provided</scope>
-      </dependency>
     <dependency>
       <groupId>org.apache.geronimo.specs</groupId>
       <artifactId>geronimo-j2ee_1.4_spec</artifactId>
