@@ -51,8 +51,7 @@ public class SocketListener implements Runnable, Work {
 		isRunning.set(running);
 	}
 
-	public SocketListener(WorkManager workManager, SocketActivationSpec activationSpec,
-			MessageEndpointFactory messageEndpointFactory) {
+	public SocketListener(WorkManager workManager, SocketActivationSpec activationSpec,	MessageEndpointFactory messageEndpointFactory) {
 		this.workManager = workManager;
 		this.activationSpec = activationSpec;
 	    int maximumConnections = activationSpec.getMaximumConnections();
