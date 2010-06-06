@@ -15,8 +15,7 @@
  */
 package com.googlecode.jcasockets;
 
-import static java.util.logging.Level.FINE;
-import static java.util.logging.Level.SEVERE;
+import static java.util.logging.Level.*;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -48,7 +47,7 @@ public class SocketProcessor implements Work {
 			logger.fine("Executing the onMessage(socketMessage) method");
 			messageEndpoint.onMessage(socketMessage);
 		} catch (Exception e) {
-			logger.log( FINE,  "Exception on execution of MDB, processing has probably failed", e);
+			logger.log( WARNING,  "Exception on execution of MDB, processing has probably failed. Socket will be closed.", e);
 		} finally {
 			closeSocket();
 		}
@@ -61,7 +60,7 @@ public class SocketProcessor implements Work {
 				socket.close();
 			}
 		} catch (final IOException e) {
-			logger.log( SEVERE, "Exception on close of socketMessage, processing may have failed", e);
+			logger.log( SEVERE, "Exception on close of socket, processing may have failed", e);
 		}
 	}
 
