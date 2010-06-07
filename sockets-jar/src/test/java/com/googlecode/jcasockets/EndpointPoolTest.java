@@ -1,78 +1,62 @@
 package com.googlecode.jcasockets;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
-import java.util.concurrent.TimeUnit;
+import org.junit.Before;
+import org.junit.Test;
+import org.unitils.UnitilsJUnit4;
+import org.unitils.inject.annotation.TestedObject;
+import org.unitils.mock.Mock;
 
 import javax.resource.spi.UnavailableException;
 import javax.resource.spi.endpoint.MessageEndpoint;
 import javax.resource.spi.endpoint.MessageEndpointFactory;
 
-import org.easymock.EasyMock;
-import org.junit.Test;
+import java.util.concurrent.TimeUnit;
 
-public class EndpointPoolTest {
-	private interface MockEndpoint extends SocketMessageEndpoint, MessageEndpoint{
+public class EndpointPoolTest extends UnitilsJUnit4{
+
+	@TestedObject
+	private EndpointPool endpointPool;
+	
+	private Mock<MessageEndpointFactory> messageEndpointFactory;
+	
+	private Mock<MockEndpoint> endpoint1;
+	private Mock<MockEndpoint> endpoint2;
+
+	private static final int NUM_ENDPOINTS_IN_POOL = 2;
+	private static final long MILLIS_TO_BLOCK = 100;
+
+	@Before 
+	public void setupMocks() throws UnavailableException{
+		endpointPool = new EndpointPool( messageEndpointFactory.getMock(), NUM_ENDPOINTS_IN_POOL, MILLIS_TO_BLOCK, TimeUnit.MILLISECONDS);
+		messageEndpointFactory.onceReturns( endpoint1.getMock() ).createEndpoint(null);
+		messageEndpointFactory.onceReturns( endpoint2.getMock() ).createEndpoint(null);
 	}
-	private class TestObject{
-		MessageEndpointFactory endpointFactory = EasyMock.createNiceMock(MessageEndpointFactory.class);
-		private SocketMessageEndpoint[] socketMessageEndpoints;
-		
-		public TestObject(int numEndpoints) throws UnavailableException {
-			endpointFactory = EasyMock.createNiceMock(MessageEndpointFactory.class);
-			socketMessageEndpoints = new SocketMessageEndpoint[numEndpoints];
-			for (int i = 0; i < numEndpoints ; i++) {
-				socketMessageEndpoints[i] = EasyMock.createNiceMock(MockEndpoint.class); 
-				EasyMock.expect( endpointFactory.createEndpoint(null) ).andReturn((MessageEndpoint)socketMessageEndpoints[i]);
-			}
-			EasyMock.replay(endpointFactory);
-		}
-		public void assertEndpointNum( SocketMessageEndpoint socketMessageEndpoint, int num ){
-			assertTrue("Expected " + num , socketMessageEndpoint == socketMessageEndpoints[num] );
-		}
+	@Test
+	public void testReleaseKeepsTheEndpointInThePoolForReuse() throws UnavailableException{
+		SocketMessageEndpoint actualEndPoint = endpointPool.getEndpoint();
+		assertEquals(endpoint1.getMock(), actualEndPoint);
+		endpointPool.release(actualEndPoint);
+		assertEquals(endpoint1.getMock(), endpointPool.getEndpoint());
 	}
 	
 	@Test
-	public void testGetNewWithRelease() throws UnavailableException{
-		TestObject testObject = new TestObject( 2 );
-		EndpointPool endpointPool = new EndpointPool( testObject.endpointFactory, 2, 1, TimeUnit.MILLISECONDS);
-		
-		SocketMessageEndpoint endpoint = endpointPool.getEndpoint();
-		testObject.assertEndpointNum(endpoint, 0);
-		endpointPool.release(endpoint);
-		testObject.assertEndpointNum(endpoint, 0);
-	}
-	
-	@Test
-	public void testCreatePool() throws UnavailableException{
-		TestObject testObject = new TestObject( 2 );
-		EndpointPool endpointPool = new EndpointPool( testObject.endpointFactory, 2, 1, TimeUnit.MILLISECONDS);
-		SocketMessageEndpoint actual = endpointPool.getEndpoint();
-		testObject.assertEndpointNum(actual,0 ); 
-	}
-
-	
-	@Test
-	public void testGetNew() throws UnavailableException{
-		TestObject testObject = new TestObject( 2 );
-		EndpointPool endpointPool = new EndpointPool( testObject.endpointFactory, 2, 1, TimeUnit.MILLISECONDS);
-		
-		testObject.assertEndpointNum(endpointPool.getEndpoint(), 0);
-		testObject.assertEndpointNum(endpointPool.getEndpoint(), 1);
+	public void testGetEndpointReturnsNewEndpoint() throws UnavailableException{
+		assertEquals(endpoint1.getMock(), endpointPool.getEndpoint());
+		assertEquals(endpoint2.getMock(), endpointPool.getEndpoint());
 	}
 
 	@Test
-	public void testBlockWithTimeout() throws UnavailableException {
-		TestObject testObject = new TestObject( 2 );
-		long millisBlock = 100;
-		EndpointPool endpointPool = new EndpointPool( testObject.endpointFactory, 2, millisBlock, TimeUnit.MILLISECONDS);
-		
-		SocketMessageEndpoint actual1 = endpointPool.getEndpoint();
-		testObject.assertEndpointNum(actual1,0 ); 
-		SocketMessageEndpoint actual2 = endpointPool.getEndpoint();
-		testObject.assertEndpointNum(actual2,1 ); 
-		
+	public void testPoolBlocksUntilTimeout() throws UnavailableException {
+		assertEquals(endpoint1.getMock(), endpointPool.getEndpoint());
+		assertEquals(endpoint2.getMock(), endpointPool.getEndpoint());
+		assertNextCallBlocksUntilTimeout();
+	}
+	
+	private void assertNextCallBlocksUntilTimeout() {
 		long currentTimeMillis = System.currentTimeMillis();
 		try {
 			endpointPool.getEndpoint();
@@ -80,7 +64,11 @@ public class EndpointPoolTest {
 		} catch (UnavailableException e) {
 			long elapsedMillis = System.currentTimeMillis() - currentTimeMillis;
 			// test for 20% more than the blocking time (clock inaccuracies)
-			assertTrue( elapsedMillis * 1.2 >= millisBlock);
+			assertTrue( elapsedMillis * 1.2 >= MILLIS_TO_BLOCK);
 		}
+	}
+
+	private interface MockEndpoint extends SocketMessageEndpoint, MessageEndpoint{
+		
 	}
 }
