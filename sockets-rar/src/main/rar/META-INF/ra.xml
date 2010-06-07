@@ -23,7 +23,7 @@
       <description>The default maximum number of simultaneous connections, may be overridden in ejb-jar.xml</description>
       <config-property-name>maximumConnections</config-property-name>
       <config-property-type>java.lang.Integer</config-property-type>
-      <config-property-value>30</config-property-value>
+      <config-property-value>100</config-property-value>
     </config-property>
     <config-property>
       <description>The default timeout in milliseconds to get a connection from the pool, may be overridden in ejb-jar.xml</description>
