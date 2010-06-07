@@ -68,8 +68,8 @@ public abstract class AbstractCharacterTerminatedMessageProtocol {
 	}
 
 	public void close() throws IOException {
-		reader.close();
-		writer.close();
+		socket.shutdownOutput();
+		socket.shutdownInput();
 		socket.close();
 	}
 

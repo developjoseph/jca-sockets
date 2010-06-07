@@ -88,7 +88,6 @@ public class RequestResponseDisconnectProtocolRealSocketServerTest {
 	@After
 	public void teardownSocketServer() throws IOException {
 		serverThreadPool.shutdownNow();
-		clientProtocol.close();
 	}
 
 	@Test
@@ -98,10 +97,11 @@ public class RequestResponseDisconnectProtocolRealSocketServerTest {
 		clientProtocol.writeMessage(request);
 		String response = clientProtocol.getMessage();
 		assertEquals(request, response);
+		clientProtocol.close();
 	}
 
 	@Test
-	public void testProtocolWithMultipleMessagse() throws Exception {
+	public void testProtocolWithMultipleMessages() throws Exception {
 		shutdown.set(true);
 		String request1 = "TESTMESSAGE1";
 		String request2 = "TESTMESSAGE2";
@@ -122,12 +122,13 @@ public class RequestResponseDisconnectProtocolRealSocketServerTest {
 		String response1 = clientProtocol.getMessage();
 		assertEquals(request1, response1);
 		clientProtocol.close();
-		shutdown.set(true);
 
 		setupClientProtocol();
 		clientProtocol.writeMessage(request2);
 		String response2 = clientProtocol.getMessage();
 		assertEquals(request2, response2);
+		shutdown.set(true);
+		clientProtocol.close();
 	}
 
 
@@ -151,6 +152,8 @@ public class RequestResponseDisconnectProtocolRealSocketServerTest {
 					while (!"".equals(message = protocol.getMessage())) {
 						protocol.writeMessage(message);
 					}
+					socket.shutdownOutput();
+					socket.shutdownInput();
 					socket.close();
 				}
 			} catch (Exception e) {
