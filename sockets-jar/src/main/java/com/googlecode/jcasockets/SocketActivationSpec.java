@@ -29,6 +29,7 @@ import javax.resource.spi.ResourceAdapter;
 public class SocketActivationSpec implements ActivationSpec, Serializable {
 	private final Logger logger = Logger.getLogger(SocketActivationSpec.class.getName());
 	
+
 	private int maximumConnections;
 	private int port;
 	private String encoding;
@@ -98,6 +99,13 @@ public class SocketActivationSpec implements ActivationSpec, Serializable {
 		this.connectionTimeoutMilliseconds = connectionTimeoutMilliseconds;
 	}
 
+	@Override
+	public String toString() {
+		return "[" + this.getClass().getSimpleName() + " port=" + port + ",encoding=" + encoding 
+		+ ",maximumConnections=" + maximumConnections 
+		+ ",connectionTimeoutMilliseconds=" + connectionTimeoutMilliseconds 
+		+ "]";
+	}
 
 	@Override
 	public int hashCode() {

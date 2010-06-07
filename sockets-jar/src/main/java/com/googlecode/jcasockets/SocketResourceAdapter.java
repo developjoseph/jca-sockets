@@ -54,22 +54,40 @@ public class SocketResourceAdapter implements ResourceAdapter{
 	public void stop() {
 		logger.info("stop");
 		for (SocketListener socketListener: socketListeners.values()) {
-			if ( socketListener != null){
-				socketListener.release();
-			}else{
-				logger.info("stop called but SocketListener was not listening. It probably failed to start on deployment.");
-			}
+			socketListener.release();
 		}
 	}
 
-	public void endpointActivation(MessageEndpointFactory endpointFactory, ActivationSpec activationSpec)
+	public void endpointActivation(MessageEndpointFactory messageEndpointFactory, ActivationSpec activationSpec)
 			throws  ResourceException {
 		logger.info("endpointActivation");
-
 		if (!(activationSpec instanceof SocketActivationSpec)) {
-			throw new NotSupportedException("Invalid spec" + activationSpec);
+			throw new NotSupportedException("Invalid spec, Should be a " + SocketActivationSpec.class.getName() + " was: " + activationSpec);
 		}
 		SocketActivationSpec socketActivationSpec = (SocketActivationSpec) activationSpec;
+		createSocketActivationSpec(socketActivationSpec);
+		SocketListener socketListener = new SocketListener(workManager, socketActivationSpec, messageEndpointFactory);
+		recordSocketListener(socketActivationSpec, socketListener);
+		try {
+			socketListener.start();
+		} catch (ResourceException e) {
+			socketListener.release();
+			throw e;
+		}
+	}
+
+	private void recordSocketListener(SocketActivationSpec socketActivationSpec, SocketListener socketListener) throws NotSupportedException {
+		SocketListener previousValue = socketListeners.putIfAbsent(socketActivationSpec, socketListener);
+		if ( previousValue!= null ){
+			throw new NotSupportedException( "A socket activation spec already exists with the same port: \n " 
+					+ " previous: " + previousValue 
+					+ " this: " + socketActivationSpec 
+					);
+		}
+		
+	}
+
+	private void createSocketActivationSpec(SocketActivationSpec socketActivationSpec) {
 		if ( socketActivationSpec.getEncoding() == null){
 			socketActivationSpec.setEncoding(defaultEncoding);
 		}
@@ -78,14 +96,6 @@ public class SocketResourceAdapter implements ResourceAdapter{
 		}
 		if ( socketActivationSpec.getConnectionTimeoutMilliseconds() <= 0){
 			socketActivationSpec.setConnectionTimeoutMilliseconds(defaultConnectionTimeoutMilliseconds);
-		}
-		SocketListener socketListener = new SocketListener(workManager, socketActivationSpec, endpointFactory);
-		socketListeners.put(activationSpec, socketListener);
-		try {
-			socketListener.start();
-		} catch (ResourceException e) {
-			socketListener.release();
-			throw e;
 		}
 	}
 
@@ -105,7 +115,7 @@ public class SocketResourceAdapter implements ResourceAdapter{
 	}
 
 	public void setEncoding(String defaultEncoding) {
-		logger.info("Setting default encoding: " + defaultEncoding);
+		logger.info("Default encoding (may be overridden when activated later) is: " + defaultEncoding);
 		this.defaultEncoding = defaultEncoding;
 	}
 
@@ -114,7 +124,7 @@ public class SocketResourceAdapter implements ResourceAdapter{
 	}
 
 	public void setMaximumConnections(Integer defaultMaximumConnections) {
-		logger.info("Setting default maximumConnections: " + defaultMaximumConnections);
+		logger.info("Default maximumConnections (may be overridden when activated later) is: " + defaultMaximumConnections);
 		this.defaultMaximumConnections = defaultMaximumConnections;
 	}
 
@@ -123,7 +133,7 @@ public class SocketResourceAdapter implements ResourceAdapter{
 	}
 
 	public void setConnectionTimeoutMilliseconds(Integer defaultConnectionTimeoutMilliseconds) {
-		logger.info("Setting default connectionTimeoutMilliseconds: " + defaultConnectionTimeoutMilliseconds);
+		logger.info("Default connectionTimeoutMilliseconds (may be overridden when activated later) is: " + defaultConnectionTimeoutMilliseconds);
 		this.defaultConnectionTimeoutMilliseconds = defaultConnectionTimeoutMilliseconds;
 	}
 
