@@ -39,6 +39,6 @@
             </configuration>
          </plugin>
       </plugins>
-      <finalName>sockets-rar-${version}</finalName>
+      <finalName>sockets-rar-${project.version}</finalName>
    </build>
 </project>
