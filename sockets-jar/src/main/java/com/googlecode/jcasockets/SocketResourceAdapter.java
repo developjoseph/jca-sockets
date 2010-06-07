@@ -54,7 +54,11 @@ public class SocketResourceAdapter implements ResourceAdapter{
 	public void stop() {
 		logger.info("stop");
 		for (SocketListener socketListener: socketListeners.values()) {
-			socketListener.release();
+			if ( socketListener != null){
+				socketListener.release();
+			}else{
+				logger.info("stop called but SocketListener was not listening. It probably failed to start on deployment.");
+			}
 		}
 	}
 
