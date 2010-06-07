@@ -38,7 +38,8 @@ public class SimpleClient {
     final int timeoutMs = 1; 
     socket.connect(socketAddress, timeoutMs);
     final OutputStream outputStream = socket.getOutputStream();
-    outputStream.write(args[0].getBytes());
+    String sendString = args.length == 0 ? "sendString" : args[0];
+    outputStream.write(sendString.getBytes());    
     socket.shutdownOutput();
 
     final InputStream inputStream = socket.getInputStream();
