@@ -1,4 +1,5 @@
 package com.googlecode.jcasockets.protocol;
+
 /*
  * The SO_LINGER option is used to specify how the close() method affects
  * socket using a connection-oriented protocol (i.e. TCP/IP, not UDP). A
@@ -61,10 +62,11 @@ import org.junit.Test;
 public class RequestResponseDisconnectProtocolRealSocketServerTest {
 	private final AtomicBoolean shutdown = new AtomicBoolean(false);
 
-
 	private ExecutorService serverThreadPool;
 	private AbstractCharacterTerminatedMessageProtocol clientProtocol;
-	private static int currentPort = 9999;
+	private static int currentPort = 9900;
+	private static final String request1 = "TESTMESSAGE1";
+	private static final String request2 = "TESTMESSAGE2";
 
 	@Before
 	public void setupSocketServer() throws IOException {
@@ -74,63 +76,64 @@ public class RequestResponseDisconnectProtocolRealSocketServerTest {
 		setupClientProtocol();
 	}
 
-	private void setupClientProtocol() throws UnknownHostException,
-			SocketException, IOException {
-		final InetAddress address = InetAddress.getByName("localhost");
-		final SocketAddress socketAddress = new InetSocketAddress(address, currentPort);
-		Socket clientSocket = new Socket();
-		clientSocket.setSoLinger(false, 0);
-		clientSocket.connect(socketAddress);
-
-		clientProtocol = new RequestResponseDisconnectProtocol(clientSocket);
-	}
-
 	@After
 	public void teardownSocketServer() throws IOException {
 		serverThreadPool.shutdownNow();
 	}
 
 	@Test
-	public void testProtocol() throws Exception {
-		shutdown.set(true);
-		String request = "TESTMESSAGE";
-		clientProtocol.writeMessage(request);
-		String response = clientProtocol.getMessage();
-		assertEquals(request, response);
-		clientProtocol.close();
+	public void testSimpleRequestResponseUsingProtocol() throws Exception {
+		shutdownServerListener();
+		assertResponseEqualsRequest(request1);
+		closeClientSocket();
 	}
 
 	@Test
 	public void testProtocolWithMultipleMessages() throws Exception {
-		shutdown.set(true);
-		String request1 = "TESTMESSAGE1";
-		String request2 = "TESTMESSAGE2";
-		clientProtocol.writeMessage(request1);
-		String response1 = clientProtocol.getMessage();
-		assertEquals(request1, response1);
-		clientProtocol.writeMessage(request2);
-		String response2 = clientProtocol.getMessage();
-		assertEquals(request2, response2);
-		clientProtocol.close();
+		shutdownServerListener();
+		assertResponseEqualsRequest(request1);
+		assertResponseEqualsRequest(request2);
+		closeClientSocket();
 	}
 
 	@Test
-	public void testProtocolWithClose() throws Exception {
-		String request1 = "TESTMESSAGE1";
-		String request2 = "TESTMESSAGE2";
-		clientProtocol.writeMessage(request1);
-		String response1 = clientProtocol.getMessage();
-		assertEquals(request1, response1);
-		clientProtocol.close();
+	public void testProtocolWithCloseAndReconnectBetweenRequest() throws Exception {
+		assertResponseEqualsRequest(request1);
+		closeClientSocket();
 
 		setupClientProtocol();
-		clientProtocol.writeMessage(request2);
-		String response2 = clientProtocol.getMessage();
-		assertEquals(request2, response2);
-		shutdown.set(true);
-		clientProtocol.close();
+		assertResponseEqualsRequest(request2);
+
+		shutdownServerListener();
+		closeClientSocket();
 	}
 
+	private void shutdownServerListener() {
+		shutdown.set(true);
+	}
+
+	private void assertResponseEqualsRequest(String request) throws IOException {
+		clientProtocol.writeMessage(request);
+		String response = clientProtocol.getMessage();
+		assertEquals(request, response);
+	}
+
+	private void setupClientProtocol() throws UnknownHostException, SocketException, IOException {
+		final InetAddress address = InetAddress.getByName("localhost");
+		final SocketAddress socketAddress = new InetSocketAddress(address, currentPort);
+		Socket clientSocket = new Socket();
+		setLingerOptions(clientSocket);
+		clientSocket.connect(socketAddress);
+		clientProtocol = new RequestResponseDisconnectProtocol(clientSocket);
+	}
+
+	void setLingerOptions(Socket socket) throws SocketException {
+		socket.setSoLinger(false, 1);
+	}
+
+	private void closeClientSocket() throws IOException {
+		clientProtocol.close();
+	}
 
 	private class Server implements Runnable {
 		private ServerSocket serverSocket;
@@ -143,11 +146,11 @@ public class RequestResponseDisconnectProtocolRealSocketServerTest {
 		public void run() {
 			Thread.currentThread().setName("Socket Server Thread");
 			try {
-				while ( !shutdown.get() ) {
+				while (!shutdown.get()) {
 					final Socket socket = serverSocket.accept();
-					socket.setSoLinger(false, 0);
-					AbstractCharacterTerminatedMessageProtocol protocol = new RequestResponseDisconnectProtocol(
-							socket);
+					setLingerOptions(socket);
+
+					AbstractCharacterTerminatedMessageProtocol protocol = new RequestResponseDisconnectProtocol(socket);
 					String message;
 					while (!"".equals(message = protocol.getMessage())) {
 						protocol.writeMessage(message);
