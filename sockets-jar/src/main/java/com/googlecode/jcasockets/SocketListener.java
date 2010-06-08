@@ -29,6 +29,7 @@ import java.util.logging.Logger;
 import javax.resource.spi.ResourceAdapterInternalException;
 import javax.resource.spi.UnavailableException;
 import javax.resource.spi.endpoint.MessageEndpointFactory;
+import javax.resource.spi.work.ExecutionContext;
 import javax.resource.spi.work.Work;
 import javax.resource.spi.work.WorkException;
 import javax.resource.spi.work.WorkManager;
@@ -103,11 +104,17 @@ public class SocketListener implements Runnable, Work {
 		try{
 			SocketMessage socketMessage = new SocketMessageImpl(socket, activationSpec.getEncoding());
 			SocketMessageEndpoint messageEndpoint = endpointPool.getEndpoint();
+			
 			SocketProcessor socketProcessor = new SocketProcessor(socketMessage, messageEndpoint);
-			workManager.scheduleWork(socketProcessor, WorkManager.IMMEDIATE, null, endpointPool);
+			startSocketProcessingWorkImmediately(socketProcessor);
 		}catch ( UnavailableException e){
 			logger.log( SEVERE, "No more endpoints avaiable in the pool", e);
 		}
+	}
+
+	private void startSocketProcessingWorkImmediately(SocketProcessor socketProcessor) throws WorkException {
+		ExecutionContext executionContext = null;
+		workManager.scheduleWork(socketProcessor, WorkManager.IMMEDIATE, executionContext, endpointPool);
 	}
 
 	public void dumpSocket(Socket socket) {
