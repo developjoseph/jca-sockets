@@ -55,6 +55,7 @@ public class SocketListener implements Runnable, Work {
 	public SocketListener(WorkManager workManager, SocketActivationSpec activationSpec,	MessageEndpointFactory messageEndpointFactory) {
 		this.workManager = workManager;
 		this.activationSpec = activationSpec;
+		logger.info("Activating socket listener with: " + activationSpec);
 	    int maximumConnections = activationSpec.getMaximumConnections();
 	    int connectionTimeoutMilliseconds = activationSpec.getConnectionTimeoutMilliseconds();
 		endpointPool = new EndpointPool(messageEndpointFactory, maximumConnections, connectionTimeoutMilliseconds, TimeUnit.MILLISECONDS);

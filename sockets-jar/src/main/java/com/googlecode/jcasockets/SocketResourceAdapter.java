@@ -30,14 +30,14 @@ import javax.resource.spi.endpoint.MessageEndpointFactory;
 import javax.resource.spi.work.WorkManager;
 import javax.transaction.xa.XAResource;
 
-public class SocketResourceAdapter implements ResourceAdapter{
+public class SocketResourceAdapter implements ResourceAdapter, SocketResourceAdapterConfiguration{
 	private static ConcurrentMap<ActivationSpec, SocketListener> socketListeners = new ConcurrentHashMap<ActivationSpec, SocketListener>();
 
 	private WorkManager workManager;
 	private final Logger logger = Logger.getLogger(SocketResourceAdapter.class.getName());
 	private String defaultEncoding;
-	private Integer defaultMaximumConnections;
-	private Integer defaultConnectionTimeoutMilliseconds;
+	private int defaultMaximumConnections;
+	private int defaultConnectionTimeoutMilliseconds;
 	
 
 	public SocketResourceAdapter() {
@@ -67,7 +67,7 @@ public class SocketResourceAdapter implements ResourceAdapter{
 		SocketActivationSpec socketActivationSpec = (SocketActivationSpec) activationSpec;
 		createSocketActivationSpec(socketActivationSpec);
 		SocketListener socketListener = new SocketListener(workManager, socketActivationSpec, messageEndpointFactory);
-		recordSocketListener(socketActivationSpec, socketListener);
+		addToKnownListeners(socketActivationSpec, socketListener);
 		try {
 			socketListener.start();
 		} catch (ResourceException e) {
@@ -76,7 +76,7 @@ public class SocketResourceAdapter implements ResourceAdapter{
 		}
 	}
 
-	private void recordSocketListener(SocketActivationSpec socketActivationSpec, SocketListener socketListener) throws NotSupportedException {
+	private void addToKnownListeners(SocketActivationSpec socketActivationSpec, SocketListener socketListener) throws NotSupportedException {
 		SocketListener previousValue = socketListeners.putIfAbsent(socketActivationSpec, socketListener);
 		if ( previousValue!= null ){
 			throw new NotSupportedException( "A socket activation spec already exists with the same port: \n " 
@@ -110,31 +110,51 @@ public class SocketResourceAdapter implements ResourceAdapter{
 		return new XAResource[0]; // XA is unsupported
 	}
 
-	public String getEncoding() {
-		return defaultEncoding;
-	}
-
 	public void setEncoding(String defaultEncoding) {
 		logger.info("Default encoding (may be overridden when activated later) is: " + defaultEncoding);
 		this.defaultEncoding = defaultEncoding;
+	}
+	
+	/* Different server behaviour. This is for Glassfish. */
+	public void setMaximumConnections(int defaultMaximumConnections) {
+		doSetOfMaximumConnections(defaultMaximumConnections);
+	}
+	
+	/* Different server behaviour. This is for JBoss. */
+	public void setMaximumConnections(Integer defaultMaximumConnections) {
+		doSetOfMaximumConnections(defaultMaximumConnections);
+	}
+
+	/* Different server behaviour. This is for Glassfish. */
+	public void setConnectionTimeoutMilliseconds(int defaultConnectionTimeoutMilliseconds) {
+		doSetConnectionTimeoutMilliseconds(defaultConnectionTimeoutMilliseconds);
+	}
+
+	/* Different server behaviour. This is for JBoss. */
+	public void setConnectionTimeoutMilliseconds(Integer defaultConnectionTimeoutMilliseconds) {
+		setConnectionTimeoutMilliseconds(defaultConnectionTimeoutMilliseconds.intValue());
+	}
+	
+	private void doSetConnectionTimeoutMilliseconds(int defaultConnectionTimeoutMilliseconds) {
+		logger.info("Default connectionTimeoutMilliseconds (may be overridden when activated later) is: " + defaultConnectionTimeoutMilliseconds);
+		this.defaultConnectionTimeoutMilliseconds = defaultConnectionTimeoutMilliseconds;
+	}
+	private void doSetOfMaximumConnections(Integer defaultMaximumConnections) {
+		logger.info("Default maximumConnections (may be overridden when activated later) is: " + defaultMaximumConnections);
+		this.defaultMaximumConnections = defaultMaximumConnections;
+	}
+
+
+	public String getEncoding() {
+		return defaultEncoding;
 	}
 
 	public int getMaximumConnections() {
 		return defaultMaximumConnections;
 	}
 
-	public void setMaximumConnections(Integer defaultMaximumConnections) {
-		logger.info("Default maximumConnections (may be overridden when activated later) is: " + defaultMaximumConnections);
-		this.defaultMaximumConnections = defaultMaximumConnections;
-	}
-
 	public int getConnectionTimeoutMilliseconds() {
 		return defaultConnectionTimeoutMilliseconds;
-	}
-
-	public void setConnectionTimeoutMilliseconds(Integer defaultConnectionTimeoutMilliseconds) {
-		logger.info("Default connectionTimeoutMilliseconds (may be overridden when activated later) is: " + defaultConnectionTimeoutMilliseconds);
-		this.defaultConnectionTimeoutMilliseconds = defaultConnectionTimeoutMilliseconds;
 	}
 
 }

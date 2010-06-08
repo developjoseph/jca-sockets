@@ -26,13 +26,12 @@ import javax.resource.spi.InvalidPropertyException;
 import javax.resource.spi.ResourceAdapter;
 
 
-public class SocketActivationSpec implements ActivationSpec, Serializable {
+public class SocketActivationSpec implements ActivationSpec, SocketResourceAdapterConfiguration, Serializable {
 	private final Logger logger = Logger.getLogger(SocketActivationSpec.class.getName());
 	
-
-	private int maximumConnections;
 	private int port;
 	private String encoding;
+	private int maximumConnections;
 	private int connectionTimeoutMilliseconds;
 
 	private SocketResourceAdapter ra = null;
@@ -61,42 +60,62 @@ public class SocketActivationSpec implements ActivationSpec, Serializable {
 	}
 
 	boolean accepts(String recipientAddress) throws InvalidPropertyException {
-		return true; // sluttily accept anything
+		return true; // accept anything
+	}
+
+	public void setPort(int port) {
+		logger.fine("Setting port: " + port);
+		this.port = port;
+	}
+	public void setEncoding(String encoding) {
+		logger.fine("Setting encoding: " + encoding);
+		this.encoding = encoding;
+	}
+
+	/* Different server behaviour. This is for JBoss. */
+	public void setConnectionTimeoutMilliseconds(Integer connectionTimeoutMilliseconds) {
+		doSetConnectionTimeoutMilliseconds(connectionTimeoutMilliseconds);
+	}
+
+	/* Different server behaviour. This is for Glassfish */
+	public void setConnectionTimeoutMilliseconds(int connectionTimeoutMilliseconds) {
+		doSetConnectionTimeoutMilliseconds(connectionTimeoutMilliseconds);
+	}
+
+	/* Different server behaviour. This is for JBoss. */
+	public void setMaximumConnections(Integer maximumConnections) {
+		doSetMaximumConnections(maximumConnections);
+	}
+
+	/* Different server behaviour. This is for Glassfish */
+	public void setMaximumConnections(int maximumConnections) {
+		doSetMaximumConnections(maximumConnections);
+	}
+
+	private void doSetConnectionTimeoutMilliseconds(int connectionTimeoutMilliseconds) {
+		logger.fine("Setting connection timeout milliseconds: " + connectionTimeoutMilliseconds);
+		this.connectionTimeoutMilliseconds = connectionTimeoutMilliseconds;
+	}
+
+	private void doSetMaximumConnections(int maximumConnections) {
+		logger.fine("Setting maximum connections: " + maximumConnections);
+		this.maximumConnections = maximumConnections;
 	}
 
 	public String getEncoding() {
 		return encoding;
 	}
 
-	public void setEncoding(String encoding) {
-		logger.info("Setting encoding: " + encoding);
-		this.encoding = encoding;
-	}
-
 	public int getPort() {
 		return port;
 	}
 
-	public void setPort(int port) {
-		logger.info("Setting port: " + port);
-		this.port = port;
-	}
 	public int getMaximumConnections() {
 		return maximumConnections;
 	}
 
-	public void setMaximumConnections(int maximumConnections) {
-		logger.info("Setting maximum connections: " + maximumConnections);
-		this.maximumConnections = maximumConnections;
-	}
-
 	public int getConnectionTimeoutMilliseconds() {
 		return connectionTimeoutMilliseconds;
-	}
-
-	public void setConnectionTimeoutMilliseconds(int connectionTimeoutMilliseconds) {
-		logger.info("Setting connection timeout milliseconds: " + connectionTimeoutMilliseconds);
-		this.connectionTimeoutMilliseconds = connectionTimeoutMilliseconds;
 	}
 
 	@Override
