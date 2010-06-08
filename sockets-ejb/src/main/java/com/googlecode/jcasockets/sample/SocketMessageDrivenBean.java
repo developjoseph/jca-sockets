@@ -56,7 +56,7 @@ public class SocketMessageDrivenBean implements MessageDrivenBean, SocketMessage
 				socketMessage.getRawSocket().close();
 				break;	
 			}else{
-				socketOutput.println( "New " + line);
+				socketOutput.println(line);
 				size += line.length();
 				socketOutput.flush();
 			}
