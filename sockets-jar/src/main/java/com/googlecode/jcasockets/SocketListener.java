@@ -100,8 +100,6 @@ public class SocketListener implements Runnable, Work {
 
 	private void waitForRequestAndProcess() throws IOException, UnavailableException, WorkException {
 		final Socket socket = serverSocket.accept();
-//	experiments			socket.setSoLinger(true, 10);  
-//				dumpSocket( socket );
 		try{
 			SocketMessage socketMessage = new SocketMessageImpl(socket, activationSpec.getEncoding());
 			SocketMessageEndpoint messageEndpoint = endpointPool.getEndpoint();
@@ -112,7 +110,7 @@ public class SocketListener implements Runnable, Work {
 		}
 	}
 
-	private void dumpSocket(Socket socket) {
+	public void dumpSocket(Socket socket) {
 		try {
 			logger.info("getKeepAlive         " + socket.getKeepAlive());
 			logger.info("getLocalPort         " + socket.getLocalPort());
@@ -127,7 +125,6 @@ public class SocketListener implements Runnable, Work {
 		} catch (SocketException e) {
 			e.printStackTrace();
 		}
-		
 	}
 
 }
