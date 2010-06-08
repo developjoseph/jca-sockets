@@ -73,7 +73,7 @@ public class RequestResponseDisconnectProtocolRealSocketServerTest {
 		Server server = new Server();
 		serverThreadPool = Executors.newFixedThreadPool(1);
 		serverThreadPool.submit(server);
-		setupClientProtocol();
+		setupProtocolWithNewClientConnection();
 	}
 
 	@After
@@ -101,7 +101,7 @@ public class RequestResponseDisconnectProtocolRealSocketServerTest {
 		assertResponseEqualsRequest(request1);
 		closeClientSocket();
 
-		setupClientProtocol();
+		setupProtocolWithNewClientConnection();
 		assertResponseEqualsRequest(request2);
 
 		shutdownServerListener();
@@ -118,7 +118,7 @@ public class RequestResponseDisconnectProtocolRealSocketServerTest {
 		assertEquals(request, response);
 	}
 
-	private void setupClientProtocol() throws UnknownHostException, SocketException, IOException {
+	private void setupProtocolWithNewClientConnection() throws UnknownHostException, SocketException, IOException {
 		final InetAddress address = InetAddress.getByName("localhost");
 		final SocketAddress socketAddress = new InetSocketAddress(address, currentPort);
 		Socket clientSocket = new Socket();
