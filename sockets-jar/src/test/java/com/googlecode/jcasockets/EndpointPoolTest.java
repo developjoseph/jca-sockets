@@ -50,7 +50,7 @@ public class EndpointPoolTest extends UnitilsJUnit4{
 	}
 
 	@Test
-	public void testPoolBlocksUntilTimeout() throws UnavailableException {
+	public void testWhenPoolExhaustedPoolBlocksUntilTimeout() throws UnavailableException {
 		assertEquals(endpoint1.getMock(), endpointPool.getEndpoint());
 		assertEquals(endpoint2.getMock(), endpointPool.getEndpoint());
 		assertNextCallBlocksUntilTimeout();
