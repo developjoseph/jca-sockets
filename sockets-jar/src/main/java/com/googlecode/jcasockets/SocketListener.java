@@ -94,7 +94,7 @@ public class SocketListener implements Runnable, Work {
 			}
 		} catch (Exception e) {
 			if (isRunning()) {
-				logger.log( SEVERE, "Error while accepting a socket request an scheduling work on the request", e);
+				logger.log( SEVERE, "Error while accepting a socket request and scheduling work on the request. See linked exception", e);
 			}
 			setRunning(false);
 		}
