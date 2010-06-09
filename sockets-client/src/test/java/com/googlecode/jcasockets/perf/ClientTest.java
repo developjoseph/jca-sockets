@@ -18,55 +18,45 @@ package com.googlecode.jcasockets.perf;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import org.junit.Before;
+import org.junit.Test;
+import org.unitils.UnitilsJUnit4;
+import org.unitils.mock.Mock;
+import org.unitils.mock.core.proxy.ProxyInvocation;
+import org.unitils.mock.mockbehavior.MockBehavior;
+
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
+import java.text.MessageFormat;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
-import org.apache.commons.cli.ParseException;
-import org.junit.Test;
+public class ClientTest extends UnitilsJUnit4 {
 
-import com.googlecode.jcasockets.perf.Client;
-import com.googlecode.jcasockets.perf.ExecutionStatistics;
-
-public class ClientTest {
-
+	private Mock<SocketSenderFactory> socketSenderFactory;
+	private Mock<SocketSender> socketSender;
+	
+	@Before
+	public void setupMocks(){
+		socketSenderFactory.returns(socketSender.getMock()).createSocketSender(null, null);
+		MockBehavior returnSameStringSentBehavior = new MockBehavior() {
+			public Object execute(ProxyInvocation proxyInvocation) throws Throwable {
+				return proxyInvocation.getArguments().get(0);
+			}
+		};
+		socketSender.performs(returnSameStringSentBehavior).send(null);
+	}
+	
 	@Test
 	public void whenSingleThreadSendsMessages_MessagesAreSentCorrectly() throws Exception {
-		Client client = getClient("-s 1 -m 3 -M 3 -p 8888");
-		int expectedBytesIsTwiceSentMessage = 6;
-
-		MockSocketSender socketSender = new MockSocketSender();
-		client.setSender(socketSender);
-		client.execute();
-		ExecutionStatistics executionStatistics = client.getExecutionStatistics();
-
-		assertTrue(executionStatistics.getMessagesSent() > 0);
-		assertEquals(expectedBytesIsTwiceSentMessage, executionStatistics.getMinimumMessageSize());  // 2 * number of characters sent   
-		assertEquals(expectedBytesIsTwiceSentMessage, executionStatistics.getMaximumMessageSize());   // 2 * number of characters sent
-
+		int messageCharSize = 3;
+		executeClientAndVerifyStatistics("--seconds 1 --threads 1 --minSize {0} --maxSize {0} --ports 8888 -p 8888", messageCharSize);
 	}
-
 
 	@Test
 	public void whenMultipleThreadsSendMessages_MessagesAreSentCorrectly() throws Exception {
-
-		Client client = getClient("-s 1 -t3 -m10 -M10 -p 8888");
-		int expectedBytesIsTwiceSentMessage = 20;
-		MockSocketSender socketSender = new MockSocketSender();
-
-		client.setSender(socketSender);
-		client.execute();
-		ExecutionStatistics executionStatistics = client.getExecutionStatistics();
-
-		assertTrue(executionStatistics.getMessagesSent() > 0);
-		assertEquals(expectedBytesIsTwiceSentMessage, executionStatistics.getMinimumMessageSize());  
-		assertEquals(expectedBytesIsTwiceSentMessage, executionStatistics.getMaximumMessageSize());
-	}
-
-	private Client getClient(String string) throws ParseException {
-		String[] args = string.split(" ");
-		Client client = new Client(args);
-		return client;
+		int messageCharSize = 10;
+		executeClientAndVerifyStatistics("--seconds 1 --threads 3 --minSize {0} --maxSize {0} --ports 8888", messageCharSize);
 	}
 
 	@Test
@@ -97,6 +87,29 @@ public class ClientTest {
 	}
 
 
+	private void executeClientAndVerifyStatistics(String commandLineTemplate, int messageCharSize) throws Exception, InterruptedException, ExecutionException {
+		int expectedMessageByteSize = messageCharSize * 2;
+		Client client = executeClient(commandLineTemplate, messageCharSize );
+
+		client.setSender(socketSenderFactory.getMock());
+		client.execute();
+		ExecutionStatistics executionStatistics = client.getExecutionStatistics();
+		assertTrue(executionStatistics.getMessagesSent() > 0);
+		assertEquals(expectedMessageByteSize, executionStatistics.getMinimumMessageSize());  // 2 * number of characters sent   
+		assertEquals(expectedMessageByteSize, executionStatistics.getMaximumMessageSize());   // 2 * number of characters sent
+	}
+
+
+	private Client executeClient(String commandLineTemplate, Object... parameters) throws Exception {
+		String commandLine = MessageFormat.format(commandLineTemplate, parameters);
+		String[] args = commandLine.split(" ");
+		Client client = new Client(args);
+		client.setSender(socketSenderFactory.getMock());
+		client.execute();
+		return client;
+	}
+
+
 	private void assertCsvHeaderAndBodyHaveTheSameNumberOfValues(String[] values) {
 		assertEquals(getCSVHeaderStrings().length, values.length);
 	}
@@ -110,7 +123,6 @@ public class ClientTest {
 		String[] values = csv.split(",");
 		return values;
 	}
-
 
 	private String[] getCSVHeaderStrings() {
 		ByteArrayOutputStream os = new ByteArrayOutputStream(); 
