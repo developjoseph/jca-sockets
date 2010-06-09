@@ -20,12 +20,10 @@
           <activation-config-property-name>port</activation-config-property-name>
           <activation-config-property-value>9000</activation-config-property-value>
         </activation-config-property>
-<!-- 
         <activation-config-property>
           <activation-config-property-name>encoding</activation-config-property-name>
           <activation-config-property-value>UTF-8</activation-config-property-value>
         </activation-config-property>
- -->        
         <activation-config-property>
           <activation-config-property-name>maximumConnections</activation-config-property-name>
           <activation-config-property-value>5</activation-config-property-value>
