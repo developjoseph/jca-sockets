@@ -39,11 +39,10 @@
       <module>sockets-client</module>
     <module>sockets-jar</module>
   </modules>
-    <!-- Environment Settings -->
     <scm>
-        <connection>scm:svn:https://jca-sockets.googlecode.com/svn/trunk/tags/releases/jcasockets-1.2.0</connection>
-        <developerConnection>scm:svn:https://jca-sockets.googlecode.com/svn/trunk/tags/releases/jcasockets-1.2.0</developerConnection>
-        <url>scm:svn:https://jca-sockets.googlecode.com/svn/trunk/tags/releases/jcasockets-1.2.0</url>
+        <connection>scm:svn:https://jca-sockets.googlecode.com/svn/tags/releases/jcasockets-1.2.0</connection>
+        <developerConnection>scm:svn:https://jca-sockets.googlecode.com/svn/tags/releases/jcasockets-1.2.0</developerConnection>
+        <url>scm:svn:https://jca-sockets.googlecode.com/svn/tags/releases/jcasockets-1.2.0</url>
     </scm>
 
    <build>
@@ -96,11 +95,11 @@
             </plugin>
             
             <plugin>
-                <artifactId>maven-release-plugin</artifactId>
+              <artifactId>maven-release-plugin</artifactId>
               <version>2.0-beta-8</version>
                 <configuration>
                     <goals>deploy package assembly:assembly</goals>
-                    <tagBase>https://jca-sockets.googlecode.com/svn/trunk/tags/releases</tagBase>
+                    <tagBase>https://jca-sockets.googlecode.com/svn/tags/releases</tagBase>
                 </configuration>
             </plugin>
             <plugin>
