@@ -41,9 +41,9 @@
   </modules>
     <!-- Environment Settings -->
     <scm>
-        <connection>scm:svn:http://jca-sockets.googlecode.com/svn/trunk/jcasockets-1.2.0</connection>
+        <connection>scm:svn:https://jca-sockets.googlecode.com/svn/trunk/tags/releases/jcasockets-1.2.0</connection>
         <developerConnection>scm:svn:https://jca-sockets.googlecode.com/svn/trunk/tags/releases/jcasockets-1.2.0</developerConnection>
-        <url>scm:svn:http://jca-sockets.googlecode.com/svn/trunk/jcasockets-1.2.0</url>
+        <url>scm:svn:https://jca-sockets.googlecode.com/svn/trunk/tags/releases/jcasockets-1.2.0</url>
     </scm>
 
    <build>
