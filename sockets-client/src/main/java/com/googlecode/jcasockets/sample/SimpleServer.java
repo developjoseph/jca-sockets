@@ -48,7 +48,7 @@ public class SimpleServer {
 		}
 
 		public Boolean call() throws Exception {
-			String message = protocol.getMessage();
+			String message = protocol.readMessage();
 			final Writer socketOutput = getWriter();
 			socketOutput.write( "Server " + message + "\n");
 			socketOutput.flush();

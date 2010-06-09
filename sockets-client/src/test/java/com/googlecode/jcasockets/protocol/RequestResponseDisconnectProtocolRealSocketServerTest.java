@@ -73,7 +73,7 @@ public class RequestResponseDisconnectProtocolRealSocketServerTest {
 
 	private void assertResponseEqualsRequest(String request) throws IOException {
 		clientProtocol.writeMessage(request);
-		String response = clientProtocol.getMessage();
+		String response = clientProtocol.readMessage();
 		assertEquals(request, response);
 	}
 
@@ -105,7 +105,7 @@ public class RequestResponseDisconnectProtocolRealSocketServerTest {
 
 					AbstractCharacterTerminatedMessageProtocol protocol = new RequestResponseDisconnectProtocol(socket);
 					String message;
-					while (!"".equals(message = protocol.getMessage())) {
+					while (!"".equals(message = protocol.readMessage())) {
 						protocol.writeMessage(message);
 					}
 					socket.shutdownOutput();

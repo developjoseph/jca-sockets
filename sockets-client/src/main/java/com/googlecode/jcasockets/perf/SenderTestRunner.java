@@ -52,6 +52,8 @@ public class SenderTestRunner implements Callable<ExecutionStatistics> {
 	}
 
 	private void doSend() throws InterruptedException {
+		String name = Thread.currentThread().getName();
+		int count = 0;
 		while ( endNanos > timeProvider.nanoTime()){
 			String sendMessage = generateMessage();
 			executionStatistics.recordSend(sendMessage);
@@ -63,7 +65,7 @@ public class SenderTestRunner implements Callable<ExecutionStatistics> {
 				throw new RuntimeException("Messages are different expected\n" 
 						+ expectedResponse + "\nactual\n" + receivedMessage);
 			}else{
-				System.out.println("Messages same");
+				System.out.println("Thread" + name + ": Messages same " + ++count);
 			}
 			
 			TimeUnit.MILLISECONDS.sleep(clientOptions.getMillisPause());

@@ -14,7 +14,7 @@ import org.junit.Test;
 import org.unitils.UnitilsJUnit4;
 import org.unitils.mock.Mock;
 
-public class ProtocolTest extends UnitilsJUnit4{
+public class AbstractCharacterTerminatedMessageProtocolTest extends UnitilsJUnit4{
 	
 	private ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 	private AbstractCharacterTerminatedMessageProtocol protocol;
@@ -24,8 +24,8 @@ public class ProtocolTest extends UnitilsJUnit4{
 	public void testOngoingConversation() throws Exception {
 		String messageString = "123456\n379";
 		setupProtcolWithMessageAndExitToken(messageString, "dont call exit");
-		assertEquals( "123456", protocol.getMessage());
-		assertEquals( "379", protocol.getMessage());
+		assertEquals( "123456", protocol.readMessage());
+		assertEquals( "379", protocol.readMessage());
 		assertTrue(!protocol.isEndOfConversation());
 	}
 	@Test
@@ -33,8 +33,8 @@ public class ProtocolTest extends UnitilsJUnit4{
 		String exitString = "EXIT";
 		setupProtcolWithMessageAndExitToken("123456\n" + exitString, exitString);
 		
-		assertEquals( "123456", protocol.getMessage());
-		assertNull( protocol.getMessage());
+		assertEquals( "123456", protocol.readMessage());
+		assertNull( protocol.readMessage());
 		assertTrue(protocol.isEndOfConversation());
 	}
 

@@ -56,7 +56,8 @@ public class Client {
 				.getMessagesPerSecond());
 	}
 
-	private SocketSenderFactory socketSenderFactory = new RemoteSocketSender();
+	private SocketSenderFactory socketSenderFactory = new RemoteSocketSenderConnectionPerRequest();
+//	private SocketSenderFactory socketSenderFactory = new RemoteSocketSenderKeepConnection();
 	private ClientOptions clientOptions;
 	private ExecutionStatistics executionStatistics;
 
