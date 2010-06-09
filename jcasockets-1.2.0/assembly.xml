@@ -1,0 +1,131 @@
+<assembly>
+    <id/>
+    <formats>
+        <format>zip</format>
+    </formats>
+
+    <moduleSets>
+        <!-- sockets-api -->
+        <moduleSet>
+            <includes>
+                <include>com.googlecode.jcasockets:sockets-api</include>
+            </includes>
+            <binaries>
+                <includeDependencies>false</includeDependencies>
+                <outputDirectory>sockets-api</outputDirectory>
+                <unpack>false</unpack>
+            </binaries>
+            <sources>
+                <fileSets>
+                    <fileSet>
+                        <directory>target</directory>
+                        <includes>
+                            <include>*-sources.jar</include>
+                        </includes>
+                    </fileSet>
+                    <fileSet>
+                        <includes>
+                            <include>pom.xml</include>
+                        </includes>
+                    </fileSet>
+                </fileSets>
+            </sources>
+        </moduleSet>
+
+
+        <!-- sockets-rar -->
+        <moduleSet>
+            <includes>
+                <include>com.googlecode.jcasockets:sockets-rar</include>
+            </includes>
+            <binaries>
+                <includeDependencies>false</includeDependencies>
+                <outputDirectory>sockets-rar</outputDirectory>
+                <unpack>false</unpack>
+            </binaries>
+            <sources>
+                <fileSets>
+                    <fileSet>
+                        <directory>target</directory>
+                        <includes>
+                            <include>*-sources.jar</include>
+                        </includes>
+                    </fileSet>
+                    <fileSet>
+                        <includes>
+                            <include>pom.xml</include>
+                        </includes>
+                    </fileSet>
+                </fileSets>
+            </sources>
+        </moduleSet>
+
+        <!-- sockets-ejb -->
+        <moduleSet>
+            <includes>
+                <include>com.googlecode.jcasockets:sockets-ejb</include>
+            </includes>
+            <binaries>
+                <includeDependencies>false</includeDependencies>
+                <outputDirectory>sockets-ejb</outputDirectory>
+                <unpack>false</unpack>
+            </binaries>
+            <sources>
+                <fileSets>
+                    <fileSet>
+                        <directory>target</directory>
+                        <includes>
+                            <include>*-sources.jar</include>
+                        </includes>
+                    </fileSet>
+                    <fileSet>
+                        <includes>
+                            <include>pom.xml</include>
+                        </includes>
+                    </fileSet>
+                </fileSets>
+            </sources>
+        </moduleSet>
+
+        <!-- sockets-client -->
+        <moduleSet>
+            <includes>
+                <include>com.googlecode.jcasockets:sockets-client</include>
+            </includes>
+            <binaries>
+                <includeDependencies>false</includeDependencies>
+                <outputDirectory>sockets-client</outputDirectory>
+                <unpack>false</unpack>
+            </binaries>
+            <sources>
+                <fileSets>
+                    <fileSet>
+                        <directory>target</directory>
+                        <includes>
+                            <include>*-sources.jar</include>
+                        </includes>
+                    </fileSet>
+                    <fileSet>
+                        <includes>
+                            <include>pom.xml</include>
+                        </includes>
+                    </fileSet>
+                </fileSets>
+            </sources>
+        </moduleSet>
+
+    </moduleSets>
+
+    <fileSets>
+        <fileSet>
+            <includes>
+                <include>README.txt</include>
+                <include>LICENSE.txt</include>
+                <include>NOTICE.txt</include>
+                <include>pom.xml</include>
+            </includes>
+        </fileSet>
+
+    </fileSets>
+
+</assembly>
