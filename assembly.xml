@@ -60,6 +60,33 @@
             </sources>
         </moduleSet>
 
+        <!-- sockets-jar -->
+        <moduleSet>
+            <includes>
+                <include>com.googlecode.jcasockets:sockets-jar</include>
+            </includes>
+            <binaries>
+                <includeDependencies>false</includeDependencies>
+                <outputDirectory>sockets-jar</outputDirectory>
+                <unpack>false</unpack>
+            </binaries>
+            <sources>
+                <fileSets>
+                    <fileSet>
+                        <directory>target</directory>
+                        <includes>
+                            <include>*-sources.jar</include>
+                        </includes>
+                    </fileSet>
+                    <fileSet>
+                        <includes>
+                            <include>pom.xml</include>
+                        </includes>
+                    </fileSet>
+                </fileSets>
+            </sources>
+        </moduleSet>
+
         <!-- sockets-ejb -->
         <moduleSet>
             <includes>
