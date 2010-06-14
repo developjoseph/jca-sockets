@@ -37,7 +37,7 @@
       <module>sockets-rar</module>
       <module>sockets-ejb</module>
       <module>sockets-client</module>
-    <module>sockets-jar</module>
+      <module>sockets-jar</module>
   </modules>
     <scm>
         <connection>scm:svn:https://jca-sockets.googlecode.com/svn/trunk</connection>
