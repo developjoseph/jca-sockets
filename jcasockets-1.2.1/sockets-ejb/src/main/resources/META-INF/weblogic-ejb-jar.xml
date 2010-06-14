@@ -1,0 +1,17 @@
+<weblogic-ejb-jar xmlns="http://www.bea.com/ns/weblogic/10.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.bea.com/ns/weblogic/10.0 http://www.bea.com/ns/weblogic/10.0/weblogic-ejb-jar.xsd">
+	<!--  this is untested  -->
+	<weblogic-enterprise-bean>
+		<ejb-name>SOCKET_MDB</ejb-name>
+		<message-driven-descriptor>
+			<resource-adapter-jndi-name>sockets-rar.rar</resource-adapter-jndi-name>
+		</message-driven-descriptor>
+	</weblogic-enterprise-bean>
+	<weblogic-enterprise-bean>
+		<ejb-name>SOCKET_MDB1</ejb-name>
+		<message-driven-descriptor>
+			<resource-adapter-jndi-name>sockets-rar.rar</resource-adapter-jndi-name>
+		</message-driven-descriptor>
+	</weblogic-enterprise-bean>
+</weblogic-ejb-jar>

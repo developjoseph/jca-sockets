@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<connector xmlns="http://java.sun.com/xml/ns/j2ee"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee
+  http://java.sun.com/xml/ns/j2ee/connector_1_5.xsd" version="1.5">
+
+  <display-name>Socket Resource Adapter</display-name>
+  <vendor-name>Systems Architects SPRL</vendor-name>
+  <eis-type>General Socket Server</eis-type>
+  <resourceadapter-version>1.2</resourceadapter-version>
+  
+
+  <resourceadapter>
+    <resourceadapter-class>com.googlecode.jcasockets.SocketResourceAdapter</resourceadapter-class>
+    
+    <config-property>
+      <description>The default encoding for the input and output readers of the socket, may be overridden in ejb-jar.xml</description>
+      <config-property-name>encoding</config-property-name>
+      <config-property-type>java.lang.String</config-property-type>
+      <config-property-value>ISO-8859-1</config-property-value>
+    </config-property>
+    <config-property>
+      <description>The default maximum number of simultaneous connections, may be overridden in ejb-jar.xml</description>
+      <config-property-name>maximumConnections</config-property-name>
+      <config-property-type>java.lang.Integer</config-property-type>
+      <config-property-value>100</config-property-value>
+    </config-property>
+    <config-property>
+      <description>The default timeout in milliseconds to get a connection from the pool, may be overridden in ejb-jar.xml</description>
+      <config-property-name>connectionTimeoutMilliseconds</config-property-name>
+      <config-property-type>java.lang.Integer</config-property-type>
+      <config-property-value>1000</config-property-value>
+    </config-property>
+
+    <!-- ResourceAdapter default configuration properties -->
+    <!-- The inbound resource adapter description -->
+    <inbound-resourceadapter>
+      <messageadapter>
+        <messagelistener>
+          <messagelistener-type>com.googlecode.jcasockets.SocketMessageEndpoint</messagelistener-type>
+          <activationspec>
+            <activationspec-class>com.googlecode.jcasockets.SocketActivationSpec</activationspec-class>
+            <required-config-property>
+              <description>The Socket Listener Port</description>
+              <config-property-name>port</config-property-name>
+            </required-config-property>
+          </activationspec>
+        </messagelistener>
+      </messageadapter>
+    </inbound-resourceadapter>
+  </resourceadapter>
+</connector>
