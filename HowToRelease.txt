@@ -1,8 +1,8 @@
 All commands executed from the project root.
 
-Change the version number:
-mvn versions:set -DnewVersion=1.2.1
-mvn versions:commit
+Changing the version number (don't do this the release:prepare will do this):
+#mvn versions:set -DnewVersion=1.2.1
+#mvn versions:commit
 
 Assemble the distro:
 mvn clean package source:jar assembly:assembly
@@ -15,7 +15,7 @@ java  com.googlecode.jcasockets.perf.Client --seconds 60 --threads  1 --minSize 
 
 mvn release:prepare
 mvn release:perform
+(this will fail because we don't have a repository to write to, can probably set up a local one)
 mvn release:clean
 
-Commit the new Revision:
-Tag the new revison
+Upload the new file.
