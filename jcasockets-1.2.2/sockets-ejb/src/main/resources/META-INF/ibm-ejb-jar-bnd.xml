@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ejb-jar-bnd xmlns="http://websphere.ibm.com/xml/ns/javaee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://websphere.ibm.com/xml/ns/javaee http://websphere.ibm.com/xml/ns/javaee/ibm-ejb-jar-bnd_1_0.xsd"
+	version="1.0">
+	<!-- FIXME this is not correct.  -->
+	<message-driven name="SOCKET_MDB">
+		<jca-adapter activation-spec-binding-name="jms/ActivationSpecTest???"
+			destination-binding-name="jms/TestQueue???" />
+		
+	</message-driven>
+	<message-driven name="SOCKET_MDB1">
+		<jca-adapter activation-spec-binding-name="jms/ActivationSpecTest1???"
+			destination-binding-name="jms/TestQueue???" />
+	</message-driven>
+</ejb-jar-bnd>
