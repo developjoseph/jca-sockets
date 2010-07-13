@@ -1,0 +1,21 @@
+All commands executed from the project root.
+
+Changing the version number (don't do this the release:prepare will do this):
+#mvn versions:set -DnewVersion=1.2.1
+#mvn versions:commit
+
+Assemble the distro:
+mvn clean package source:jar assembly:assembly
+
+Test the deployment:
+Deploy EJB and execute the Client to test it.
+
+(need  sockets-client\target\sockets-client-1.2.0.jar and commons-cli in the classpath)
+java  com.googlecode.jcasockets.perf.Client --seconds 60 --threads  1 --minSize 100 --maxSize 100 --ports 9000 --pause  100 --ipaddress localhost
+
+mvn release:prepare
+mvn release:perform
+(this will fail because we don't have a repository to write to, can probably set up a local one)
+mvn release:clean
+
+Upload the new file.
