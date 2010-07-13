@@ -7,7 +7,7 @@
     <parent>
         <groupId>com.googlecode</groupId>
         <artifactId>jcasockets</artifactId>
-      <version>1.2.3-SNAPSHOT</version>
+      <version>1.2.3</version>
       <relativePath>../pom.xml</relativePath>
     </parent>
     <build>
