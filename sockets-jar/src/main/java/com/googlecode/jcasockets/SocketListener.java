@@ -62,17 +62,19 @@ public class SocketListener implements Runnable, Work {
 	}
 
 	public void start() throws ResourceAdapterInternalException {
-		logger.info("Start listening on port " + activationSpec.getPort());
 		try {
 			serverSocket = new ServerSocket();
 			serverSocket.setReuseAddress(true);
-			serverSocket.bind( new InetSocketAddress( activationSpec.getPort() ));
+			InetSocketAddress inetSocketAddress = getInetSocketAddress();
+			logger.info("Start listening on address: " + inetSocketAddress );
+			serverSocket.bind( inetSocketAddress);
 			workManager.startWork(this);
 		} catch (Throwable e) {
 			logger.log( SEVERE, "Exception while starting resource adapter, rethrowing with ResourceAdapterInternalException", e);
 			throw new ResourceAdapterInternalException(e);
 		}
 	}
+
 
 	public void release() {
 		logger.info("Stop listening on port " + activationSpec.getPort());
@@ -118,7 +120,15 @@ public class SocketListener implements Runnable, Work {
 		workManager.scheduleWork(socketProcessor, WorkManager.IMMEDIATE, executionContext, endpointPool);
 	}
 
-	public void dumpSocket(Socket socket) {
+	private InetSocketAddress getInetSocketAddress() {
+		InetSocketAddress inetSocketAddress = new InetSocketAddress( activationSpec.getIpAddress(), activationSpec.getPort() );
+		if ( inetSocketAddress.isUnresolved()){
+			throw new IllegalArgumentException("Hostname cannot be resolved: " +  activationSpec.getIpAddress());
+		}
+		return inetSocketAddress;
+	}
+	
+	void dumpSocket(Socket socket) {
 		try {
 			logger.info("getKeepAlive         " + socket.getKeepAlive());
 			logger.info("getLocalPort         " + socket.getLocalPort());
@@ -134,5 +144,5 @@ public class SocketListener implements Runnable, Work {
 			e.printStackTrace();
 		}
 	}
-
+	
 }

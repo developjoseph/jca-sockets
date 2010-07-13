@@ -38,7 +38,13 @@ public class SocketResourceAdapter implements ResourceAdapter, SocketResourceAda
 	private String defaultEncoding;
 	private int defaultMaximumConnections;
 	private int defaultConnectionTimeoutMilliseconds;
+
+	private String defaultIpAddress;
 	
+
+	public String getDefaultIpAddress() {
+		return defaultIpAddress;
+	}
 
 	public SocketResourceAdapter() {
 	}
@@ -88,6 +94,9 @@ public class SocketResourceAdapter implements ResourceAdapter, SocketResourceAda
 	}
 
 	private void createSocketActivationSpec(SocketActivationSpec socketActivationSpec) {
+		if ( socketActivationSpec.getIpAddress() == null){
+			socketActivationSpec.setIpAddress(defaultIpAddress);
+		}
 		if ( socketActivationSpec.getEncoding() == null){
 			socketActivationSpec.setEncoding(defaultEncoding);
 		}
@@ -110,6 +119,11 @@ public class SocketResourceAdapter implements ResourceAdapter, SocketResourceAda
 		return new XAResource[0]; // XA is unsupported
 	}
 
+	public void setIpAddress(String defaultIpAddress) {
+		logger.info("Default ipAddress (may be overridden when activated later) is: " + defaultIpAddress);
+		this.defaultIpAddress = defaultIpAddress;
+	}
+	
 	public void setEncoding(String defaultEncoding) {
 		logger.info("Default encoding (may be overridden when activated later) is: " + defaultEncoding);
 		this.defaultEncoding = defaultEncoding;
@@ -117,12 +131,12 @@ public class SocketResourceAdapter implements ResourceAdapter, SocketResourceAda
 	
 	/* Different server behaviour. This is for Glassfish. */
 	public void setMaximumConnections(int defaultMaximumConnections) {
-		doSetOfMaximumConnections(defaultMaximumConnections);
+		doSetMaximumConnections(defaultMaximumConnections);
 	}
 	
 	/* Different server behaviour. This is for JBoss. */
 	public void setMaximumConnections(Integer defaultMaximumConnections) {
-		doSetOfMaximumConnections(defaultMaximumConnections);
+		doSetMaximumConnections(defaultMaximumConnections);
 	}
 
 	/* Different server behaviour. This is for Glassfish. */
@@ -134,12 +148,12 @@ public class SocketResourceAdapter implements ResourceAdapter, SocketResourceAda
 	public void setConnectionTimeoutMilliseconds(Integer defaultConnectionTimeoutMilliseconds) {
 		setConnectionTimeoutMilliseconds(defaultConnectionTimeoutMilliseconds.intValue());
 	}
-	
+
 	private void doSetConnectionTimeoutMilliseconds(int defaultConnectionTimeoutMilliseconds) {
 		logger.info("Default connectionTimeoutMilliseconds (may be overridden when activated later) is: " + defaultConnectionTimeoutMilliseconds);
 		this.defaultConnectionTimeoutMilliseconds = defaultConnectionTimeoutMilliseconds;
 	}
-	private void doSetOfMaximumConnections(Integer defaultMaximumConnections) {
+	private void doSetMaximumConnections(Integer defaultMaximumConnections) {
 		logger.info("Default maximumConnections (may be overridden when activated later) is: " + defaultMaximumConnections);
 		this.defaultMaximumConnections = defaultMaximumConnections;
 	}
@@ -156,5 +170,6 @@ public class SocketResourceAdapter implements ResourceAdapter, SocketResourceAda
 	public int getConnectionTimeoutMilliseconds() {
 		return defaultConnectionTimeoutMilliseconds;
 	}
+
 
 }

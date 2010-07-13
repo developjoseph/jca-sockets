@@ -36,6 +36,8 @@ public class SocketActivationSpec implements ActivationSpec, SocketResourceAdapt
 
 	private SocketResourceAdapter ra = null;
 
+	private String ipAddress;
+
 	public SocketActivationSpec() {
 		logger.info("Creating Activation spec: " + this);
 	}
@@ -63,6 +65,10 @@ public class SocketActivationSpec implements ActivationSpec, SocketResourceAdapt
 		return true; // accept anything
 	}
 
+	public void setIpAddress(String ipAddress) {
+		logger.fine("Setting ipAddress: " + ipAddress);
+		this.ipAddress = ipAddress;
+	}
 	public void setPort(int port) {
 		logger.fine("Setting port: " + port);
 		this.port = port;
@@ -106,6 +112,10 @@ public class SocketActivationSpec implements ActivationSpec, SocketResourceAdapt
 		return encoding;
 	}
 
+	public String getIpAddress() {
+		return ipAddress;
+	}
+
 	public int getPort() {
 		return port;
 	}
@@ -120,7 +130,7 @@ public class SocketActivationSpec implements ActivationSpec, SocketResourceAdapt
 
 	@Override
 	public String toString() {
-		return "[" + this.getClass().getSimpleName() + " port=" + port + ",encoding=" + encoding 
+		return "[" + this.getClass().getSimpleName() + " ipAddress=" + ipAddress +  ",port=" + port + ",encoding=" + encoding 
 		+ ",maximumConnections=" + maximumConnections 
 		+ ",connectionTimeoutMilliseconds=" + connectionTimeoutMilliseconds 
 		+ "]";
@@ -148,5 +158,5 @@ public class SocketActivationSpec implements ActivationSpec, SocketResourceAdapt
 		return true;
 	}
 
-	
+
 }

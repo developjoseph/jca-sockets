@@ -31,6 +31,12 @@
       <config-property-type>java.lang.Integer</config-property-type>
       <config-property-value>1000</config-property-value>
     </config-property>
+    <config-property>
+      <description>The default Hostname or IP adddress to listen on, may be overridden in ejb-jar.xml</description>
+      <config-property-name>ipAddress</config-property-name>
+      <config-property-type>java.lang.String</config-property-type>
+      <config-property-value>localhost</config-property-value>
+    </config-property>
 
     <!-- ResourceAdapter default configuration properties -->
     <!-- The inbound resource adapter description -->
