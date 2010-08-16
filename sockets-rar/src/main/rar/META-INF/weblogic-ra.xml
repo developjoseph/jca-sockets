@@ -1,0 +1,8 @@
+<?xml version = "1.0"?>
+<weblogic-connector xmlns="http://www.bea.com/ns/weblogic/90">
+
+	<jndi-name>sockets-rar.rar</jndi-name>
+	<enable-access-outside-app>true</enable-access-outside-app>
+	<enable-global-access-to-classes>true </enable-global-access-to-classes>
+
+</weblogic-connector> 
